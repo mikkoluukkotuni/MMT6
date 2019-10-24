@@ -12,9 +12,7 @@
  * @since         0.10.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 $cakeDescription = 'MMT';
-
 //debug prints
 //print_r($this->request->session()->read('selected_project_role'));
 ?>
@@ -83,7 +81,6 @@ $cakeDescription = 'MMT';
 						->select(['id'])
 						->where(['user_id =' => $userid, 'project_id =' => $projid])
 						->toArray();
-
 		// else (as SV) you get informed about every new comment of every project
 		} else {
 			$memid = Cake\ORM\TableRegistry::get('Members')->find()
@@ -93,7 +90,6 @@ $cakeDescription = 'MMT';
 		}
 		
 		
-
 		// proceed only if ID's were found
 		if ( sizeof($memid) > 0) {
 			// now try to find current member's id from notifications
@@ -103,7 +99,7 @@ $cakeDescription = 'MMT';
 			if ( !($supervisor) ) {
 			$notifquery = Cake\ORM\TableRegistry::get('Notifications')->find()
 						->select(['comment_id', 'weeklyreport_id'])
-						->distinct(['weeklyreport_id'])
+					    ->distinct(['weeklyreport_id', 'comment_id'])
 						->where(['member_id =' => $memid[0]->id])
 						->toArray();
 			
@@ -111,7 +107,7 @@ $cakeDescription = 'MMT';
 			} else {
 				$notifquery = Cake\ORM\TableRegistry::get('Notifications')->find()
 							->select(['comment_id', 'weeklyreport_id'])
-							->distinct(['weeklyreport_id']);
+							->distinct(['weeklyreport_id', 'comment_id']);
 				
 				// this part fetches all the rows by putting OR condition between all member ID's
 				for ($i=0; $i<sizeof($memid); $i++) {
@@ -119,7 +115,6 @@ $cakeDescription = 'MMT';
 				}
 				$notifquery = $notifquery->toArray();
 			}
-
 			// if there are any notifications, tell user
 			if ( $amount = sizeof($notifquery) > 0 ) { ?>
 				<div id="notificationarea">
@@ -151,7 +146,6 @@ $cakeDescription = 'MMT';
 								echo "<li>" . $this->Html->link("Report, week " . $weekno, ['controller'=>'Weeklyreports', 'action'=>'view', $notif->weeklyreport_id]) . "</li>";
 							}
 						}
-
 				// close a million tags
 				echo "</ul></div></div></div>";
 			}
@@ -194,19 +188,15 @@ $cakeDescription = 'MMT';
                                 <br>
                                 <?= $this->Html->link(__('Forgot Password'), ['controller' => 'Users', 'action' => 'forgotpassword']) ?>
 				<?php
-
 				} else {
 					// prints user's full name
 					print_r( ($this->request->session()->read('Auth.User.first_name')).' '.($this->request->session()->read('Auth.User.last_name')) );
 					// checks if user has accessed any projects
 					if ($this->request->session()->check('selected_project') ) {
-
 						// fetch the name of current project
 						$selected_project = $this->request->session()->read('selected_project');
 						$name = $selected_project['project_name'];
-
 						echo "<div class=\"info\">On project</div>";
-
 						// the text part
 						if ($selected_project)
 							print_r($name);
