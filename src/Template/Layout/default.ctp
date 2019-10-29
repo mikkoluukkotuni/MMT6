@@ -103,7 +103,7 @@ $cakeDescription = 'MMT';
 			if ( !($supervisor) ) {
 			$notifquery = Cake\ORM\TableRegistry::get('Notifications')->find()
 						->select(['comment_id', 'weeklyreport_id'])
-						->distinct(['weeklyreport_id'])
+						->distinct(['weeklyreport_id', 'comment_id'])
 						->where(['member_id =' => $memid[0]->id])
 						->toArray();
 			
@@ -111,7 +111,7 @@ $cakeDescription = 'MMT';
 			} else {
 				$notifquery = Cake\ORM\TableRegistry::get('Notifications')->find()
 							->select(['comment_id', 'weeklyreport_id'])
-							->distinct(['weeklyreport_id']);
+							->distinct(['weeklyreport_id', 'comment_id']);
 				
 				// this part fetches all the rows by putting OR condition between all member ID's
 				for ($i=0; $i<sizeof($memid); $i++) {
