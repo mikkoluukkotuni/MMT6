@@ -150,7 +150,8 @@ class WeeklyhoursTable extends Table
             
             $weeklyRisk['weeklyreport_id'] = $weeklyreport['id'];
             $weeklyRisk['risk_id'] = $id;
-            $weeklyRisk['probability'] = $prob;
+            $weeklyRisk['probability'] = $prob['probability'];
+            $weeklyRisk['impact'] = $prob['impact'];
             
             if (!$tableWeeklyrisks->save($weeklyRisk)) {
                 return False;

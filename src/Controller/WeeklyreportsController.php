@@ -204,7 +204,7 @@ class WeeklyreportsController extends AppController
         $project .= '<tr><td>Year</td><td '.$rightAlign.'>'.$weeklyreport->year.'</td></tr>';
         $project .= '<tr><td>Meetings</td><td '.$rightAlign.'>'.$weeklyreport->meetings.'</td></tr>';
         $project .= '<tr><td>Requirements link</td><td '.$rightAlign.'>'.$weeklyreport->reqlink.'</td></tr>';
-        $project .= '<tr><td>Challenges, issues, etc.</td><td '.$rightAlign.'>'.$weeklyreport->problems.'</td></tr>';
+        $project .= '<tr><td>Realized risks,Challenges, issues, etc.</td><td '.$rightAlign.'>'.$weeklyreport->problems.'</td></tr>';
         $project .= '<tr><td>Addtitional</td><td '.$rightAlign.'>'.$weeklyreport->additional.'</td></tr>';
         $project .= '<tr><td>Created on</td><td '.$rightAlign.'>'.$weeklyreport->created_on->format('d.m.Y').'</td></tr>';
         $project .= '<tr><td>Updated on</td><td '.$rightAlign.'>'.($weeklyreport->updated_on != NULL ? $weeklyreport->updated_on->format('d.m.Y') : '').'</td></tr>';

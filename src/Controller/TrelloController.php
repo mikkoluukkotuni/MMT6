@@ -205,7 +205,12 @@ class TrelloController extends AppController {
             //One can only access trello pages of current project
             if(in_array ($this->request->action, ['links','edit','delete'])){
                 
-                $trelloId = $this->request->getParam('pass')[0];
+                //For CakePhP 3.4+
+                //$trelloId = $this->request->getParam('pass')[0];
+                
+                
+                //For older CakePHP
+                $trelloId = $this->request->param('pass')[0];
                 
                 $checkItem = $this->Trello->find()->where(['id' => $trelloId])->first();
                 

@@ -9,7 +9,7 @@
     <h3><?= __('FAQ') ?></h3>
     <ol start="0">
       <li style="list-style-type:none;"><a accesskey="alt+0 "href="#Q0">Video tutorials</a></li>
-      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in spring 2017</a></li>
+      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in fall 2018</a></li>
       <li><a accesskey="alt+2" href="#Q2">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
       <li><a accesskey="alt+3" href="#Q3">How do I get started?</a></li>
       <li><a accesskey="alt+4" href="#Q4">I forgot my password. How do I get a new one?</a></li>
@@ -19,8 +19,13 @@
       <li><a accesskey="alt+8" href="#Q8">Where can I find team's/member's logged working time and the total number of working hours?</a></li>
       <li><a accesskey="alt+9" href="#Q9">How can I view the progress of my project?</a></li>
       <li><a href="#Q10">How can I view the progress of other projects?</a></li>
+	  <li><a href="#Q11">How can I automatically get the number of requirements to MMT from TRELLO?</a></li>
+	  <li><a href="#Q12">How can I see my MMT-events (like new reports) on my SLACK channel?</a></li>
+	  <li><a href="#Q13">How can I try this application and/or see a DEMO?</a></li>
     </ol>
     
+		See also <a href="http://metricsmonitoring.sis.uta.fi/publications" target="_blank">publications</a> related to MMT
+	
     <h4 id="Q0">Video tutorials</h4>
     <p>
        <ul>
@@ -33,19 +38,18 @@
          </p>
         <p><a href="#">[back to the top]</a></p>
     </p>
-    <h4 id="Q1">1. For students of PW and SPM courses in spring 2017</h4>
+    <h4 id="Q1">1. For students of PW and SPM courses in fall 2018</h4>
     <p>
     For developers and managers:
           <ul>
             <li>Unless you created your user account yourself, change the password during your first log in.</li>
-            <li>The first weekly report is written for week XX.</li>
-            <li>However, remember to log your working hours for weeks XX - XX.</li>
+            <li>The first weekly report is written for week 38.</li>
             <li>The working hours that are in the table on Members' page include all working hours, even the ones that are not covered by a weekly report.</li>   
           </ul>
     For managers:
       	<ul>    
-            <li>The first week you'll need write a weekly report for is week XX.</li>
-            <li>Submit the first weekly report on Monday, XXth January 2017</li>
+            <li>The first week you'll need to write a weekly report for is week 39.</li>
+            <li>Submit the first weekly report latest on Monday, 24th of September 2018</li>
             <li>For all teams, the phase will be 0 in the first weekly report.</li>
         </ul>
     In the current version of MMT:
@@ -62,10 +66,19 @@
 	
     <h4 id="Q2">2. What can I use the Metrics Monitoring Tool (MMT) for?</h4>
     <p>
-    All project members (incl. clients) can:
+	
+	Everyone can (no need for logging):
+        <ul>
+            <li>view the progress of public projects</li>
+            <li>give feedback on MMT</li>
+			<li>create an account</li>
+         
+        </ul>
+	
+	
+    All project members  can:
         <ul>
             <li>view the progress of your project</li>
-            <li>view the progress of other public projects</li>
             <li>leave comments on the weekly reports of your project</li>
             <li>give feedback on MMT</li>
             <ul>
@@ -83,6 +96,14 @@
           <ul >
              <li>log your daily working time</li>
           </ul>       
+		  
+		  As a client:
+          <ul >
+             <li>you will have the weekly report to your email as a pdf and you see the metrics of your own project</li>
+          </ul>       
+		  
+		  
+		  
     <a href="#">[back to the top]</a> 
     </p>
 
@@ -228,4 +249,46 @@
       <br />
       <a href="#">[back to the top]</a>
     </p>
+	
+	
+	 <h4 id="Q11">11. How can I link TRELLO with MMT?</h4>
+    <p>
+      <a href="/trello/about">See TRELLO instructions</a> 
+      
+      <br />
+      <br />
+      <a href="#">[back to the top]</a>
+    </p>
+	
+	 <h4 id="Q12">12. How can I link Slack with MMT?</h4>
+  <p>
+      <a href="/slack/about">See SLACK instructions</a> 
+      
+      <br />
+      <br />
+      <a href="#">[back to the top]</a>
+	  
+	  <h4 id="Q13">13. How can I try this application and/or see a DEMO?</h4>
+  <p>
+      <a href="/projects/about">See ABOUT MMT</a> 
+      
+      <br />
+      <br />
+      <a href="#">[back to the top]</a>
+	  
+    </p>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </div>
