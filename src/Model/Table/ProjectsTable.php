@@ -42,7 +42,8 @@ class ProjectsTable extends Table
             ->add('project_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
-            ->add('created_on', 'valid', ['rule' => 'date'])
+            // removed this because created_on was changed to use jQuery UI datepicker
+            //->add('created_on', 'valid', ['rule' => 'date'])
             ->requirePresence('created_on', 'create')
             ->notEmpty('created_on');
 

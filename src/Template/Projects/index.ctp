@@ -37,7 +37,8 @@
         <table cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('project_name') ?></th>
+                    <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
+                    <th><?= $this->Paginator->sort('created_on') ?></th>
                     <th><?= __('Desciption') ?></th>
                     <?php // links to unread weekly reports for supervisors
                     $super = $this->request->session()->read('is_supervisor');
@@ -51,7 +52,8 @@
                 <?php foreach ($projects as $project): ?>
                     <?php if(in_array($project->id, $this->request->session()->read('project_memberof_list'))){ ?>
                         <tr>    
-                            <td><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
+                            <td colspan="2"><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
+                            <td><?= h($project->created_on) ?></td>
                             <td><?= h($project->description) ?></td>
                             <?php 
                             // Links to unread weeklyreports are visible to supervisors
@@ -103,7 +105,8 @@
         <table cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('project_name') ?></th>
+                    <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
+                    <th><?= $this->Paginator->sort('created_on') ?></th>
                     <th><?= $this->Paginator->sort('description') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
@@ -112,7 +115,8 @@
                 <?php foreach ($projects as $project): ?>
                     <?php if($project->is_public){ ?>
                         <tr>
-                            <td><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
+                            <td colspan="2"><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
+                            <td><?= h($project->created_on) ?></td>
                             <td><?= h($project->description) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
