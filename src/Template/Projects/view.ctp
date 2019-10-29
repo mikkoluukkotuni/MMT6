@@ -3,9 +3,10 @@
         <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
-            $notmember = ( $this->request->session()->read('selected_project_role') == 'notmember' ) ? 1 : 0;
-            
-            if($admin || $supervisor) { ?>
+            $notmember = ( $this->request->session()->read('selected_project_role') == 'notmember' ) ? 1 : 0;            
+            $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;		
+            		            
+            if($admin || $supervisor || $manager) { ?>
                 <li><?= $this->Html->link(__('Edit Project'), ['action' => 'edit', $project->id]) ?> </li>
             <?php }            
             if ($admin) { ?>   
