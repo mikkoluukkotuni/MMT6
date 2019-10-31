@@ -39,6 +39,15 @@
                                     ?></td>
                     </tr>
                     <tr>
+                        <th><?= __('Target hours') ?></th>
+                        <td><?php 
+                            if ($member->target_hours != NULL)
+                                echo h($member->target_hours); 
+                            else
+                                echo h('100');
+                                    ?></td>
+                    </tr>
+                    <tr>
                         <?php
 
                         // Removed link from the email address 

@@ -21,6 +21,7 @@
                 <th colspan="2"><?= __('Name') ?></th>
                 <th><?= $this->Paginator->sort('project_role') ?></th>
                 <th><?= __('Working hours') ?></th>
+                <th><?= __('Target hours') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -50,6 +51,14 @@
                 $total += $sum;?>
 
                 <td><?= h($sum) ?></td>
+                <td><?php 
+                    if ($member->project_role != 'supervisor' && $member->project_role != 'client') { 
+                        if ($member->target_hours != NULL)
+                            echo h($member->target_hours); 
+                        else
+                            echo h('100');
+                    }
+                ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $member->id]) ?>
                     <?php
