@@ -56,7 +56,7 @@
                         if ($member->target_hours != NULL)
                             echo h($member->target_hours); 
                         else
-                            echo h('100');
+                            echo h('100 (default)');
                     }
                 ?></td>
                 <td class="actions">

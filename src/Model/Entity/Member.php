@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property int $project_id
  * @property \App\Model\Entity\Project $project
  * @property int $project_role
+ * @property int $target_hours
  * @property \Cake\I18n\Time $starting_date
  * @property \Cake\I18n\Time $ending_date
  * @property \App\Model\Entity\Workinghour[] $workinghours

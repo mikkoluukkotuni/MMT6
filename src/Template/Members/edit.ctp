@@ -19,6 +19,7 @@ echo $this->Html->script('jquery-ui.min');
     <fieldset>
         <?php 
         $userid = $member->user_id;
+        $target_hours = $member->target_hours;
         $queryName = Cake\ORM\TableRegistry::get('Users')
             ->find()
             ->select(['first_name','last_name'])          	
@@ -33,6 +34,8 @@ echo $this->Html->script('jquery-ui.min');
             
             echo $this->Form->input('project_role', 
                 ['options' => array('developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor', 'client' => 'client')]);
+
+            echo $this->Form->input('target_hours', array('type' => 'integer', 'value' => $target_hours, 'style' => 'width: 15%;'));
      
             ?><div style="overflow: auto"><div class="columns medium-6 no-padding"><?php
             
