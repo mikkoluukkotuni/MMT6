@@ -97,7 +97,7 @@ mb_internal_encoding(Configure::read('App.encoding'));
  * Set the default locale. This controls how dates, number and currency is
  * formatted and sets the default language to use for translations.
  */
-ini_set('intl.default_locale', 'en_US');
+ini_set('intl.default_locale', 'fi_FI');
 
 /**
  * Register application error and exception handlers.
@@ -209,10 +209,10 @@ Configure::write('Session', [
     'timeout' => 30
 ]);
 
-Cake\I18n\Date::setToStringFormat('dd.MM.YYYY');
-Cake\I18n\FrozenDate::setToStringFormat('dd.MM.YYYY');
+// Cake\I18n\Date::setToStringFormat('dd.MM.YYYY');
+// Cake\I18n\FrozenDate::setToStringFormat('dd.MM.YYYY');
 
-\Cake\Database\Type::build('date')
-    ->useImmutable()
-    ->useLocaleParser()
-    ->setLocaleFormat('dd.MM.YYYY');
+// \Cake\Database\Type::build('date')
+//     ->useImmutable()
+//     ->useLocaleParser()
+//     ->setLocaleFormat('dd.MM.YYYY');
