@@ -208,3 +208,11 @@ Configure::write('Session', [
     'defaults' => 'php',
     'timeout' => 30
 ]);
+
+Cake\I18n\Date::setToStringFormat('dd.MM.YYYY');
+Cake\I18n\FrozenDate::setToStringFormat('dd.MM.YYYY');
+
+\Cake\Database\Type::build('date')
+    ->useImmutable()
+    ->useLocaleParser()
+    ->setLocaleFormat('dd.MM.YYYY');
