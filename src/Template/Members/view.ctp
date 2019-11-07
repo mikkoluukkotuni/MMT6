@@ -3,7 +3,7 @@
         <?php
         // Edit link not visible to devs or managers
         $admin = $this->request->session()->read('is_admin');
-        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;       
+        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
         if ($admin || $supervisor ) { ?>
             <li><?= $this->Html->link(__('Edit Member'), ['action' => 'edit', $member->id]) ?> </li>
         <?php } 
@@ -47,6 +47,24 @@
                         <td><?= $member->user->email ?></td>
 
                     </tr>
+
+                    <tr>
+                        <th><?= __('Data usage in research') ?></th>
+                        <td>
+                        <?php
+                            if ($admin || $supervisor)
+                                if ($member->user->research_allowed == 1){
+                                    echo ("Allowed");
+                                } else if ($member->user->research_allowed == 0){
+                                    echo ("Disallowed");
+                                } else if ($member->user->research_allowed == -1){
+                                    echo ("No answer");
+                                } else {
+                                    echo ("No answer");
+                                }
+                                ?></td>
+                    </tr>
+                    
                 </table>
             </div>
             <div class="member-cell portrait">
