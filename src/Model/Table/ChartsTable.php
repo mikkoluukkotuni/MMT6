@@ -367,27 +367,71 @@ class ChartsTable extends Table
 
         return $data;
     }
-    
-    public function weeklyhourAreaData($idlist){
-        $weeklyhours = TableRegistry::get('Weeklyhours');
+
+    public function totalhourLineData($project_id, $idlist, $weeklist) {
         
-        $weeklyhourData = array();
+        $members = TableRegistry::get('Members');
         
-        foreach($idlist as $temp){  
-            $query = $weeklyhours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['weeklyreport_id =' => $temp])
-                    ->toArray();
-            $duration = 0;
-            foreach($query as $dur){
-                $duration += $dur->duration;
+        // get a list of the members in the project
+        $query = $members
+                ->find()
+                ->select(['id'])
+                ->where(['project_id =' => $project_id])
+                ->toArray();
+        $memberlist = array();
+        if(!empty($query)) {
+            foreach($query as $temp){
+                $memberlist[] = $temp->id;
             }
-            $weeklyhourData[] = $duration;
         }
-        
-        return $weeklyhourData;
+        $workinghours = TableRegistry::get('Workinghours');
+        if(!empty($memberlist)) {
+            $queryW = $workinghours
+                        ->find()
+                        ->select(['date', 'duration'])
+                        ->where(['member_id IN' => $memberlist])
+                        ->toArray();
+        }
+        $data = array();
+        $sum = 0;
+        foreach($weeklist as $temp){
+            
+            // $sum = 0;
+            if(!empty($queryW)) {
+                foreach($queryW as $result) {
+                    // date of workinghours need to be turned to week
+                    $weekWH = date('W', strtotime($result['date']));
+                    if ($temp == $weekWH) {
+                        $sum += $result['duration'];
+                    }        
+                }
+            }
+            $data[] = $sum;
+        }
+
+        return $data;
     }
+    
+    // public function weeklyhourAreaData($idlist){
+    //     $weeklyhours = TableRegistry::get('Weeklyhours');
+        
+    //     $weeklyhourData = array();
+        
+    //     foreach($idlist as $temp){  
+    //         $query = $weeklyhours
+    //                 ->find()
+    //                 ->select(['duration'])
+    //                 ->where(['weeklyreport_id =' => $temp])
+    //                 ->toArray();
+    //         $duration = 0;
+    //         foreach($query as $dur){
+    //             $duration += $dur->duration;
+    //         }
+    //         $weeklyhourData[] = $duration;
+    //     }
+        
+    //     return $weeklyhourData;
+    // }
     
     
     public function riskData($idlist, $projectId){
