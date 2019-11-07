@@ -54,7 +54,7 @@ class ChartsController extends AppController
         $commitChart = $this->commitChart();
         $testcaseChart = $this->testcaseChart();
         $hoursChart = $this->hoursChart();
-        $weeklyhourChart = $this->weeklyhourChart();
+        $totalhourChart = $this->totalhourChart();
         $hoursPerWeekChart = $this->hoursPerWeekChart();
         $reqPercentChart = $this->reqPercentChart();
         $risksProbChart = $this->risksProbChart();
@@ -71,7 +71,7 @@ class ChartsController extends AppController
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
         $hoursData = $this->Charts->hoursData($project_id);
         $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
-        $weeklyhourData = $this->Charts->weeklyhourAreaData($weeklyreports['id']);
+        $totalhourData = $this->Charts->totalhourLineData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
         
         // Insert the data in to the charts, one by one
@@ -134,10 +134,10 @@ class ChartsController extends AppController
         );
         
         // weeklyhourChart 
-        $weeklyhourChart->xAxis->categories = $weeklyreports['weeks'];    
-        $weeklyhourChart->series[] = array(
-            'name' => 'weekly hours',
-            'data' => $weeklyhourData
+        $totalhourChart->xAxis->categories = $weeklyreports['weeks'];    
+        $totalhourChart->series[] = array(
+            'name' => 'total hours',
+            'data' => $totalhourData
         );
         
         //workinghours per week  
@@ -219,7 +219,7 @@ class ChartsController extends AppController
             'data' => $testcaseData['testsPassed']
         );
         // This sets the charts visible in the actual charts page "Charts/index.php"
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'weeklyhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 'derivedChart'));
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 'derivedChart'));
 
     }
     // All the following functions are similar
@@ -514,9 +514,9 @@ class ChartsController extends AppController
     	return $myChart;
     }
     
-    public function weeklyhourChart(){
+    public function totalhourChart(){
 		$myChart = $this->Highcharts->createChart();
-		$myChart->chart->renderTo = 'weeklyhourwrapper';
+		$myChart->chart->renderTo = 'totalhourwrapper';
 		$myChart->chart->type = 'line';
 	
 		$myChart->title = array(
@@ -526,7 +526,7 @@ class ChartsController extends AppController
 			'styleFont' => '18px Metrophobic, Arial, sans-serif',
 			'styleColor' => '#0099ff',
 		);
-		$myChart->subtitle->text = 'cumulative';
+		$myChart->subtitle->text = 'cumulative (based on weeklyreports)';
 		
 		// body of the chart
 		$myChart->chart->width =  800;
@@ -544,7 +544,7 @@ class ChartsController extends AppController
 		$myChart->yAxis->title->text = 'Total amount of hours';
 		
         $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' produced <b>'+
+        return 'Total hours at this point ' +' <b>'+
         Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
         $myChart->plotOptions->area->marker->enabled = false;
         return $myChart;

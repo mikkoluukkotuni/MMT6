@@ -74,8 +74,8 @@
     </div>
     </br>
     <div class="chart">
-        <div id="weeklyhourwrapper">
-		    <?php echo $this->Highcharts->render($weeklyhourChart, 'weeklyhourchart'); ?>
+        <div id="totalhourwrapper">
+		    <?php echo $this->Highcharts->render($totalhourChart, 'totalhourchart'); ?>
 	    </div>
     </div>
     
