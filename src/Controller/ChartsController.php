@@ -517,16 +517,16 @@ class ChartsController extends AppController
     public function weeklyhourChart(){
 		$myChart = $this->Highcharts->createChart();
 		$myChart->chart->renderTo = 'weeklyhourwrapper';
-		$myChart->chart->type = 'area';
+		$myChart->chart->type = 'line';
 	
 		$myChart->title = array(
-			'text' => 'Weeklyhours',
+			'text' => 'Total hours',
 			'y' => 20,
 			'align' => 'center',
 			'styleFont' => '18px Metrophobic, Arial, sans-serif',
 			'styleColor' => '#0099ff',
 		);
-		$myChart->subtitle->text = 'submitted to weekly reports';
+		$myChart->subtitle->text = 'cumulative';
 		
 		// body of the chart
 		$myChart->chart->width =  800;
@@ -541,7 +541,7 @@ class ChartsController extends AppController
 		
 		// labels to describe the content of axes
 		$myChart->xAxis->title->text = 'Week number';
-		$myChart->yAxis->title->text = 'Total amount of weeklyhours';
+		$myChart->yAxis->title->text = 'Total amount of hours';
 		
         $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
         return this.series.name +' produced <b>'+
