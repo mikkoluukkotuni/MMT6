@@ -3,7 +3,7 @@ body {
 	height: 100%;
 	position: absolute;
 	background-color: #FFF;
-	background-image: url('../img/tausta.jpg');
+	/*background-image: url('../img/tausta.jpg');*/
 	background-position: center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
