@@ -137,6 +137,6 @@
     
     <article>
     	<h4><?= h('Additional statistics') ?></h4>
-    	<p>Visit the <a href="http://www.uta.fi/sis/tie/pw/statistics.html" target="_blank">Statistics page</a> of Project Work course.</p>
+    	<p>Visit the <a href="https://coursepages.uta.fi/tiea4/paasivu/statistics/" target="_blank">Statistics page</a> of Project Work course.</p>
     </article>
 </div>

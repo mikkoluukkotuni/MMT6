@@ -24,7 +24,7 @@
 	  <li><a href="#Q13">How can I try this application and/or see a DEMO?</a></li>
     </ol>
     
-		See also <a href="http://metricsmonitoring.sis.uta.fi/publications" target="_blank">publications</a> related to MMT
+		See also <a href="/projects/publications" target="_blank">publications</a> related to MMT
 	
     <h4 id="Q0">Video tutorials</h4>
     <p>

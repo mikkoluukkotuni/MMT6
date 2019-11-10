@@ -314,8 +314,10 @@ $cakeDescription = 'MMT';
 		<div class="footerblock">
 			<h6>OTHER RESOURCES</h6>
 			<ul>
-                            <li><a href="http://www.uta.fi/sis/tie/pw/statistics.html" target="_blank">Project Work course - Statistics</a></li>
-                            <li><a href="http://www.uta.fi/sis/yhteystiedot/henkilokunta/pekkamakiaho.html" target="_blank">Supervisor's web site</a></li>
+                            <!--<li><a href="http://www.uta.fi/sis/tie/pw/statistics.html" target="_blank">Project Work course - Statistics</a></li>
+							<li><a href="http://www.uta.fi/sis/yhteystiedot/henkilokunta/pekkamakiaho.html" target="_blank">Supervisor's web site</a></li>-->
+							<li><a href="https://coursepages.uta.fi/tiea4/paasivu/statistics/" target="_blank">Project Work course - Statistics</a></li>
+							<li><a href="https://www.linkedin.com/in/makiaho/" target="_blank">Supervisor's web site</a></li>
                             <li><?= $this->Html->link(__('Mobile Website'), ['controller' => 'Mobile', 'action' => 'index']) ?> </li>                   
 			</ul>
 
