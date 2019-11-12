@@ -190,10 +190,6 @@ class ProjectsController extends AppController
     {
 
     }  
-	public function publications()
-    {
-
-    }  
     
     public function add()
     {
@@ -201,10 +197,11 @@ class ProjectsController extends AppController
         if ($this->request->is('post')) {
             // data loaded from the form
             $project = $this->Projects->patchEntity($project, $this->request->data);
+            // the following three lines were removed because created_on was changed to use jQuery UI datepicker
             // the current date is put in the project object
-            $time = Time::now();
-            $project['created_on'] = $time;
-            
+            //$time = Time::now();
+            //$project['created_on'] = $time;
+
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
                 // if the project was not saved by an admin
@@ -287,7 +284,6 @@ class ProjectsController extends AppController
         $this->Auth->allow(['statistics']);
         $this->Auth->allow(['faq']);
         $this->Auth->allow(['about']);
-		$this->Auth->allow(['publications']);
     }
     
     public function isAuthorized($user)
