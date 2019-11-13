@@ -93,11 +93,11 @@ class ChartsController extends AppController
             'data' => $reqData['new']
         );
         $reqChart->series[] = array(
-            'name' => 'In progress',
+            'name' => 'Sprint Backlog',
             'data' => $reqData['inprogress']
         );
         $reqChart->series[] = array(
-            'name' => 'Closed',
+            'name' => 'Done',
             'data' => $reqData['closed']
         );
         $reqChart->series[] = array(
@@ -154,11 +154,11 @@ class ChartsController extends AppController
             'data' => $reqData['new']
         );
         $reqPercentChart->series[] = array(
-            'name' => 'In progress',
+            'name' => 'Sprint Backlog',
             'data' => $reqData['inprogress']
         );
         $reqPercentChart->series[] = array(
-            'name' => 'Closed',
+            'name' => 'Done',
             'data' => $reqData['closed']
         );
         $reqPercentChart->series[] = array(
