@@ -290,7 +290,10 @@ class ProjectsController extends AppController
         $this->Auth->allow(['statistics']);
         $this->Auth->allow(['faq']);
         $this->Auth->allow(['about']);
+<<<<<<< HEAD
 	$this->Auth->allow(['publications']);
+=======
+>>>>>>> 1548801189859ad9ff3d30b894a7a8566c9400d6
     }
     
     public function isAuthorized($user)
