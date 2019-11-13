@@ -190,7 +190,13 @@ class ProjectsController extends AppController
     {
 
     }  
-    
+
+	public function publications()
+	{
+		
+	}
+
+	
     public function add()
     {
         $project = $this->Projects->newEntity();
@@ -284,6 +290,7 @@ class ProjectsController extends AppController
         $this->Auth->allow(['statistics']);
         $this->Auth->allow(['faq']);
         $this->Auth->allow(['about']);
+	$this->Auth->allow(['publications']);
     }
     
     public function isAuthorized($user)
