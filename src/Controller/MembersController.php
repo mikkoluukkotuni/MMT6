@@ -47,27 +47,38 @@ class MembersController extends AppController
             $email = $this->request->data['email'];
             $query = TableRegistry::get('Users')
                 ->find()
-           	->select(['id']) 
+           	 ->select(['id']) 
             	->where(['email =' => $email])
                 ->toArray(); 
             foreach($query as $temp) {
                 $id = $temp['id'];
             }
-
-            $member['user_id'] = $id;
-
-            
-            // Managers are not allowed to add members that are supervisors
-            if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
-                if ($this->Members->save($member)) {
-                    $this->Flash->success(__('The member has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The member could not be saved. Please, try again.'));
+            //Get matching user id's from current project
+            $memberQuery = TableRegistry::get('Members')
+                ->find()
+                ->select('user_id')
+                ->where(['user_id =' => $id, 'project_id =' => $project_id])
+                ->toArray();
+            //If ID doesn't exist in project, proceed
+            if(sizeof($memberQuery) == 0) {
+                $member['user_id'] = $id;
+                
+                // Managers are not allowed to add members that are supervisors
+                if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
+                    
+                    
+                    if ($this->Members->save($member)) {
+                        $this->Flash->success(__('The member has been saved.'));
+                        return $this->redirect(['action' => 'index']);
+                    } else {
+                        $this->Flash->error(__('The member could not be saved. Please, try again.'));
+                    }
                 }
-            }
-            else{
-                $this->Flash->error(__('Managers cannot add supervisors'));
+                else{
+                    $this->Flash->error(__('Managers cannot add supervisors'));
+                }
+            } else {
+                $this->Flash->error(__('The member is already part of the project.'));
             }
         }          
         $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
@@ -144,6 +155,6 @@ class MembersController extends AppController
             return False;
         }
         // if not trying to add edit delete
-        return parent::isAuthorized($user);
+        return parent::isAuthorized($user);        
     }
 }
