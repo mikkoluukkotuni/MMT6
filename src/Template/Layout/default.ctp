@@ -227,6 +227,7 @@ $cakeDescription = 'MMT';
 				?>
 				<ul>
                                     <li class="buttonTop"><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
+									<li class="buttonTop"><?= $this->Html->link(__('View profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?></li>
                                     <li class="buttonTop"><?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
                                     <li class="buttonOut"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
                                 </ul>

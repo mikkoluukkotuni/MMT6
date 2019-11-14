@@ -359,9 +359,19 @@ class UsersController extends AppController
         }
 
         if ($this->request->action === 'add' || $this->request->action === 'edit'
-            || $this->request->action === 'delete' || $this->request->action === 'index' || $this->request->action === 'view') 
+            || $this->request->action === 'delete' || $this->request->action === 'index') 
         {
             return False;
+        }
+
+        if ($this->request->action === 'view') {
+            $id_length = ceil(log10(abs($user['id']) + 1));
+            if($user['id'] == substr($this->request->url, -$id_length)) {
+                return true;
+            } else {
+                return false;
+            }
+
         }
         
         // All registered users can edit their own profile and logout
