@@ -53,7 +53,7 @@
                     <?php if(in_array($project->id, $this->request->session()->read('project_memberof_list'))){ ?>
                         <tr>    
                             <td colspan="2"><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
-                            <td><?= h($project->created_on) ?></td>
+                            <td><?= h(date_format($project->created_on, "j.n.Y")) ?></td>
                             <td><?= h($project->description) ?></td>
                             <?php 
                             // Links to unread weeklyreports are visible to supervisors
@@ -116,7 +116,7 @@
                     <?php if($project->is_public){ ?>
                         <tr>
                             <td colspan="2"><?= $project->has('project_name') ? $this->Html->link($project->project_name, ['action' => 'view', $project->id]) : '' ?></td>
-                            <td><?= h($project->created_on) ?></td>
+                            <td><?= h(date_format($project->created_on, "j.n.Y")) ?></td>
                             <td><?= h($project->description) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
