@@ -52,7 +52,8 @@
                         <th><?= __('Data usage in research') ?></th>
                         <td>
                         <?php
-                            if ($admin || $supervisor || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -3))
+                            $id_length = ceil(log10(abs($this->request->session()->read('selected_project_memberid') + 1)));
+                            if ($admin || $supervisor || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -$id_length))
                                 if ($member->user->research_allowed == 1){
                                     echo ("Allowed");
                                 } else if ($member->user->research_allowed == 0){
