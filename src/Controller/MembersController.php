@@ -147,7 +147,8 @@ class MembersController extends AppController
         // in addition to supervisors and admins, member can also edit own data
         if ($this->request->action === 'edit') 
         {
-            if($project_role == "supervisor" || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -3)){
+            $id_length = ceil(log10(abs($this->request->session()->read('selected_project_memberid') + 1)));
+            if($project_role == "supervisor" || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -$id_length)){
                 return True;
             }
 
