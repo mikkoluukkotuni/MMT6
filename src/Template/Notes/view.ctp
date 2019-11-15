@@ -1,13 +1,13 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
+
+<ul class="side-nav">
             <li><?= $this->Form->postLink(
                             __('Delete'),
                             ['action' => 'delete', $note->id],
                             ['confirm' => __('Are you sure you want to delete # {0}?', $note->id)]
                         )?></li>
             <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?></li>
-    </ul>
-</nav>
+ </ul>
+
 <div class="notes view large-7 medium-16 columns content float: left">
     <h3><?= __('View feedback') ?></h3>
 

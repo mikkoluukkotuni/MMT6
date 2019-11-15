@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
            $admin = $this->request->session()->read('is_admin');
@@ -11,7 +11,7 @@
            }
          ?>
     </ul>
-</nav>
+
 <div class="metrics view large-7 medium-14 columns content float: left">
     <h3><?= h($metric->metrictype->description) ?></h3>
     <table class="vertical-table">

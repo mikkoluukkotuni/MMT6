@@ -4,10 +4,13 @@ echo $this->Html->script('jquery');
 echo $this->Html->script('jquery-ui.min');
 ?>
 
-
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav"></ul>
-</nav>
+<!-- 
+    If the lower navigation bar needed, links go here
+    
+    <ul class="side-nav">
+        
+    </ul>
+-->
 <div class="projects form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($project) ?>
     <fieldset>

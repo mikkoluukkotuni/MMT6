@@ -1,8 +1,8 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <li><?= $this->Html->link(__('New Metrictype'), ['action' => 'add']) ?></li>
     </ul>
-</nav>
+
 <div class="metrictypes index large-9 medium-18 columns content float: left">
     <h3><?= __('Metrictypes') ?></h3>
     <table cellpadding="0" cellspacing="0">

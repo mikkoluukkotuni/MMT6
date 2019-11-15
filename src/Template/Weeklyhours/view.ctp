@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <?php
@@ -15,7 +15,7 @@
 			}
 		?>
     </ul>
-</nav>
+
 <div class="weeklyhours view large-7 medium-14 columns content float: left">
     <h3><?= h("View weeklyhour") ?></h3>
     <table class="vertical-table">

@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
             use Cake\I18n\Time;
@@ -19,7 +19,7 @@
             <li><?= $this->Html->link(__('Log time for another member'), ['action' => 'adddev']) ?></li>
         <?php } ?>
     </ul>
-</nav>
+
 <div class="workinghours index large-9 medium-18 columns content float: left">
     <h3><?= __('Project team\'s logged tasks') ?></h3>
     <?php // the code for the menu is the same as in adddev.ctp 

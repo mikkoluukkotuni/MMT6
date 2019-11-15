@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav"> 
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -16,7 +16,7 @@
                 <li><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?> </li>
             <?php } ?>
     </ul>
-</nav>
+
 <div class="projects view large-7 medium-16 columns content float: left">
     <h3><?= h($project->project_name) ?></h3>
 	<p>

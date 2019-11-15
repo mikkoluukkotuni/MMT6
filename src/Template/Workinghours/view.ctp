@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
         	$admin = $this->request->session()->read('is_admin');
@@ -36,7 +36,7 @@
 			<li><?= $this->Html->link(__('Edit logged time'), ['action' => 'edit', $workinghour->id]) ?> </li>
 		<?php } ?>
     </ul>
-</nav>
+
 <div class="workinghours view large-7 medium-14 columns content float: left">
     <h3><?= h("View logged task") ?></h3>
     <table class="vertical-table">

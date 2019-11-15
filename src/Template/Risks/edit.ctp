@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php if($editable): ?>
         <li><?= $this->Form->postLink(
@@ -9,7 +9,7 @@
         ?></li>
         <?php endif; ?>
     </ul>
-</nav>
+
 <div class="workinghours form large-8 medium-16 columns content float: left">
     <?php if($editable): ?>
     <?= $this->Form->create($risk) ?>

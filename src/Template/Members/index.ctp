@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -11,7 +11,7 @@
             <li><?= $this->Html->link(__('New Member'), ['action' => 'add']) ?></li>
         <?php } ?>
     </ul>
-</nav>
+
 <div class="members index large-9 medium-18 columns content float: left">
     <h3><?= __('Members') ?></h3>
     <table cellpadding="0" cellspacing="0">

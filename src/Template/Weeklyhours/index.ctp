@@ -1,6 +1,12 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav"></ul>
-</nav>
+
+<!-- 
+    If the lower navigation bar needed, links go here
+    
+    <ul class="side-nav">
+        
+    </ul>
+-->
+
 <div class="weeklyhours index large-9 medium-18 columns content  float: left">
     <h3><?= __('Weeklyhours') ?></h3>
     <table cellpadding="0" cellspacing="0">

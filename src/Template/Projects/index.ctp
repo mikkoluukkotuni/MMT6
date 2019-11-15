@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">    
+
     <ul class="side-nav">
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -24,12 +24,12 @@
             <?php } ?>
             <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
             <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>
-            <li><?= $this->Html->link(__('About MMT 4.0'), ['controller' => 'Projects', 'action' => 'about'],['class' => 'link-highlight']) ?> </li>
+            <li><?= $this->Html->link(__('About MMT 4.0'), ['controller' => 'Projects', 'action' => 'about']) ?> </li>
             <?php if ($admin) { ?>
                 <li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
             <?php } ?>
     </ul>
-</nav>
+
 <div class="projects index large-9 medium-18 columns content float: left">
     <!-- List of the projects the user is a member of -->
     <?php if($this->request->session()->check('Auth.User')){ ?>       

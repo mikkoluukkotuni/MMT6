@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -16,7 +16,7 @@
             ?>
         <?php } ?>
     </ul>
-</nav>
+
 <div class="workinghours index large-9 medium-18 columns content float: left">
     <h3><?= __('Project Risks') ?></h3>
     <?php // the code for the menu is the same as in adddev.ctp 

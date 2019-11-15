@@ -1,8 +1,8 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
     </ul>
-</nav>
+
 <div class="users view large-7 medium-14 columns content float: left">
     <h3><?= h($user->first_name ." ". $user->last_name) ?></h3>
     <table class="vertical-table">

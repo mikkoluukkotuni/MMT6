@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <li><?= $this->Form->postLink(
                 __('Delete'),
@@ -20,7 +20,7 @@
             }
         ?> 
     </ul>
-</nav>
+
 <div class="metrics form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($metric) ?>
     <fieldset>

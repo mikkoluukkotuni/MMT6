@@ -2,9 +2,15 @@
      $current_metrics is what was previously placed in the form if the user visits this page a second time
 -->
 <?= $this->Html->script('trello.js') ?>
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav"></ul>
-</nav>
+
+<!-- 
+    If the lower navigation bar needed, links go here
+    
+    <ul class="side-nav">
+        
+    </ul>
+-->
+
 <div class="metrics form large-6 medium-12 columns content float: left">
     <?= $this->Form->create($metric) ?>
     <fieldset>

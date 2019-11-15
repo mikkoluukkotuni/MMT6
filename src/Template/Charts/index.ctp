@@ -1,8 +1,7 @@
 <?php echo $this->Highcharts->includeExtraScripts(); ?>
 
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Edit limits') ?></li> 
+<div class="statistics">
+        <h3><?= __('Edit limits') ?></h3> 
         <?= $this->Form->create() ?>
         <fieldset>
             <?php
@@ -14,8 +13,8 @@
 			?>
         </fieldset>
         <?= $this->Form->end() ?>
-    </ul>
-</nav>
+</div>
+
 <div class="metrics index large-9 medium-8 columns content float: left">
 
 	<!-- 12.3.2016: code cleanup for displaying the charts properly

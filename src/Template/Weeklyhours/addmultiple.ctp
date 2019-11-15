@@ -3,9 +3,15 @@
      Pre calculated workinghours are added automatically and if the user
      goes backwards on the page the current values are saved.
 -->
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav"></ul>
-</nav>
+
+<!-- 
+    If the lower navigation bar needed, links go here
+    
+    <ul class="side-nav">
+        
+    </ul>
+-->
+
 <div class="weeklyhours form large-6 medium-12 columns content float: left">
     <?= $this->Form->create($weeklyhours) ?>
     <fieldset>

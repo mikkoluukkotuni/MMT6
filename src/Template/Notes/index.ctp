@@ -1,8 +1,7 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
 </ul>
-</nav>
+
 
 <div class="notes index large-9 medium-18 columns content float: left">
     <h3><?= __('Feedback') ?></h3>

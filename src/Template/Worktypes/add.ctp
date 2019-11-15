@@ -1,6 +1,11 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav"></ul>
-</nav>
+<!-- 
+    If the lower navigation bar needed, links go here
+    
+    <ul class="side-nav">
+        
+    </ul>
+-->
+
 <div class="worktypes form large-9 medium-18 columns content float: left">
     <?= $this->Form->create($worktype) ?>
     <fieldset>

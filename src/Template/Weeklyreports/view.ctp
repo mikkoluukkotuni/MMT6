@@ -70,7 +70,7 @@
 	}
 ?>
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">	
+
            <?php
             // link not visible to devs and clients
             if ($admin || $supervisor || $manager) { ?>
@@ -93,7 +93,7 @@
             <?php } 
             } */ ?>
     </ul>
-</nav>
+
 <div class="weeklyreports view large-8 medium-16 columns content float: left">
     <h3><?= h($weeklyreport->title) ?></h3>
 	<h5><?= h($selected_project = $this->request->session()->read('selected_project')['project_name']) ?></h5>

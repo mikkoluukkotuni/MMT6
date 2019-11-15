@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -13,7 +13,7 @@
             <li><?= $this->Html->link(__('Weeklyhours'), ['controller' => 'Weeklyhours', 'action' => 'index']) ?> </li> 
         <?php } ?>
     </ul>
-</nav>
+
 <div class="weeklyreports index large-9 medium-18 columns content float: left">
     <h3><?= __('Weekly reports') ?></h3>
     <table cellpadding="0" cellspacing="0">

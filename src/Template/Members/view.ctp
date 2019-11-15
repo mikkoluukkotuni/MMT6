@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php
         // Edit link not visible to devs or managers
@@ -14,7 +14,7 @@
         <?php } 
         } ?>
     </ul>
-</nav>
+
 <div class="members view large-8 medium-16 columns content float: left">
     <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
     <div class="member-table">

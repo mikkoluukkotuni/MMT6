@@ -1,9 +1,9 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">    
+
     <ul class="side-nav">
         <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
         <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>
     </ul>    
-</nav>
+
 
 <div id="faq" class="projects index large-9 medium-18 columns content float: left">
     <h3><?= __('Publications') ?></h3>

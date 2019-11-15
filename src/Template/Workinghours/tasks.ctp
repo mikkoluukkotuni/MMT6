@@ -1,4 +1,4 @@
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <?php use Cake\I18n\Time;
         // get the member id parameter
@@ -8,7 +8,7 @@
         <li><?= $this->Html->link(__('Team\'s logged tasks'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('View member'), ['controller' => 'Members', 'action' => 'view', $id]) ?></li>
     </ul>
-</nav>
+
 <div class="workinghours index large-9 medium-18 columns content float: left">
     <?php // member name for the header
         foreach ($workinghours as $workinghour) {
