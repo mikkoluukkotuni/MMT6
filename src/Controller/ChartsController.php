@@ -89,7 +89,7 @@ class ChartsController extends AppController
         // reqChart
         $reqChart->xAxis->categories = $weeklyreports['weeks'];
         $reqChart->series[] = array(
-            'name' => 'New',
+            'name' => 'Product Backlog',
             'data' => $reqData['new']
         );
         $reqChart->series[] = array(
@@ -150,7 +150,7 @@ class ChartsController extends AppController
         // reqPercentChart
         $reqPercentChart->xAxis->categories = $weeklyreports['weeks'];
         $reqPercentChart->series[] = array(
-            'name' => 'New',
+            'name' => 'Product Backlog',
             'data' => $reqData['new']
         );
         $reqPercentChart->series[] = array(
