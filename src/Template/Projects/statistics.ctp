@@ -126,9 +126,15 @@
     <table class="stylized-table half-width">
         <h4><?= h('Total numbers of working hours') ?></h4>
         <tbody>
+            <tr class="header">
+                <td>Project name</td>
+                <td>Number of members</td>
+                <td>Total number of working hours</td>
+            </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
                     <td><?= h($project['project_name']) ?></td>
+                    <td><?= h($project['user_members']) ?></td>
                     <td><?= h($project['sum']) ?></td>
                 </tr>
             <?php endforeach; ?>
