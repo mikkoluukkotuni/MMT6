@@ -23,9 +23,13 @@ echo $this->Html->script('jquery-ui.min');
             echo $this->Form->input('email', ['options' => $users, 'type' => 'text', 'id' => 'autocomplete', 
                 'required' => true, 'label' => 'Email of the user (enter first few characters)']);
             ?></div><?php
-            echo $this->Form->input('project_role', 
-                ['options' => array('client' => 'client', 'developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor'), 'empty' => ' ']);
-            
+            if($this->request->session()->read('selected_project_role') == 'manager') {
+                echo $this->Form->input('project_role', 
+                    ['options' => array('client' => 'client', 'developer' => 'developer', 'manager' => 'manager'), 'empty' => ' ']);     
+            } else {
+                echo $this->Form->input('project_role', 
+                    ['options' => array('client' => 'client', 'developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor'), 'empty' => ' ']);            
+            }
             // jQuery UI datepicker
             echo $this->Form->input('starting_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);            
             ?> </br>
