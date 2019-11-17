@@ -69,8 +69,8 @@
         }
 	}
 ?>
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
 
+<ul class="side-nav">
            <?php
             // link not visible to devs and clients
             if ($admin || $supervisor || $manager) { ?>
