@@ -184,8 +184,9 @@
 
 	/* Banner picture */
 	#topimg {
-            margin-left: 1em;
-            margin-bottom: 1em;
+			margin-top: 0.5em;
+            /*margin-left: 1em;
+            margin-bottom: 1em;*/
 	}
         /*
 		#topimg img {
@@ -198,10 +199,9 @@
                     margin-right: 1em;
 					padding: 0.1em;
 					width: 10%;
-					/*display: inline-block;*/
 		}
 		#topimg .logo {
-					
+					width: 30%;
                     font-size: 1.4em;
 		}
                 
@@ -761,9 +761,8 @@ a.link-highlight{
 
 	/*
 		.title-area {
-		  background: #01545b;
-		  height: 80px;
-		  z-index: 2;
+		  margin-top: 0em;
+		}
 		  
 		  border-right: 2px solid white;
 		  border-bottom: 2px solid white;
