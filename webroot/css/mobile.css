@@ -27,7 +27,7 @@ header a.toggle img{
 
 header .main-bar{
     height: 50px;
-    background-color: #083e7f;
+    background-color: #581886;
     position: relative;
 }
 
@@ -43,7 +43,7 @@ header .title{
 
 nav{
     display: none;
-    background-color: #4591CF;
+    background-color: #34205B;
 }
 
 nav ul{
@@ -61,8 +61,8 @@ nav li a{
 }
 
 nav li a:hover, nav li a:focus{
-    background-color: #dae2ef;
-    color: #083e7f;
+    background-color: #000;
+    color: #fff;
 }
 
 .login-form{
@@ -77,9 +77,6 @@ nav li a:hover, nav li a:focus{
     margin-top: 20px;
 }
 
-
-
-
 .link-item-list{
     padding: 10px;
 }
@@ -91,12 +88,12 @@ nav li a:hover, nav li a:focus{
     min-height: 60px;
     background-color: #FFF;
     padding: 10px;
-    color: #1A1A1A;
+    color: #000000;
 }
 
 .link-item-list a.item:hover, .link-item-list a.item:focus{
-    color: #FFF;
-    background-color: #083e7f;
+    color: #000000;
+    background-color: #EBECF1;
 }
 
 .link-item-list a.item:hover h2, .link-item-list a.item:focus h2{
@@ -106,7 +103,7 @@ nav li a:hover, nav li a:focus{
 .item h2{
     font-size: 20px;
     margin: 0 0 4px 0;
-    color: #083e7f;
+    color: #34205B;
 }
 
 .item-list .item{
@@ -133,7 +130,7 @@ div.hours .number{
 }
 
 div.total-hours{
-    background-color: #083e7f;
+    background-color: #000000;
     color: #FFF;
     font-size: 20px;
     padding: 10px;
@@ -156,11 +153,11 @@ fieldset{
 }
 
 fieldset legend{
-    color: #083e7f;
+    color: #34205B;
     font-size: 18px;
     margin-top: 10px;
     padding-bottom: 5px;
-    border-bottom: 1px solid #083e7f;
+    border-bottom: 1px solid #34205B;
     width: 100%;
 }
 
@@ -246,12 +243,12 @@ fieldset legend{
     padding: 12px;
     text-align: center;
     color: #FFF;
-    background-color: #4591CF;
+    background-color: #34205B;
 }
 
 .chart-menu a:hover, .chart-menu a:active{
     background-color: #dae2ef;
-    color: #083e7f;
+    color: #000000;
 }
 
 
@@ -265,7 +262,7 @@ fieldset legend{
 
 .report-box .title{
     padding: 7px;
-    background-color: #083e7f;
+    background-color: #34205B;
     color: #FFF;
     font-size: 20px;
 }
@@ -276,7 +273,7 @@ fieldset legend{
 }
 
 .report-item .item-label{
-    color: #083e7f;
+    color: #34205B;
     font-size: 18px;
     padding: 3px 0;
 }
@@ -285,13 +282,11 @@ fieldset legend{
     
 }
 
-
-
 h4{
-    color: #083e7f;
+    color: #34205B;
     padding-bottom: 0.5rem;
     margin-bottom: 10px;
-    border-bottom: 2px solid #083e7f;
+    border-bottom: 2px solid #34205B;
 }
 
 
@@ -306,7 +301,7 @@ table.stylized-table{
         }
         
         table.stylized-table .header td{
-            background-color: #083e7f;
+            background-color: #34205B;
             color: #FFFFFF;
         }
         
@@ -352,8 +347,8 @@ div.message {
 	  font-weight: normal;
 	  padding: 0.5rem 1.5rem;
 	  transition: height 300ms ease-out 0s;
-	  background-color: #a0d3e8;
-	  color: #626262;
+	  background-color: #EBECF1;
+	  color: #000000;
 	  position: fixed;
 	  bottom: 10px;
           left: 1%;
