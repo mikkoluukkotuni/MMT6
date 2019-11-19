@@ -1521,44 +1521,48 @@ a.link-highlight{
         
         
         /*Different colors for test layout*/
-        
+        /*
         body.test-layout{
             background-image: url('../img/tausta_test.jpg');
         }
-        
+        */
         .test-layout .dropdown{
-            border: 1px solid #2e2e2e;
+            border: 1px solid #581886;
         }
         
         .test-layout .dropdown button{
-            background-color: #2e2e2e;
+            background-color: #581886;
         }
         
         .test-layout #notificationarea button {
             background-color: #2e2e2e;
 	}
-        
+    /*  
         .test-layout #left-title {
 		background-color: #2e2e2e;
 
 	}
-
+	*/
         .test-layout footer {
-            background-color: #2e2e2e !important;             
+            background-color: #000000 !important;             
 	}
 
+		.test-layout #navtop {
+			background-color: #000000;
+		}
+
         .test-layout button {
-            background: #2e2e2e;
+            background: #581886;
 	}
         
         .test-layout form a.link-button{
-            background: #2e2e2e;
+            background: #581886;
         }
-        
+        /*
         .test-layout #navtop ul a {
             background-color: #2e2e2e;
 	}
 	.test-layout #navtop ul li a:hover {
             background-color: #c7c7c7;
             color: #2e2e2e;
-        }
+        }*/

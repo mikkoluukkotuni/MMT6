@@ -1,6 +1,6 @@
 
     <ul class="side-nav">
-        <li><?= $this->Html->link(__('What is Slack Integration?'), ['controller' => 'Slack', 'action' => 'about'],['class' => 'link-highlight']) ?> </li>
+        <li><?= $this->Html->link(__('What is Slack Integration?'), ['controller' => 'Slack', 'action' => 'about']) ?> </li>
     </ul>
 
 <div class="workinghours form large-8 medium-16 columns content float: left">
