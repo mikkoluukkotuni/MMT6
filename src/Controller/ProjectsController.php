@@ -66,7 +66,6 @@ class ProjectsController extends AppController
 
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
-        
         // if the selected project is a new one
         if($this->request->session()->read('selected_project')['id'] != $project['id']){
             // write the new id 
@@ -192,6 +191,7 @@ class ProjectsController extends AppController
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
             $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $project['sum'] = $this->Projects->getHoursDuration($project['id']);
+            $project['user_members'] = $this->Projects->getUserMember($project['id']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

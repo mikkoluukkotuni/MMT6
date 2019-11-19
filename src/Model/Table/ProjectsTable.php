@@ -86,6 +86,23 @@ class ProjectsTable extends Table
         return $publicProjects;
     }
     
+    // used for getting the number of project's users for public statistics
+    public function getUserMember($project_id) {
+        $members = TableRegistry::get('Members');
+        $queryM = $members
+                ->find()
+                ->select(['project_role'])
+                ->where(['project_id' => $project_id, 'OR' => [['project_role' => 'developer'], ['project_role' => 'manager']], ])
+                ->toArray();
+                $ids = array();
+        foreach($queryM as $temp){
+            $ids[] = $temp->id;
+        }
+        return count($ids);
+    }
+
+
+
     // get the total workinghours of a project
     public function getHoursDuration($project_id) {
         $members = TableRegistry::get('Members');
