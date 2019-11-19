@@ -32,6 +32,7 @@
             <th><?= __('Role') ?></th>
             <td><?= h($user->role) ?></td>
         </tr>
+
     </table>
     <div class="related">
         <h4><?= __('Member of') ?></h4>

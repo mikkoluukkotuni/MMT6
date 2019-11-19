@@ -365,6 +365,16 @@ class UsersController extends AppController
         {
             return False;
         }
+
+        if ($this->request->action === 'view') {
+            $id_length = ceil(log10(abs($user['id']) + 1));
+            if($user['id'] == substr($this->request->url, -$id_length)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
         
         // All registered users can edit their own profile and logout
         if ($this->request->action === 'logout' || $this->request->action === 'editprofile' 

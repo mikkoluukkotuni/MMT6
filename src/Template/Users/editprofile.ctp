@@ -14,6 +14,8 @@
             echo $this->Form->input('first_name');
             echo $this->Form->input('last_name');
             echo $this->Form->input('phone');
+            echo $this->Form->input('research_allowed', array('options' => array('Disallowed', 'Allowed'),'label' => 'Data usage in research:',
+             'hiddenField' => false, 'type' => 'radio'));
             echo $this->Form->button(__('Submit'));
             ?>
     </fieldset>
