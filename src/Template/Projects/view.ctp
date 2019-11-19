@@ -8,11 +8,12 @@
             		            
             if($admin || $supervisor || $manager) { ?>
                 <li><?= $this->Html->link(__('Edit Project'), ['action' => 'edit', $project->id]) ?> </li>
+                <li><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?> </li>
             <?php }            
             if ($admin) { ?>   
                 <li><?= $this->Html->link(__('Metrics'), ['controller' => 'Metrics', 'action' => 'index']) ?> </li>
             <?php }
-            if (!$notmember) { ?>
+            if ($notmember) { ?>
                 <li><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?> </li>
             <?php } ?>
     </ul>

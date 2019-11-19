@@ -455,9 +455,9 @@
                     display: none;
                 }
 	
-#faq {
-	margin: 0 auto;
-}
+/*#faq {
+	margin: 1em 0em 1em 0em;
+}*/
 	#faq ul {
 		list-style-type: circle;
 	}
