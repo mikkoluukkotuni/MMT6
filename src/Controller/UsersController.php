@@ -22,9 +22,11 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
+                // this is used so that normal user can be directed straight to workinghours after login
+                $this->request->session()->write('first_view', True);
                 return $this->redirect(
                     ['controller' => 'Projects', 'action' => 'index']
-                );
+                );            
             }
             $this->Flash->error('Your username or password is incorrect.');
         }

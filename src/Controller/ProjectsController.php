@@ -28,6 +28,14 @@ class ProjectsController extends AppController
             ];     
         }
 
+        // this is used so that normal user can be directed straight to workinghours after login when having only one project
+        if(count($this->request->session()->read('project_memberof_list')) == 1 && $this->Auth->user('role') == 'user' 
+                && $this->request->session()->read('first_view') == True) {
+            return $this->redirect(
+                ['controller' => 'Projects', 'action' => 'view', (string)$this->request->session()->read('project_memberof_list')[0]]
+            );            
+        }
+
         $mobileOptional = false;
         $referer = \Cake\Routing\Router::parse($this->referer('/', true));
         
@@ -46,6 +54,16 @@ class ProjectsController extends AppController
         $project = $this->Projects->get($id, [
             'contain' => ['Members', 'Metrics', 'Weeklyreports']
         ]);
+
+        // when normal user opens the project first time after login it redirect to Workinghours
+        if($this->Auth->user('role') == 'user' && $this->request->session()->read('first_view') == True) {
+            $this->request->session()->write('first_view', False);
+            $this->request->session()->write('selected_project', $project);
+            return $this->redirect(
+                ['controller' => 'Workinghours', 'action' => 'index']
+            );
+        }
+
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
         
@@ -57,7 +75,9 @@ class ProjectsController extends AppController
             $this->request->session()->delete('current_weeklyreport');
             $this->request->session()->delete('current_metrics');
             $this->request->session()->delete('current_weeklyhours');
-        }  
+        }
+
+
         
        
     }
