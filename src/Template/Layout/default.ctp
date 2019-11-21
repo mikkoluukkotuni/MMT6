@@ -72,15 +72,17 @@ $cakeDescription = 'MMT';
 		<?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?>
 		<?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
 		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
+		<?php
+			if ( empty(!$this->request->session()->read('Auth.User')) ) { ?>
+				<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
+			<?php }
+		?>
 	</div>
 		<?php
 			if ( empty(!$this->request->session()->read('Auth.User')) ) { 
 				$name = $this->request->session()->read('Auth.User.first_name') ?>
-					<div class="general-links">
-						<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
-					</div>
-					<div class="personal-links"
-						<?= $this->Html->link(__($name), ['controller' => 'Users', 'action' => 'editprofile']) ?>
+					<div class="personal-links">
+						<?= $this->Html->link(__($name), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?>
 						<?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?>
 					</div>
 			<?php
