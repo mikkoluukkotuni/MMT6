@@ -22,7 +22,7 @@
     <h3><?= h($project->project_name) ?></h3>
 	<p>
 		<?= h($project->description) ?>
-	</p>
+    </p>
     <table class="vertical-table">
         <tr>
             <th><?= __('Created On') ?></th>
@@ -35,8 +35,8 @@
 				echo h($project->updated_on->format('d.m.Y'));
 			?></tr>
         </tr>
-        <tr>
-            <th><?= __('Completion Date') ?></th>
+        <tr> 
+            <th><?= __('Estimated Completion Date') ?></th>
             <td><?php
 			if ($project->finished_date != NULL)
 				echo h($project->finished_date->format('d.m.Y')); 

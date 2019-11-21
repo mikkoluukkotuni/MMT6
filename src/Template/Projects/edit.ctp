@@ -13,7 +13,17 @@ echo $this->Html->script('jquery-ui.min');
             )
         ?></li>
     </ul>
-
+<!-- <style>
+    a.contshop {
+    display:inline-block;
+    width:200px;
+    height:80px; /* Change to the height of your image */
+    background:url('../../webroot/img/questionmark.png') no-repeat;
+}
+a.contshop:hover {
+    text: "asd";
+}
+</style> -->
 <div class="projects form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($project) ?>
     <fieldset>
@@ -21,8 +31,14 @@ echo $this->Html->script('jquery-ui.min');
         <?php
             echo $this->Form->input('project_name');
             
+            //tiedosto kesken vielä
+
+            // echo $this->Html->link('', array('controller' => 'shops', 'action' => 'index'), array('class'=>'contshop'));
+
+            //echo $this->Form->image('../../webroot/img/questionmark.png');
+
             // Req 37: using jQuery UI datepicker
-            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Completion date', 'id' => 'datepicker']);
+            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion Date', 'id' => 'datepicker']);
             ?> </br>
             <?php
             echo $this->Form->input('description');
