@@ -265,11 +265,13 @@ body {
   }
 
   .general-links {
+	  padding-left: 12em;
 	  display: inline;
   }
 
   .personal-links {
 	  display: inline;
+	  font-weight: lighter;
 	  padding-left: 10em;
   }
   
@@ -1071,7 +1073,6 @@ a.link-highlight{
   .time select,
   .datetime select {
 	display: inline;
-	width: auto;
 	margin-right: 10px;
   }
 
@@ -1477,10 +1478,7 @@ a.link-highlight{
   }
 
   /* Force equal height by overflowing */
-  .content,
-  #actions-sidebar {
-	  
-  }
+
   @media(max-width: 640px) {
 	  #actions-sidebar {
 		  padding-bottom: 2rem;
