@@ -1,7 +1,9 @@
 
+<?php if($this->request->session()->read('is_admin')) { ?>
     <ul class="side-nav">
         <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
     </ul>
+<?php } ?>
 
 <div class="users view large-7 medium-14 columns content float: left">
     <h3><?= h($user->first_name ." ". $user->last_name) ?></h3>
