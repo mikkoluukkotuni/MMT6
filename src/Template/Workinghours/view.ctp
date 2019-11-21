@@ -68,7 +68,7 @@
         <?php } ?>
         <?php if($workinghour->modified_on != NULL) {?>
             <tr>
-                <th><?= __('Modified On') ?></th>
+                <th><?= __('Updated On') ?></th>
                 <td colspan="2"><?= h($workinghour->modified_on->format('d.m.Y')) ?></tr>
             </tr>
         <?php } ?>
