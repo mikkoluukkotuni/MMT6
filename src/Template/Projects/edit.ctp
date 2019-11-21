@@ -13,29 +13,15 @@ echo $this->Html->script('jquery-ui.min');
             )
         ?></li>
     </ul>
-<!-- <style>
-    a.contshop {
-    display:inline-block;
-    width:200px;
-    height:80px; /* Change to the height of your image */
-    background:url('../../webroot/img/questionmark.png') no-repeat;
-}
-a.contshop:hover {
-    text: "asd";
-}
-</style> -->
+
 <div class="projects form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($project) ?>
     <fieldset>
         <legend><?= __('Edit Project') ?></legend>
         <?php
             echo $this->Form->input('project_name');
-            
-            //tiedosto kesken vielä
 
-            // echo $this->Html->link('', array('controller' => 'shops', 'action' => 'index'), array('class'=>'contshop'));
-
-            //echo $this->Form->image('../../webroot/img/questionmark.png');
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This is used to make some of the charts. Manager should set this. It can be changed later.']);
 
             // Req 37: using jQuery UI datepicker
             echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion Date', 'id' => 'datepicker']);
@@ -67,11 +53,15 @@ a.contshop:hover {
 	<?= $this->Form->end(); ?>
 </div>
 
+<!-- <script>
+    document.getElementById('infoicon.png').title
+</script> -->
 <script> 
     /*
      * Req 37:
      * minDate is the date the project was created, no min date if it is admin
      */
+    
     $( "#datepicker" ).datepicker({
         dateFormat: "MM d, yy",
         minDate: <?php if($isAdmin) { ?> null<?php } else { ?> new Date('<?php echo $mDate; ?>') <?php } ?>,
