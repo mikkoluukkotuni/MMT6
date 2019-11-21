@@ -59,6 +59,18 @@
         <tr>
             <th><?= __('Description') ?></th>
             <td colspan="2"><?= h(wordwrap($workinghour->description,35,"\n",TRUE)) ?></td>
-        </tr>
+        </tr>        
+        <?php if($workinghour->created_on != NULL) {?>
+            <tr>
+                <th><?= __('Created On') ?></th>
+                <td colspan="2"><?= h($workinghour->created_on->format('d.m.Y')) ?></tr>
+            </tr>
+        <?php } ?>
+        <?php if($workinghour->modified_on != NULL) {?>
+            <tr>
+                <th><?= __('Modified On') ?></th>
+                <td colspan="2"><?= h($workinghour->modified_on->format('d.m.Y')) ?></tr>
+            </tr>
+        <?php } ?>
     </table>
 </div>
