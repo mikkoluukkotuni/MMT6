@@ -21,6 +21,7 @@
                 <th colspan="2"><?= __('Name') ?></th>
                 <th><?= $this->Paginator->sort('project_role') ?></th>
                 <th><?= __('Working hours') ?></th>
+                <th><?= __('Target hours') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -50,14 +51,27 @@
                 $total += $sum;?>
 
                 <td><?= h($sum) ?></td>
+                <td><?php 
+                    if ($member->project_role != 'supervisor' && $member->project_role != 'client') { 
+                        if ($member->target_hours != NULL)
+                            echo h($member->target_hours); 
+                        else
+                            echo h('100 (default)');
+                    }
+                ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $member->id]) ?>
                     <?php
 			$admin = $this->request->session()->read('is_admin');
-			$supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
-			if($admin || $supervisor){
+            $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+            //developer can edit own data
+            $current_member = ( $this->request->session()->read('selected_project_memberid') == $member->id ) ? 1 : 0;
+			if($admin || $supervisor || $current_member){
 			        ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $member->id]) ?>
+                    <?php } ?>
+            <?php if($admin || $supervisor){
+                    ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $member->id], ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]) ?>
                     <?php } ?>
                 </td>

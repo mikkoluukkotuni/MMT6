@@ -30,6 +30,9 @@ echo $this->Html->script('jquery-ui.min');
                 echo $this->Form->input('project_role', 
                     ['options' => array('client' => 'client', 'developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor'), 'empty' => ' ']);            
             }
+                        
+            echo $this->Form->input('target_hours', array('type' => 'integer', 'value' => '100', 'style' => 'width: 15%;'));
+
             // jQuery UI datepicker
             echo $this->Form->input('starting_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);            
             ?> </br>
