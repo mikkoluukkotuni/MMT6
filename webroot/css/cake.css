@@ -265,14 +265,28 @@ body {
   }
 
   .general-links {
-	  padding-left: 12em;
+	  position: relative;
 	  display: inline;
   }
 
   .personal-links {
-	  display: inline;
-	  font-weight: lighter;
-	  padding-left: 10em;
+	display: inline;
+	position: fixed;
+  	top: 0;
+	right: 10%;
+	padding: 0.5em 0em;
+  }
+
+  .personal-links a {
+	color: #ffffff;
+	margin-right: 1em;
+  }
+
+  .personal-links a:hover {
+	border-bottom: 5px;
+	border-bottom-style: solid;
+	border-color: #78C4E6;
+	color: #ffffff
   }
   
 
@@ -363,6 +377,29 @@ body {
 	  position: static;
 	  width: 100%;
   }
+
+  #add_new {
+	background-color: #34205B;
+	display: inline;
+	position: absolute;
+	padding: 0.5em 0.5em;
+	right: 1em;
+	margin-top: -4em;
+	border: 2px;
+	border-style: solid;
+	border-color: transparent;
+  }
+
+  #add_new a {
+	  color: #ffffff;
+  }
+
+  #add_new:hover {
+	color: #ffffff;
+	border: 2px;
+	border-style: solid;
+	border-color: #78C4E6;
+}
 
   /* All footer related styling */
   footer {
@@ -1365,8 +1402,7 @@ a.link-highlight{
 
   fieldset {
 	border: none;
-	padding: 1.25rem;
-	margin: 1.125rem 0;
+	padding-bottom: 1.25rem;
   }
 
   fieldset legend {
