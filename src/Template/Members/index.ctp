@@ -1,6 +1,11 @@
-
+<!--
     <ul class="side-nav">
-        <?php
+        
+    </ul>
+-->
+<div class="members index large-9 medium-18 columns content float: left">
+    <h3><?= __('Members') ?></h3>
+    <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
             // FIX: managers can also add new members
@@ -8,12 +13,8 @@
             
             if($admin || $supervisor || $manager ) {
         ?>
-            <li><?= $this->Html->link(__('New Member'), ['action' => 'add']) ?></li>
+            <button id="add_new"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
         <?php } ?>
-    </ul>
-
-<div class="members index large-9 medium-18 columns content float: left">
-    <h3><?= __('Members') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
