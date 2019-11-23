@@ -66,10 +66,11 @@ $cakeDescription = 'MMT';
         
 ?>
 
-<!-- testing general top naviagation bar -->
+<!-- general top naviagation bar -->
 <div id="navgeneral">
 	<div class="general-links">
 		<?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?>
+		<?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?>
 		<?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
 		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
 		<?php
@@ -78,6 +79,7 @@ $cakeDescription = 'MMT';
 			<?php }
 		?>
 	</div>
+</div>
 		<?php
 			if ( empty(!$this->request->session()->read('Auth.User')) ) { 
 				$name = $this->request->session()->read('Auth.User.first_name') ?>
@@ -88,8 +90,6 @@ $cakeDescription = 'MMT';
 			<?php
 			}
 		?>
-	</ul>
-</div>
 
 <div id="area51">
 	<!-- This area is meant for notifications about new messages -->
@@ -282,33 +282,37 @@ $cakeDescription = 'MMT';
 	</nav> 
 	
 	<!-- top navigation bar with every other button -->
-	<nav id="navtop" role="navigation" data-topbar>
-		<ul>
-			<li class="navbutton"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-				<?php // Link to public statistics (only for admins and supervisors)
-                    if ($admin || $supervisor) { ?>
-                        <li><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
-                    <?php }
-			// logged in with a project selected
-			if( $this->request->session()->check('selected_project') ) { ?>
-                            <li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
-                            <?php // if not a member, particular links are not shown 
-                            if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
-                                <li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-                                <li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-                                <li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
-                                <li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
-                            <?php } ?>	
-                            <?php if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-                                <li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
-                                <li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
-                            <?php endif; ?>
-                            <li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
-                            <?php  
-                        } ?>
-	        </ul> <!-- end -->
+	<?php if ( !empty($this->request->session()->read('Auth.User')) ){ ?>
+		<nav id="navtop" role="navigation" data-topbar>
+			<ul>
+				<li class="navbutton"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
+					<?php // Link to public statistics (only for admins and supervisors)
+						if ($admin || $supervisor) { ?>
+							<li><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
+						<?php }
+				// logged in with a project selected
+				if( $this->request->session()->check('selected_project') ) { ?>
+								<li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+								<?php // if not a member, particular links are not shown 
+								if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
+									<li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
+									<li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+									<li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+									<li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
+								<?php } ?>	
+								<?php if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
+									<li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
+									<li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
+								<?php endif; ?>
+								<li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+								<?php  
+							} ?>
+				</ul> <!-- end -->
+			<div class="clearer"></div>
+		</nav>
+	<?php } else { ?>
 		<div class="clearer"></div>
-	</nav>
+	<?php } ?>
 
     <?= $this->Flash->render() ?>
     <section class="container clearfix">
