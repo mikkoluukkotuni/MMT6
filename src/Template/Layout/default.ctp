@@ -227,7 +227,6 @@ $cakeDescription = 'MMT';
 				?>
 				<ul>
                                     <li class="buttonTop"><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
-									<li class="buttonTop"><?= $this->Html->link(__('View profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?></li>
                                     <li class="buttonTop"><?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
                                     <li class="buttonOut"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
                                 </ul>
@@ -253,36 +252,41 @@ $cakeDescription = 'MMT';
 				<h1><a href=""><?= $this->fetch('title') ?></a></h1>
 			</li>
 		</ul>
-	</nav> 
+	</nav>
 	
 	<!-- top navigation bar with every other button -->
 	<nav id="navtop" role="navigation" data-topbar>
 	    	<ul>
-                    <li class="navbutton"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>	
+                    <li id="homeBtn" class="navbutton"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>	
 	            <?php // Link to public statistics (only for admins and supervisors)
                     if ($admin || $supervisor) { ?>
-                        <li class="navbutton"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
+                        <li id="statisticsBtn" class="navbutton"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
                     <?php }
 			// logged in with a project selected
 			if( $this->request->session()->check('selected_project') ) { ?>
-                            <li class="navbutton"><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+                            <li id="projectsBtn" class="navbutton"><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
                             <?php // if not a member, particular links are not shown 
                             if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
-                                <li class="navbutton"><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
+                                <li id="membersBtn" class="navbutton"><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
+                                <li id="weeklyreportsBtn" class="navbutton"><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+                                <li id="workinghoursBtn" class="navbutton"><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+                                <li id="risksBtn" class="navbutton"><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
                             <?php } ?>	
                             <?php if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-                                <li class="navbutton"><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
+                                <li id="slackBtn" class="navbutton"><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
+                                <li id="trelloBtn" class="navbutton"><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
                             <?php endif; ?>
-                            <li class="navbutton"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
-                            <?php  
+                            <li id="chartsBtn" class="navbutton"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+							<?php
                         } ?>
 	        </ul> <!-- end -->
 		<div class="clearer"></div>
 	</nav>
+
+	<?php
+		$title = $this->fetch('title');
+		echo "<script type='text/javascript'>selectNavButton('$title')</script>"
+	?>
 
     <?= $this->Flash->render() ?>
     <section class="container clearfix">
@@ -296,7 +300,7 @@ $cakeDescription = 'MMT';
 	<div id="area52">
 		<div class="footerblock">
 			<div id="logoblock">
-                <?= $this->Html->image('ylapalkki.jpg'); ?>
+                                <?= $this->Html->image('ylapalkki.jpg'); ?>
 				<!--<?= $this->Html->image('pitkalogo1.png'); ?>
 				<div class="footerlogo">METRICS</div>
 				<div class="footerlogo">MONITORING</div>
@@ -315,10 +319,8 @@ $cakeDescription = 'MMT';
 		<div class="footerblock">
 			<h6>OTHER RESOURCES</h6>
 			<ul>
-                            <!--<li><a href="http://www.uta.fi/sis/tie/pw/statistics.html" target="_blank">Project Work course - Statistics</a></li>
-							<li><a href="http://www.uta.fi/sis/yhteystiedot/henkilokunta/pekkamakiaho.html" target="_blank">Supervisor's web site</a></li>-->
-							<li><a href="https://coursepages.uta.fi/tiea4/paasivu/statistics/" target="_blank">Project Work course - Statistics</a></li>
-							<li><a href="https://www.linkedin.com/in/makiaho/" target="_blank">Supervisor's web site</a></li>
+                            <li><a href="http://www.uta.fi/sis/tie/pw/statistics.html" target="_blank">Project Work course - Statistics</a></li>
+                            <li><a href="http://www.uta.fi/sis/yhteystiedot/henkilokunta/pekkamakiaho.html" target="_blank">Supervisor's web site</a></li>
                             <li><?= $this->Html->link(__('Mobile Website'), ['controller' => 'Mobile', 'action' => 'index']) ?> </li>                   
 			</ul>
 
