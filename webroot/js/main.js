@@ -90,4 +90,17 @@ function readURL(input) {
     }
 }
 
+function selectNavButton(clicked) {
+    var id = '#'+clicked.toLowerCase()+'Btn';
 
+    const loc = $(location).attr('pathname');
+    if (loc === '/mmt-5/projects') {
+        id = '#homeBtn';
+    } else if (loc === '/mmt-5/projects/statistics') {
+        id = '#statisticsBtn';
+    }
+
+    $('.navtop ul a').removeClass('selectedLink');
+
+    $(id+ ' a').addClass('selectedLink');
+}
