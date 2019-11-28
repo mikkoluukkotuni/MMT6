@@ -89,6 +89,11 @@ $cakeDescription = 'MMT';
 					</div>
 			<?php
 			}
+			else { ?>
+				<div class="personal-links">
+					<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
+				</div>
+			<?php }
 		?>
 
 <div id="area51">
@@ -185,82 +190,6 @@ $cakeDescription = 'MMT';
 	}
 	?>
 	
-	<div class="dropdown">
-		<button title="Click to open">
-			<?php
-				// different label text depending on if logged in or not
-				if ( empty($this->request->session()->read('Auth.User')) ) {
-					echo '<span id="label">Log in</span>';
-				} else {
-					echo '<span id="label">Options</span>';
-				}
-			?>
-			<?= $this->Html->image('arrow.png'); ?>
-		</button>
-		<div class="dd-content">
-			<?= 
-                            //$this->Html->image('icon.png');
-                            $this->Custom->profileImage($this->request->session()->read('Auth.User')['id']);
-                        ?>
-			<div id="userinfo">
-				<div class="info">Logged in as</div>
-				<?php
-				/* Displays user information to every page
-				   Requirement ID: 23
-				   - Andy
-				*/
-				// checks if logged in
-				if ( empty($this->request->session()->read('Auth.User')) ){
-					print_r('Currently not logged in');
-				?>
-				<ul>
-                                    <li class="buttonIn"><?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?></li>					
-                                    <li class="buttonTop"><?= $this->Html->link(__('Sign up'), ['controller' => 'Users', 'action' => 'signup']) ?></li>
-				</ul>
-                                <br>
-                                <?= $this->Html->link(__('Forgot Password'), ['controller' => 'Users', 'action' => 'forgotpassword']) ?>
-				<?php
-
-				} else {
-					// prints user's full name
-					print_r( ($this->request->session()->read('Auth.User.first_name')).' '.($this->request->session()->read('Auth.User.last_name')) );
-					// checks if user has accessed any projects
-					if ($this->request->session()->check('selected_project') ) {
-
-						// fetch the name of current project
-						$selected_project = $this->request->session()->read('selected_project');
-						$name = $selected_project['project_name'];
-
-						echo "<div class=\"info\">On project</div>";
-
-						// the text part
-						if ($selected_project)
-							print_r($name);
-						else
-							print_r('none');
-						/* FIX 10.3.2016: now being a non-member is also shown
-						   Requirement ID: 23
-						   - Andy
-						*/
-						// display current role. Non-member status is also displayed
-						echo "<div class=\"info\">Project role</div>";
-						if (($this->request->session()->read('selected_project_role')) != 'notmember' ) {
-							print_r(($this->request->session()->read('selected_project_role')) );
-						} else {
-							print_r('not a member');
-						}
-					}
-				?>
-				<ul>
-                                    <li class="buttonTop"><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
-									<li class="buttonTop"><?= $this->Html->link(__('View profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?></li>
-                                    <li class="buttonTop"><?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
-                                    <li class="buttonOut"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
-                                </ul>
-				<?php } ?>
-			</div>
-		</div>
-	</div>
 	<!-- this non-breaking space is empty content that makes the page render correctly -->
 	&nbsp;
 	<!--<div id="topimg">
