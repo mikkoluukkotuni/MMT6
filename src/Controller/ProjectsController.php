@@ -12,6 +12,9 @@ class ProjectsController extends AppController
 {
     public function index()
     {
+        if($this->Auth->user('id') == NULL) {
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
         // list of the projects that should be shown in the front page
         $project_list = $this->request->session()->read('project_list');
         if($project_list != NULL){
