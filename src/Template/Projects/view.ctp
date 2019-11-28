@@ -25,7 +25,7 @@
 	</p>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Created On') ?></th>
+            <th><?= __('Starting Date') ?></th>
             <td><?= h($project->created_on->format('d.m.Y')) ?></tr>
         </tr>
         <tr>

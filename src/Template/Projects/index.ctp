@@ -38,7 +38,7 @@
             <thead>
                 <tr>
                     <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
-                    <th><?= $this->Paginator->sort('created_on') ?></th>
+                    <th><?= $this->Paginator->sort('created_on', ['label' => 'Starting Date']) ?> </th>
                     <th><?= __('Desciption') ?></th>
                     <?php // links to unread weekly reports for supervisors
                     $super = $this->request->session()->read('is_supervisor');
@@ -106,7 +106,7 @@
             <thead>
                 <tr>
                     <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
-                    <th><?= $this->Paginator->sort('created_on') ?></th>
+                    <th><?= $this->Paginator->sort('created_on', ['label' => 'Starting Date']) ?></th>
                     <th><?= $this->Paginator->sort('description') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>

@@ -19,7 +19,7 @@ echo $this->Html->script('jquery-ui.min');
             // jQuery UI datepicker
                         
             echo $this->Form->input('project_name');
-            echo $this->Form->input('created_on', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);
+            echo $this->Form->input('created_on', ['label' => 'Starting Date', 'type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);
             echo $this->Form->input('description');
             echo $this->Form->input('is_public', array('label' => "This project is public"));
 			echo $this->Form->button(__('Submit'));
