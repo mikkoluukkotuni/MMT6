@@ -221,7 +221,7 @@
                     }
                     */
                     // if (($admin || $supervisor) || ($manager && (($weeklyreport->year >= $lastReport['year']) && ($weeklyreport->week >= $lastReport['week'])))) { 
-                    if ( $admin || $supervisor ) { ?> 
+                    if ( $admin || $supervisor || $manager) { ?> 
                         <th class="actions"><?= __('Actions') ?></th>
                     <?php } ?>
                 </tr>
@@ -234,7 +234,7 @@
                     // admins and supervisors can edit metrics
                     // managers can edit metrics of the last weeklyreport
                     // if (($admin || $supervisor) || ($manager && (($weeklyreport->year >= $lastReport['year']) && ($weeklyreport->week >= $lastReport['week'])))) { 
-                    if ( $admin || $supervisor ) { ?>     
+                    if ( $admin || $supervisor || $manager) { ?>     
                         <td class="actions">
                             <?= $this->Html->link(__('Edit'), ['controller' => 'Metrics', 'action' => 'edit', $metrics->id]) ?>  
                         </td> 
