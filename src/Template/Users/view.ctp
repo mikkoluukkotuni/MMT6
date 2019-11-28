@@ -1,10 +1,11 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
-    </ul>
-
 <div class="users view large-7 medium-14 columns content float: left">
     <h3><?= h($user->first_name ." ". $user->last_name) ?></h3>
+    <?php   $admin = $this->request->session()->read('is_admin');
+            
+            if($admin) { ?>
+            <button id="navbutton"><?= $this->Html->link(__('Manage User'), ['action' => 'edit', $user->id]) ?></button>
+            <?php } ?>
     <table class="vertical-table">
         <tr>
             <th><?= __('Id') ?></th>
