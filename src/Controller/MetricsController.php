@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
+use Cake\I18n\Time;
 
 class MetricsController extends AppController
 {
@@ -285,6 +286,8 @@ class MetricsController extends AppController
             }
             // if no errors found
             else {
+                $time = Time::now();
+                $metric['date'] = $time;
                 if ($this->Metrics->save($metric)) {
                     $this->Flash->success(__('The metric has been saved.'));
                     // takes the user to the weeklyreport's page
