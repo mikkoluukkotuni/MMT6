@@ -13,7 +13,7 @@
             
             if($admin || $supervisor || $manager ) {
         ?>
-            <button id="add_new"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
+            <button id="navbutton"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
         <?php } ?>
     <table cellpadding="0" cellspacing="0">
         <thead>
