@@ -70,32 +70,12 @@
 	}
 ?>
 
-<ul class="side-nav">
-           <?php
-            // link not visible to devs and clients
-            if ($admin || $supervisor || $manager) { ?>
-                <li><?= $this->Html->link(__('Edit Weeklyreport'), ['action' => 'edit', $weeklyreport->id]) ?> </li>
-            <?php }
-            // Logging time is allowed for the last weeklyreport
-            // link not visible to supervisors and clients
-            /*
-            $queryForMax = Cake\ORM\TableRegistry::get('Weeklyreports')
-		->find()
-		->select(['year', 'week'])
-		->where(['project_id =' => $weeklyreport['project_id']])
-		->toArray();
-            if(!empty($queryForMax)) {
-                    $lastReport = max($queryForMax);
-            }
-            if (($weeklyreport->year >= $lastReport['year']) && ($weeklyreport->week >= $lastReport['week'])) {
-                if ($admin || $manager || $developer) { ?>
-                <li><?= $this->Html->link(__('Log time late'), ['controller' => 'Workinghours', 'action' => 'addlate']) ?></li>            
-            <?php } 
-            } */ ?>
-    </ul>
-
 <div class="weeklyreports view large-8 medium-16 columns content float: left">
     <h3><?= h($weeklyreport->title) ?></h3>
+    <?php
+    if ($admin || $supervisor || $manager) { ?>
+        <button id="navbutton"><?= $this->Html->link(__('Edit Weeklyreport'), ['action' => 'edit', $weeklyreport->id]) ?> </button>
+    <?php } ?>
 	<h5><?= h($selected_project = $this->request->session()->read('selected_project')['project_name']) ?></h5>
     <table class="vertical-table">
         <tr>
