@@ -1,25 +1,18 @@
 
-    <ul class="side-nav"> 
-        <?php
-            $admin = $this->request->session()->read('is_admin');
-            $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
-            $notmember = ( $this->request->session()->read('selected_project_role') == 'notmember' ) ? 1 : 0;            
-            $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;		
-            		            
-            if($admin || $supervisor || $manager) { ?>
-                <li><?= $this->Html->link(__('Edit Project'), ['action' => 'edit', $project->id]) ?> </li>
-                <li><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?> </li>
-            <?php }            
-            if ($admin) { ?>   
-                <li><?= $this->Html->link(__('Metrics'), ['controller' => 'Metrics', 'action' => 'index']) ?> </li>
-            <?php }
-            if ($notmember) { ?>
-                <li><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?> </li>
-            <?php } ?>
-    </ul>
-
 <div class="projects view large-7 medium-16 columns content float: left">
     <h3><?= h($project->project_name) ?></h3>
+    <?php
+        $admin = $this->request->session()->read('is_admin');
+        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+        $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;		
+            		            
+        if($admin || $supervisor || $manager) { ?>
+            <button id="navbutton"><?= $this->Html->link(__('Edit Project'), ['action' => 'edit', $project->id]) ?> </button>
+            <?php }            
+        if ($admin) { ?>   
+            <button id="managing_button"><?= $this->Html->link(__('Metrics'), ['controller' => 'Metrics', 'action' => 'index']) ?> </button>
+        <?php }
+    ?>
 	<p>
 		<?= h($project->description) ?>
 	</p>

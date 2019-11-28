@@ -1,4 +1,4 @@
-
+<?php if ( !empty($this->request->session()->read('Auth.User')) ) { ?>
     <ul class="side-nav">
         <?php
             $admin = $this->request->session()->read('is_admin');
@@ -22,13 +22,11 @@
                 <li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
                 <li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
             <?php } ?>
-            <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
-            <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>
-            <li><?= $this->Html->link(__('About MMT 4.0'), ['controller' => 'Projects', 'action' => 'about']) ?> </li>
             <?php if ($admin) { ?>
                 <li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
             <?php } ?>
     </ul>
+<?php } ?>
 
 <div class="projects index large-9 medium-18 columns content float: left">
     <!-- List of the projects the user is a member of -->
