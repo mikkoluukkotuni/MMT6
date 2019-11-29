@@ -28,6 +28,10 @@ class ProjectsController extends AppController
             ];     
         }
 
+        if($this->Auth->user('id') != NULL) {
+            $this->request->session()->write('selected_project', NULL);
+        }
+
         // this is used so that normal user can be directed straight to workinghours after login when having only one project
         if(count($this->request->session()->read('project_memberof_list')) == 1 && $this->Auth->user('role') == 'user' 
                 && $this->request->session()->read('first_view') == True) {
