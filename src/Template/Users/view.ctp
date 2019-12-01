@@ -34,7 +34,20 @@
             <th><?= __('Role') ?></th>
             <td><?= h($user->role) ?></td>
         </tr>
-
+        <tr>
+            <th><?= __('Data usage in research') ?></th>
+            <td>
+                <?php if ($user->research_allowed == 1){
+                        echo ("Allowed");
+                    } else if ($user->research_allowed == 0){
+                        echo ("Disallowed");
+                    } else if ($user->research_allowed == -1){
+                        echo ("No answer");
+                    } else {
+                        echo ("No answer");
+                    } ?>            
+            </td>
+        </tr>
     </table>
     <div class="related">
         <h4><?= __('Member of') ?></h4>
