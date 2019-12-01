@@ -26,7 +26,7 @@ echo $this->Html->script('jquery-ui.min');
             echo $this->Form->input('project_name');
             
             // Req 37: using jQuery UI datepicker
-            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion date', 'id' => 'datepicker']);
+            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion Date', 'id' => 'datepicker']);
             ?> </br>
             <?php
             echo $this->Form->input('description');
