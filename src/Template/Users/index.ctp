@@ -16,6 +16,7 @@
                 <th><?= $this->Paginator->sort('last_name') ?></th>
                 <th><?= $this->Paginator->sort('phone') ?></th>
                 <th><?= $this->Paginator->sort('role') ?></th>
+                <th><?= $this->Paginator->sort('research_permission') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -30,6 +31,15 @@
                 <td><?= h($user->last_name) ?></td>
                 <td><?= h($user->phone) ?></td>
                 <td><?= h($user->role) ?></td>
+                <td><?php if ($user->research_allowed == 1){
+                        echo ("Allowed");
+                    } else if ($user->research_allowed == 0){
+                        echo ("Disallowed");
+                    } else if ($user->research_allowed == -1){
+                        echo ("No answer");
+                    } else {
+                        echo ("No answer");
+                    } ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
