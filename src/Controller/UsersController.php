@@ -361,7 +361,7 @@ class UsersController extends AppController
         }
 
         if ($this->request->action === 'add' || $this->request->action === 'edit'
-            || $this->request->action === 'delete' || $this->request->action === 'index' || $this->request->action === 'view') 
+            || $this->request->action === 'delete' || $this->request->action === 'index') 
         {
             return False;
         }

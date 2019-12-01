@@ -6,12 +6,16 @@ echo $this->Html->script('jquery-ui.min');
 
 
     <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $project->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $project->id)]
-            )
-        ?></li>
+    <?php
+        $admin = $this->request->session()->read('is_admin');
+        if ($admin){ ?>
+            <li><?= $this->Form->postLink(
+                    __('Delete'),
+                    ['action' => 'delete', $project->id],
+                    ['confirm' => __('Are you sure you want to delete # {0}?', $project->id)]
+                )
+            ?></li>
+    <?php } ?>
     </ul>
 
 <div class="projects form large-8 medium-16 columns content float: left">
@@ -22,7 +26,7 @@ echo $this->Html->script('jquery-ui.min');
             echo $this->Form->input('project_name');
             
             // Req 37: using jQuery UI datepicker
-            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Completion date', 'id' => 'datepicker']);
+            echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion date', 'id' => 'datepicker']);
             ?> </br>
             <?php
             echo $this->Form->input('description');
