@@ -1,14 +1,4 @@
 
-    <ul class="side-nav">
-        <?php use Cake\I18n\Time;
-        // get the member id parameter
-        foreach ($this->request['pass'] as $var) {
-            $id = $var;
-        } ?>
-        <li><?= $this->Html->link(__('Team\'s logged tasks'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('View member'), ['controller' => 'Members', 'action' => 'view', $id]) ?></li>
-    </ul>
-
 <div class="workinghours index large-9 medium-18 columns content float: left">
     <?php // member name for the header
         foreach ($workinghours as $workinghour) {
@@ -17,8 +7,11 @@
                   $workinghour->member['member_name'] = $member['member_name'];
                 }
             }
-        } ?>
-    <h3><?= h($workinghour->member['member_name']) ?></h3>
+        }
+        foreach ($this->request['pass'] as $var) {
+            $id = $var;
+        }?>
+    <h3><?= $this->Html->link(__( h($workinghour->member['member_name']) ), ['controller' => 'Members', 'action' => 'view', $id]) ?></h3>
     <div class="related">
     <h4><?= __('Logged tasks') ?></h4>
     <table cellpadding="0" cellspacing="0">
