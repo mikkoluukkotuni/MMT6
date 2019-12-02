@@ -45,7 +45,7 @@ body {
 		  padding-right: 0.5em; 
 		  float: right;
 	  }
-
+/*
   .dropdown {
 	  position: absolute;
 	  right: 2em;
@@ -221,11 +221,12 @@ body {
 
   }
 	  /* Decreases and removes the margin for smaller screens */
-	  @media(max-width: 640px) {
+	  @media(max-width: 800px) {
 	  #area51 {
 				  width: 100%;
 				  border-radius: 0 0 0 0 ;
 	  }
+
   }
 	  
   /* For navigations in general */
@@ -271,7 +272,7 @@ body {
 
   .personal-links {
 	display: inline;
-	position: fixed;
+	position: absolute;
   	top: 0;
 	right: 10%;
 	padding: 0.5em 0em;
@@ -286,8 +287,56 @@ body {
 	border-bottom: 5px;
 	border-bottom-style: solid;
 	border-color: #78C4E6;
-	color: #ffffff
+	color: #ffffff;
   }
+
+  /* Dropdown Button */
+.dropbtn {
+	color: #ffffff;
+	margin-right: 0em;
+	margin-left: 0em;
+	margin-bottom: 0em;
+	position: absolute;
+	display: inline;
+	top: 0;
+	right: 10%;
+	padding: 0.5em 0em;
+	border: none;
+	background-color: #000;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+	position: absolute;
+	display: inline;
+	top: 0;
+	right: 10%;
+	padding: 0.5em 0em;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 8em;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {display: block;}
+  
   
 
   
@@ -378,7 +427,8 @@ body {
 	  width: 100%;
   }
 
-  #add_new {
+/* The button next to the title, i.e. "+ New Member" */
+  #navbutton {
 	background-color: #34205B;
 	display: inline;
 	position: absolute;
@@ -390,11 +440,36 @@ body {
 	border-color: transparent;
   }
 
-  #add_new a {
+  #navbutton a {
 	  color: #ffffff;
   }
 
-  #add_new:hover {
+  #navbutton:hover {
+	color: #ffffff;
+	border: 2px;
+	border-style: solid;
+	border-color: #78C4E6;
+}
+
+/* The other button, possibly next to navbutton. Usually only available for admin or manager, i.e. "Log time for another member" */
+
+#managing_button {
+	background-color: #34205B;
+	display: inline;
+	position: absolute;
+	padding: 0.5em 0.5em;
+	right: 10em;
+	margin-top: -4em;
+	border: 2px;
+	border-style: solid;
+	border-color: transparent;
+  }
+
+  #managing_button a {
+	  color: #ffffff;
+  }
+
+  #managing_button:hover {
 	color: #ffffff;
 	border: 2px;
 	border-style: solid;
@@ -1622,7 +1697,7 @@ a.link-highlight{
   }
 
 	  .test-layout #navtop {
-		  background-color: #000000;
+		  background-color: #581886;
 	  }
 
 	  .test-layout button {
