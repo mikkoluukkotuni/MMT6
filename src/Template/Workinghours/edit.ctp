@@ -5,15 +5,6 @@ echo $this->Html->script('jquery-ui.min');
 ?>
 
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $workinghour->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $workinghour->id)]
-            )
-        ?></li>
-    </ul>
-
 <div class="workinghours form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($workinghour) ?>
     <fieldset>
@@ -36,13 +27,19 @@ echo $this->Html->script('jquery-ui.min');
                 ->toArray(); 
             
                 if ($queryName != null) { ?>
-                    <legend><?= __('Edit logged time for ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></legend>    
+                    <h3><?= __('Edit logged time for ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></h3>    
                 <?php }
             }    
             else { ?>
-                <legend><?= __('Edit logged time') ?></legend>
+                <h3><?= __('Edit logged time') ?></h3>
             <?php } ?>
-        
+            <button id="navbutton"><?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', $workinghour->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $workinghour->id)]
+            )
+            ?>
+            </button>
         <?php
 
             // change the format of the date that comes from the db
@@ -64,28 +61,6 @@ echo $this->Html->script('jquery-ui.min');
              */ 
            
             $project_id = $this->request->session()->read('selected_project')['id'];
-            /*
-            $query = Cake\ORM\TableRegistry::get('Weeklyreports')
-                ->find()
-           	->select(['year','week']) 
-            	->where(['project_id =' => $project_id])
-                ->toArray(); 
-
-            if ($query != null) {
-                // picking out the week of the last weekly report from the results
-                $max = max($query);
-
-                $maxYear = $max['year'];
-                $maxWeek = $max['week'];
-                
-                // $mDate is the first day of the new weeklyreport week (monday) 
-                $monday = new DateTime();
-                $monday->setISODate($maxYear,$maxWeek,8);
-                $mDate1 = $monday->format('d M Y');
-                $mDate = date('d M Y', strtotime($mDate1));
-            } */
-            // There are no weekly reports.
-            // else {
                 $project_id = $this->request->session()->read('selected_project')['id'];
                 $query2 = Cake\ORM\TableRegistry::get('Projects')
                     ->find()
@@ -102,7 +77,6 @@ echo $this->Html->script('jquery-ui.min');
                     // $mDate is the date project was created on              
                     $mDate = date("d M Y", mktime(0,0,0, $month, $day, $year));
                 }
-            // }
 			echo $this->Form->button(__('Submit'));
         ?>    
  

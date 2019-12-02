@@ -1,6 +1,7 @@
 
-    <ul class="side-nav">
-        <?php
+<div class="workinghours index large-9 medium-18 columns content float: left">
+    <h3><?= __('Project Risks') ?></h3>
+    <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
             $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;
@@ -8,17 +9,13 @@
             // link not visible to supervisors and clients
             if ($admin || $manager) {
             ?>
-            <li><?= $this->Html->link(__('Add new risk'), ['action' => 'add']) ?></li>
+            <button id="navbutton"><?= $this->Html->link(__('+ New risk'), ['action' => 'add']) ?></button>
             <?php 
             } 
             // link not visible to devs and clients
             if($admin || $supervisor || $manager) {
             ?>
         <?php } ?>
-    </ul>
-
-<div class="workinghours index large-9 medium-18 columns content float: left">
-    <h3><?= __('Project Risks') ?></h3>
     <?php // the code for the menu is the same as in adddev.ctp 
     //echo $this->Form->input('member_id', ['options' => $members, 'label' => 'Show hours for', 'empty' => '']) . $this->Form->button(__('Submit'));
     ?>

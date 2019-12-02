@@ -6,23 +6,31 @@ echo $this->Html->script('jquery-ui.min');
 
 
     <ul class="side-nav">
-    <?php
-        $admin = $this->request->session()->read('is_admin');
-        if ($admin){ ?>
-            <li><?= $this->Form->postLink(
-                    __('Delete'),
-                    ['action' => 'delete', $project->id],
-                    ['confirm' => __('Are you sure you want to delete # {0}?', $project->id)]
-                )
-            ?></li>
-    <?php } ?>
+        <li><?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', $project->id],
+                ['confirm' => __('Are you sure you want to delete # {0}? Note: you must delete logged hours, members and weekly reports first.', $project->id)]
+            )
+        ?></li>
     </ul>
 
 <div class="projects form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($project) ?>
-    <fieldset>
-        <legend><?= __('Edit Project') ?></legend>
+        <h3><?= __('Edit Project') ?></h3>
         <?php
+        // Delete button not visible to devs or managers
+        $admin = $this->request->session()->read('is_admin');
+        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+        if ($admin || $supervisor ) { ?>
+            <button id="navbutton">
+            <?= $this->Form->postLink(
+                    __('Delete Project'),
+                    ['action' => 'delete', $project->id],
+                    ['confirm' => __('Are you sure you want to delete # {0}? Note: you must delete logged hours, members and weekly reports first.', $project->id)]
+                )
+            ?>
+        </button>
+        <?php } 
             echo $this->Form->input('project_name');
             
             // Req 37: using jQuery UI datepicker
@@ -51,7 +59,6 @@ echo $this->Html->script('jquery-ui.min');
                         
             $isAdmin = $this->request->session()->read('is_admin');
     ?>
-    </fieldset>
 	<?= $this->Form->end(); ?>
 </div>
 

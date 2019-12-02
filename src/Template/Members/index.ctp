@@ -70,10 +70,7 @@
 			if($admin || $supervisor || $current_member){
 			        ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $member->id]) ?>
-                    <?php } ?>
-            <?php if($admin || $supervisor){
-                    ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $member->id], ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $member->id], ['confirm' => __('Are you sure you want to delete # {0}? Note: You must first delete logged tasks of this member', $member->id)]) ?>
                     <?php } ?>
                 </td>
             </tr>
