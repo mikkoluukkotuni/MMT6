@@ -73,7 +73,7 @@ $cakeDescription = 'MMT';
 		<?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
 		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
 		<?php
-			if ( empty(!$this->request->session()->read('Auth.User')) ) { ?>
+			if ( empty(!$this->request->session()->read('Auth.User')) && $this->request->session()->check('selected_project')) { ?>
 				<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
 			<?php }
 		?>

@@ -5,19 +5,8 @@ echo $this->Html->script('jquery-ui.min');
 ?>
 
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $member->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]
-            )
-        ?></li>
-    </ul>
-
 <div class="members form large-8 medium-16 columns content float: left">
-    <?= $this->Form->create($member) ?>
-    <fieldset>
-        <?php 
+    <?php 
         $userid = $member->user_id;
         $queryName = Cake\ORM\TableRegistry::get('Users')
             ->find()
@@ -25,9 +14,19 @@ echo $this->Html->script('jquery-ui.min');
             ->where(['id =' => $userid])
             ->toArray(); 
             
-            if ($queryName != null) { ?>
-                <legend><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></legend>    
-            <?php } 
+        if ($queryName != null) { ?>
+            <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></h3>    
+    <?php } ?>
+    <button id="navbutton">
+        <?= $this->Form->postLink(
+                __('Delete member'),
+                ['action' => 'delete', $member->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]
+            )
+        ?>
+    </button>
+    <?= $this->Form->create($member) ?>
+            <?php 
             
             // echo $this->Form->input('user_id', ['options' => $users]);
             
@@ -77,7 +76,6 @@ echo $this->Html->script('jquery-ui.min');
             
             $isAdmin = $this->request->session()->read('is_admin');
     ?>           
-    </fieldset>
     <?= $this->Form->end() ?>
 </div>
 

@@ -1,6 +1,7 @@
 
-    <ul class="side-nav">
-        <?php
+<div class="metrics index large-8 medium-16 columns content float: left">
+    <h3><?= __('Metrics') ?></h3>
+    <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
             
@@ -8,19 +9,15 @@
              * Updated view.ctp and index.ctp */   
             if($admin){
         ?>
-            <li><?= $this->Html->link(__('New Metric (admin)'), ['action' => 'addadmin']) ?></li>
+            <button id="managing_button"><?= $this->Html->link(__('New Metric (admin)'), ['action' => 'addadmin']) ?></button>
         <?php
             } 
             if ($admin || $supervisor) {
         ?> 
-	        <li><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?></li>
+	        <button id="navbutton"><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?></button>
         <?php 
-        	} // endif
+        	}
         ?>
-    </ul>
-
-<div class="metrics index large-8 medium-16 columns content float: left">
-    <h3><?= __('Metrics') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
