@@ -1,19 +1,16 @@
 
-    <ul class="side-nav">
-        <?php
+<div class="metrics view large-7 medium-14 columns content float: left">
+    <h3><?= h($metric->metrictype->description) ?></h3>
+    <?php
            $admin = $this->request->session()->read('is_admin');
            /* Req33: Only administrator can add or change/delete metrics.
            * Updated view.ctp and index.ctp */ 
            if ($admin) {
         ?>
-           <li><?= $this->Html->link(__('Edit Metric'), ['action' => 'edit', $metric->id]) ?> </li>
+           <button id="navbutton"><?= $this->Html->link(__('Edit Metric'), ['action' => 'edit', $metric->id]) ?> </button>
         <?php
            }
          ?>
-    </ul>
-
-<div class="metrics view large-7 medium-14 columns content float: left">
-    <h3><?= h($metric->metrictype->description) ?></h3>
     <table class="vertical-table">
         <tr>
             <th><?= __('Weeklyreport') ?></th>

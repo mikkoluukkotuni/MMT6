@@ -5,17 +5,7 @@ echo $this->Html->script('jquery-ui.min');
 ?>
 
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $project->id],
-                ['confirm' => __('Are you sure you want to delete # {0}? Note: you must delete logged hours, members and weekly reports first.', $project->id)]
-            )
-        ?></li>
-    </ul>
-
 <div class="projects form large-8 medium-16 columns content float: left">
-    <?= $this->Form->create($project) ?>
         <h3><?= __('Edit Project') ?></h3>
         <?php
         // Delete button not visible to devs or managers
@@ -29,8 +19,10 @@ echo $this->Html->script('jquery-ui.min');
                     ['confirm' => __('Are you sure you want to delete # {0}? Note: you must delete logged hours, members and weekly reports first.', $project->id)]
                 )
             ?>
-        </button>
-        <?php } 
+            </button>
+        <?php } ?>
+        <?= $this->Form->create($project) ?>
+        <?php
             echo $this->Form->input('project_name');
             
             // Req 37: using jQuery UI datepicker
@@ -59,7 +51,7 @@ echo $this->Html->script('jquery-ui.min');
                         
             $isAdmin = $this->request->session()->read('is_admin');
     ?>
-	<?= $this->Form->end(); ?>
+    <?= $this->Form->end(); ?>
 </div>
 
 <script> 

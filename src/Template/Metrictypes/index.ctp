@@ -1,10 +1,7 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('New Metrictype'), ['action' => 'add']) ?></li>
-    </ul>
-
 <div class="metrictypes index large-9 medium-18 columns content float: left">
     <h3><?= __('Metrictypes') ?></h3>
+    <button id="navbutton"><?= $this->Html->link(__('+ New Metrictype'), ['action' => 'add']) ?></button>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

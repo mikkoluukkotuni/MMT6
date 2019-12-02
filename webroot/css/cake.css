@@ -428,7 +428,7 @@ body {
   }
 
 /* The button next to the title, i.e. "+ New Member" */
-  #navbutton {
+#navbutton {
 	background-color: #34205B;
 	display: inline;
 	position: absolute;
@@ -438,13 +438,13 @@ body {
 	border: 2px;
 	border-style: solid;
 	border-color: transparent;
-  }
+}
 
-  #navbutton a {
-	  color: #ffffff;
-  }
+#navbutton a {
+	color: #ffffff;
+}
 
-  #navbutton:hover {
+#navbutton:hover {
 	color: #ffffff;
 	border: 2px;
 	border-style: solid;
@@ -684,7 +684,7 @@ form a.link-button:hover, form a.link-button:focus{
 
 
 a.trello-link-box{
-  background-color: #0067A3;
+  background-color: #34205B;
   border-radius: 3px;
   color: #fff;
   display: inline-block;
@@ -698,15 +698,7 @@ a.trello-link-box{
 
 a.trello-link-box:hover{
   color: #fff;
-  background-color: #005B8F;
-}
-
-
-
-.trello-form{
-  background-color: #E2E4E6;
-  border-radius: 3px;
-  padding-bottom: 10px;
+  background-color: #581886;
 }
 
 .trello-form.loading form{
@@ -720,11 +712,9 @@ a.trello-link-box:hover{
 
 .trello-form .form-title{
   padding: 5px;
-  background-color: #0067A3;
-  color: #FFF;
+  color: #000000;
   font-weight: bold;
   text-align: center;
-  border-radius: 3px 3px 0 0;
 }
 
 .trello-form .form-item{
@@ -783,21 +773,19 @@ a.trello-link-box:hover{
 }
 
 .trello-form .form-submit input.save, .trello-form .form-submit a.save{
-  box-shadow: 0 2px 0 #3f6f21;
-  background-color: #60BA4D;
+  background-color: #34205B;
 }
 
 .trello-form .form-submit input.delete, .trello-form .form-submit a.delete{
-  box-shadow: 0 2px 0 #8C432B;
-  background-color: #d9534f;
+  background-color: #34205B;
 }
 
 .trello-form .form-submit input.save:hover, .trello-form .form-submit a.save:hover{
-  background-color: #539C3B;
+  background-color: #000000;
 }
 
 .trello-form .form-submit input.delete:hover, .trello-form .form-submit a.delete:hover{
-  background-color: #c9302c;
+  background-color: #000000;
 }
 
 
