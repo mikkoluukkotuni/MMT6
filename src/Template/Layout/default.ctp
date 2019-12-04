@@ -249,7 +249,16 @@ $cakeDescription = 'MMT';
 	<nav id="left-title">
 		<ul>
 			<li class="title-area">
-				<h1><a href=""><?= $this->fetch('title') ?></a></h1>
+				
+				<h1><a href="">
+					<?= //$this->fetch('title') 
+					 $project_name = $this->request->session()->read('selected_project')['project_name'];  
+					 
+					 //($project->project_name)
+					
+					
+					?>
+				</a></h1>
 			</li>
 		</ul>
 	</nav> 

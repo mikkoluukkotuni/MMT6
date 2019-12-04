@@ -28,6 +28,10 @@ class ProjectsController extends AppController
             ];     
         }
 
+        if($this->Auth->user('id') != NULL) {
+            $this->request->session()->write('selected_project', NULL);
+        }
+
         $mobileOptional = false;
         $referer = \Cake\Routing\Router::parse($this->referer('/', true));
         
