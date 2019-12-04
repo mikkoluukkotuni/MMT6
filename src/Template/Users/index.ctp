@@ -1,10 +1,9 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-    </ul>
-
 <div class="users index large-9 medium-8 columns content float: left">
     <h3><?= __('Users') ?></h3>
+    <button id="navbutton">
+        <?= $this->Html->link(__('+ New User'), ['action' => 'add']) ?>
+    </button>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

@@ -1,10 +1,10 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Edit Worktype'), ['action' => 'edit', $worktype->id]) ?> </li>
-    </ul>
 
 <div class="worktypes view large-9 medium-18 columns content float: left ">
     <h3><?= h($worktype->description) ?></h3>
+    <button id="navbutton">
+        <?= $this->Html->link(__('Edit Worktype'), ['action' => 'edit', $worktype->id]) ?>
+    </button>
     <div class="related">
         <h4><?= __('Related Workinghours') ?></h4>
         <?php if (!empty($worktype->workinghours)): ?>

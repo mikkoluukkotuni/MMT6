@@ -1,8 +1,4 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('What is Trello Integration?'), ['controller' => 'Trello', 'action' => 'about']) ?> </li>
-    </ul>
-
 <div class="workinghours form large-8 medium-16 columns content float: left">
     <div class="trello-form">
         <div class="form-title">

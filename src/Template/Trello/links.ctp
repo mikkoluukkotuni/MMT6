@@ -1,9 +1,5 @@
 <?= $this->Html->script('trello.js') ?>
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('What is Trello Integration?'), ['controller' => 'Trello', 'action' => 'about']) ?> </li>
-    </ul>
-
 <div class="workinghours form large-8 medium-16 columns content float: left">
     <div id="trello-data" data-board-id="<?= $trello->board_id ?>" data-app-key="<?= $trello->app_key ?>" data-token="<?= $trello->token ?>"></div>
     <div id="saved-links">
