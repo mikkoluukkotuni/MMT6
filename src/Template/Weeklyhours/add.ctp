@@ -1,8 +1,4 @@
 
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-    </ul>
-
 <div class="weeklyhours form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($weeklyhour) ?>
     <fieldset>

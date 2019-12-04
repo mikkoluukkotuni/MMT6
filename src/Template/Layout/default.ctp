@@ -77,27 +77,34 @@ $cakeDescription = 'MMT';
 				<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
 			<?php }
 		?>
-	</div>
-</div>
-		<?php
-			if ( empty(!$this->request->session()->read('Auth.User')) ) { 
-				$name = $this->request->session()->read('Auth.User.first_name') ?>
-					<div class="dropdown">
-  						<div class="dropbtn"><?= __($name) ?></div>
-  						<div class="dropdown-content">
-						<?= $this->Html->link(__('View Profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?>
-    					<?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
-    					<?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?>
-  					</div>
-</div>
-			<?php
-			}
-			else { ?>
-				<div class="personal-links">
-					<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
-				</div>
-			<?php }
-		?>
+	</div> <!-- general links end -->
+</div> <!-- navgeneral ends -->
+<?php
+	if ( empty(!$this->request->session()->read('Auth.User')) ) {
+		$name = $this->request->session()->read('Auth.User.first_name') ?>
+			<div class="dropdown">
+				<div class="dropbtn">
+					<?= __($name) ?>
+				</div> <!-- dropbtn ends -->
+  				<div class="dropdown-content">
+					<?php
+					if (($this->request->session()->read('selected_project_role')) != 'notmember' ) { ?>
+						<div id="role"><?=__($this->request->session()->read('selected_project_role')) ?></div> <?php
+					}
+					?>
+					<?= $this->Html->link(__('View Profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?>
+					<?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
+					<?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?>
+  				</div> <!-- dropdown content ends -->
+			</div> <!-- dropdown ends -->
+<?php
+	}
+	else { ?>
+		<div class="personal-links">
+			<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
+		</div>
+	<?php }
+?>
 
 <div id="area51">
 	<!-- This area is meant for notifications about new messages -->
