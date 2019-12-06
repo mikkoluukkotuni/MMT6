@@ -213,69 +213,77 @@ $cakeDescription = 'MMT';
 	<nav id="left-title">
 		<ul>
 			<li class="title-area">
-				<h1><a href=""><?= $this->fetch('title') ?></a></h1>
+				<h1>
+					<?= $project_name = $this->request->session()->read('selected_project')['project_name'];  ?>
+				</h1>
 			</li>
 		</ul>
 	</nav> 
 	
 	<!-- top navigation bar with every other button -->
-	<?php if ( !empty($this->request->session()->read('Auth.User')) ){ ?>
-		<?php
-				// logged in with a project selected
-				if( $this->request->session()->check('selected_project') ) { ?>
-					<nav id="navtop" role="navigation" data-topbar>
-						<ul>
-							<li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-							<li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
-							<?php // if not a member, particular links are not shown 
-							if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
-								<li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-								<li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-								<li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
-								<li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
-							<?php } ?>	
-							<?php if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-								<li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
-								<li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
-							<?php endif; ?>
-							<li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
-						</ul>
-					</nav>
-							<?php  
-				} 
-				else {
-					$admin = $this->request->session()->read('is_admin');
-					$supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+	
+	<!-- Logged user -->
+	<?php
+	if ( !empty($this->request->session()->read('Auth.User')) ){ ?>
+		<nav id="navtop" role="navigation" data-topbar>
+			<ul>
+			<li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
+			<?php
+			// logged in with a project selected
+			if( $this->request->session()->check('selected_project') ) { ?>
+				<li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+				
+				<?php // if not a member, particular links are not shown 
+				if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
+					<li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
+				<?php } // end if not a member
+				
+				// only manager, supervisor and admin can see Slack and Trello links
+				if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
+					<li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
+				<?php endif; ?> <!-- end if manager/supervisor/admin -->
+
+					<li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+				</ul>
+			</nav>
+			<?php } // end if logged with a project selected
+
+			else {
+				$admin = $this->request->session()->read('is_admin');
+				$supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
 					
-					// Get the number of unread feedback for admin
-					$unreadNotes = Cake\ORM\TableRegistry::get('Notes')->find()
-							->select()
-							->where(['note_read IS' => NULL])
-							->toArray();
-					
-					// only admins/supervisors can add new projects
-					if($admin || $supervisor) { ?>
-					<nav id="navtop" role="navigation" data-topbar>
-						<ul>
-						<li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-						<li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
-					<?php }
-					if ($admin) { ?>
-						<li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-						<li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
-						<li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+				// Get the number of unread feedback for admin
+				$unreadNotes = Cake\ORM\TableRegistry::get('Notes')->find()
+								->select()
+								->where(['note_read IS' => NULL])
+								->toArray();
+							
+				// only admins/supervisors can add new projects
+				if($admin || $supervisor) { ?>
+					<li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+				<?php }
+				
+				if ($admin) { ?>
+					<li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+					<li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+					<li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
+				<?php }
+				// link is visible only if there is unread feedback
+				if ($admin && (sizeof($unreadNotes)>0)) { ?>
+					<li><b><?= $this->Html->link(__('Unread feedback: ' . count($unreadNotes)), ['controller' => 'Notes', 'action' => 'index']) ?> </b></li>
 					<?php } ?>
-					<?php if ($admin) { ?>
-						<li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
-					<?php }
-					// link is visible only if there is unread feedback
-					if ($admin && (sizeof($unreadNotes)>0)) { ?>
-						<li><b><?= $this->Html->link(__('Unread feedback: ' . count($unreadNotes)), ['controller' => 'Notes', 'action' => 'index']) ?> </b></li>
-					<?php } ?>
-					</ul> </nav><?php
+					</ul>
+					</nav><?php
 				} ?>
-			<div class="clearer"></div>
-	<?php } else { ?>
+				<div class="clearer"></div>
+	<?php } // end if logged in
+	
+	else { ?>		
 		<div class="clearer"></div>
 	<?php } ?>
 

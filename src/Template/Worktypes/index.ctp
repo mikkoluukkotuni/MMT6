@@ -2,7 +2,7 @@
 <div class="worktypes index large-9 medium-18 columns content float: left">
     <h3><?= __('Worktypes') ?></h3>
     <button id="navbutton">
-        <?= $this->Html->link(__('New Worktype'), ['controller' => 'Worktypes', 'action' => 'add']) ?>
+        <?= $this->Html->link(__('+ New Worktype'), ['controller' => 'Worktypes', 'action' => 'add']) ?>
     </button>
     <table cellpadding="0" cellspacing="0">
         <thead>
