@@ -412,6 +412,27 @@ class ChartsTable extends Table
         return $data;
     }
     
+    // public function weeklyhourAreaData($idlist){
+    //     $weeklyhours = TableRegistry::get('Weeklyhours');
+        
+    //     $weeklyhourData = array();
+        
+    //     foreach($idlist as $temp){  
+    //         $query = $weeklyhours
+    //                 ->find()
+    //                 ->select(['duration'])
+    //                 ->where(['weeklyreport_id =' => $temp])
+    //                 ->toArray();
+    //         $duration = 0;
+    //         foreach($query as $dur){
+    //             $duration += $dur->duration;
+    //         }
+    //         $weeklyhourData[] = $duration;
+    //     }
+        
+    //     return $weeklyhourData;
+    // }
+    
     
     public function riskData($idlist, $projectId){
         
