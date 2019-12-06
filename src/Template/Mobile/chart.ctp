@@ -81,6 +81,12 @@ $this->assign('title','Charts');
 		<?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>
 	</div>
     </div>
+
+    <div class="chart">
+        <div id="totalhourwrapper">
+		    <?php echo $this->Highcharts->render($totalhourChart, 'totalhourchart'); ?>
+	    </div>
+    </div>
     
     <div class="chart">
         <div id="risksprobrapper">

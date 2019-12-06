@@ -136,7 +136,7 @@ class MobileController extends AppController
         $commitChart = $chartController->commitChart();
         $testcaseChart = $chartController->testcaseChart();
         $hoursChart = $chartController->hoursChart();
-        $weeklyhourChart = $chartController->weeklyhourChart();
+        $totalhourChart = $chartController->totalhourChart();
         $hoursPerWeekChart = $chartController->hoursPerWeekChart();
         $reqPercentChart = $chartController->reqPercentChart();
         $risksProbChart = $chartController->risksProbChart();
@@ -153,7 +153,7 @@ class MobileController extends AppController
         $testcaseData = $chartController->Charts->testcaseAreaData($weeklyreports['id']);
         $hoursData = $chartController->Charts->hoursData($project_id);
         $hoursperweekData = $chartController->Charts->hoursPerWeekData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
-        $weeklyhourData = $chartController->Charts->weeklyhourAreaData($weeklyreports['id']);
+        $totalhourData = $chartController->Charts->totalhourLineData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $riskData = $chartController->Charts->riskData($weeklyreports['id'], $project_id);
         
         // Insert the data in to the charts, one by one
@@ -223,12 +223,12 @@ class MobileController extends AppController
         $hoursChart->chart['width'] = null;
         
         // weeklyhourChart 
-        $weeklyhourChart->xAxis->categories = $weeklyreports['weeks'];    
-        $weeklyhourChart->series[] = array(
+        $totalhourChart->xAxis->categories = $weeklyreports['weeks'];    
+        $totalhourChart->series[] = array(
             'name' => 'weekly hours',
-            'data' => $weeklyhourData
+            'data' => $totalhourData
         );
-        $weeklyhourChart->chart['width'] = null;
+        $totalhourChart->chart['width'] = null;
         
         //workinghours per week  
         $hoursPerWeekChart->xAxis->categories = $weeklyreports['weeks'];
@@ -312,7 +312,7 @@ class MobileController extends AppController
         $derivedChart->chart['width'] = null;
         
         // This sets the charts visible in the actual charts page "Charts/index.php"
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'weeklyhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 'derivedChart'));
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 'derivedChart'));
 
     }
     
