@@ -526,11 +526,7 @@ class ChartsController extends AppController
 			'styleFont' => '18px Metrophobic, Arial, sans-serif',
 			'styleColor' => '#0099ff',
 		);
-<<<<<<< HEAD
 		$myChart->subtitle->text = 'cumulative';
-=======
-		$myChart->subtitle->text = 'cumulative (based on weeklyreports)';
->>>>>>> ced7d483bd9195077e6b98ea10a7781e39a19aaa
 		
 		// body of the chart
 		$myChart->chart->width =  800;
