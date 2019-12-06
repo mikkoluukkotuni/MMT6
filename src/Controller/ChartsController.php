@@ -61,6 +61,7 @@ class ChartsController extends AppController
         $risksImpactChart = $this->risksImpactChart();
         $risksCombinedChart = $this->risksCombinedChart();
         $derivedChart = $this->derivedChart();
+        $testiChart = $this->testiChart();
         
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
@@ -73,6 +74,7 @@ class ChartsController extends AppController
         $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $totalhourData = $this->Charts->totalhourLineData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
+        $testiData = $this->Charts->testiData($weeklyreports['id'], $weeklyreports['weeks']);
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -202,10 +204,7 @@ class ChartsController extends AppController
                 'data' => $risk['combined']
             );
         
-        }
-        
-        
-       
+        }     
         
               
         // chart for derived metrics
@@ -218,8 +217,24 @@ class ChartsController extends AppController
             'name' => 'Passed test cases',
             'data' => $testcaseData['testsPassed']
         );
+
+
+        // TESTICHART
+        $testiChart->xAxis->categories = $weeklyreports['weeks'];    
+        $testiChart->series[] = array();
+        foreach($testiData as $project_data) {
+            $project_line = array(
+                'data' => $project_data
+            );
+            array_push($testiChart->series['data'], 'data');
+        }
+        $this->Flash->success($testiChart->series['data']);
+        
+
+
         // This sets the charts visible in the actual charts page "Charts/index.php"
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 'derivedChart'));
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 
+            'risksImpactChart', 'risksCombinedChart', 'derivedChart', 'testiChart'));
 
     }
     // All the following functions are similar
@@ -692,6 +707,44 @@ class ChartsController extends AppController
     
     	return $myChart;
     }    
+
+    public function testiChart(){
+		$myChart = $this->Highcharts->createChart();
+		$myChart->chart->renderTo = 'testiwrapper';
+		$myChart->chart->type = 'line';
+	
+		$myChart->title = array(
+			'text' => 'Total hours of each project',
+			'y' => 20,
+			'align' => 'center',
+			'styleFont' => '18px Metrophobic, Arial, sans-serif',
+			'styleColor' => '#0099ff',
+		);
+		$myChart->subtitle->text = 'cumulative';
+		
+		// body of the chart
+		$myChart->chart->width =  800;
+		$myChart->chart->height = 500;
+
+		// $myChart->chart->alignTicks = FALSE;
+		$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+		$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+		
+		// this chart doesn't need a legend
+		$myChart->legend->enabled = false;
+		
+		// labels to describe the content of axes
+		$myChart->xAxis->title->text = 'Week number';
+		$myChart->yAxis->title->text = 'Total amount of hours';
+		
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return 'Total hours at this point ' +' <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->plotOptions->area->marker->enabled = false;
+        return $myChart;
+    }
+    
+
     public function isAuthorized($user)
     {      
         return True;

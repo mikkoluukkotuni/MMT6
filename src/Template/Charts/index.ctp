@@ -107,6 +107,12 @@
                 <?php echo $this->Highcharts->render($derivedChart, 'testcasechart'); ?>
             </div>
         </div>
+        <div class="chart">
+            <h4>TESTI</h4>
+            <div id="testiwrapper">
+                <?php echo $this->Highcharts->render($testiChart, 'testichart'); ?>
+            </div>
+        </div>
     <?php } ?>
 	
 </div>

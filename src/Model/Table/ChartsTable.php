@@ -411,6 +411,69 @@ class ChartsTable extends Table
 
         return $data;
     }
+
+
+    // TESTING FOR COMPARISON CHART OF PROJECTS'S HOURS
+    public function testiData($idlist, $weeklist) {
+        $projects = TableRegistry::get('Projects');
+        $query2 = $projects
+            ->find()
+            ->select(['id'])
+            ->where(['is_public' => 1])
+            ->toArray();     
+        $public_projects = array();
+        foreach($query2 as $temp) {
+            $public_projects[] = $temp->id;
+        }
+
+        $combined_data = array();
+
+        foreach($public_projects as $public_project) {
+
+            $members = TableRegistry::get('Members');
+            
+            // get a list of the members in the project
+            $query = $members
+                    ->find()
+                    ->select(['id'])
+                    ->where(['project_id =' => $public_project])
+                    ->toArray();
+            $memberlist = array();
+            if(!empty($query)) {
+                foreach($query as $temp){
+                    $memberlist[] = $temp->id;
+                }
+            }
+            $workinghours = TableRegistry::get('Workinghours');
+            if(!empty($memberlist)) {
+                $queryW = $workinghours
+                            ->find()
+                            ->select(['date', 'duration'])
+                            ->where(['member_id IN' => $memberlist])
+                            ->toArray();
+            }
+            $data = array();
+            $sum = 0;
+            foreach($weeklist as $temp){
+                
+                // $sum = 0;
+                if(!empty($queryW)) {
+                    foreach($queryW as $result) {
+                        // date of workinghours need to be turned to week
+                        $weekWH = date('W', strtotime($result['date']));
+                        if ($temp == $weekWH) {
+                            $sum += $result['duration'];
+                        }        
+                    }
+                }
+                $data[] = $sum;
+            }
+
+            array_push($combined_data, $data);
+        }
+
+        return $combined_data;            
+    }
     
     // public function weeklyhourAreaData($idlist){
     //     $weeklyhours = TableRegistry::get('Weeklyhours');
