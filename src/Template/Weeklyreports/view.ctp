@@ -252,17 +252,28 @@
         
         <table cellpadding="0" cellspacing="0">
                 <tr>
-                    <th><?= __('Risk') ?></th>                 
+                    <th colspan="2"><?= __('Risk') ?></th>                 
                     <th><?= __('Impact') ?></th>
                     <th><?= __('Probability') ?></th>
+                    <?php
+                    if ( $admin || $supervisor || $manager) { ?> 
+                        <th class="actions"><?= __('Actions') ?></th>
+                    <?php } ?>
                 </tr>
                 
         <?php foreach($risks as $risk): ?>
           
                 <tr>
-                    <td><?= h($risk->description) ?></td>
+                    <td colspan="2"><?= h($risk->description) ?></td>
                     <td><?= h($risk->impact) ?></td>
                     <td><?= h($risk->probability) ?></td>
+                    <?php           
+                    // admins and supervisors can edit weeklyrisks
+                    if ( $admin || $supervisor || $manager) { ?>     
+                        <td class="actions">
+                            <?= $this->Html->link(__('Edit'), ['controller' => 'Weeklyrisks', 'action' => 'edit', $risk->id]) ?>
+                        </td> 
+                    <?php } ?>
                 </tr>   
                 
         <?php endforeach; ?>
