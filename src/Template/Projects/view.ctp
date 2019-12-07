@@ -15,7 +15,7 @@
     ?>
 	<p>
 		<?= h($project->description) ?>
-	</p>
+    </p>
     <table class="vertical-table">
         <tr>
             <th><?= __('Starting Date') ?></th>

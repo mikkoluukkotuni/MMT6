@@ -24,11 +24,14 @@ echo $this->Html->script('jquery-ui.min');
         <?= $this->Form->create($project) ?>
         <?php
             echo $this->Form->input('project_name');
-            
+
             // Req 37: using jQuery UI datepicker
             echo $this->Form->input('finished_date', ['type' => 'text', 'readonly' => true, 'label' => 'Estimated Completion Date', 'id' => 'datepicker']);
             ?> </br>
             <?php
+
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This is used to make some of the charts. Manager should set this. It can be changed later.']);
+
             echo $this->Form->input('description');
             echo $this->Form->input('is_public', array("checked" => "checked", 'label' => "This project is public"));
             
@@ -54,11 +57,15 @@ echo $this->Html->script('jquery-ui.min');
     <?= $this->Form->end(); ?>
 </div>
 
+<style>
+   .input{display:inline;} /* Helps to get the infoicon tooltip stay after estimated completion date input field. */
+</style>
 <script> 
     /*
      * Req 37:
      * minDate is the date the project was created, no min date if it is admin
      */
+    
     $( "#datepicker" ).datepicker({
         dateFormat: "MM d, yy",
         minDate: <?php if($isAdmin) { ?> null<?php } else { ?> new Date('<?php echo $mDate; ?>') <?php } ?>,
