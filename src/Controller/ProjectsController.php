@@ -14,7 +14,6 @@ class ProjectsController extends AppController
     {
         // list of the projects that should be shown in the front page
         $project_list = $this->request->session()->read('project_list');
-
         if($project_list != NULL){
             $this->paginate = [
                 'conditions' => array('id IN' => $project_list),
@@ -27,7 +26,9 @@ class ProjectsController extends AppController
                 'order' => ['project_name' => 'ASC']
             ];     
         }
-
+        if($this->Auth->user('id') != NULL) {
+            $this->request->session()->write('selected_project', NULL);
+        }
         // this is used so that normal user can be directed straight to workinghours after login when having only one project
         if(count($this->request->session()->read('project_memberof_list')) == 1 && $this->Auth->user('role') == 'user' 
                 && $this->request->session()->read('first_view') == True) {
@@ -35,7 +36,6 @@ class ProjectsController extends AppController
                 ['controller' => 'Projects', 'action' => 'view', (string)$this->request->session()->read('project_memberof_list')[0]]
             );            
         }
-
         $mobileOptional = false;
         $referer = \Cake\Routing\Router::parse($this->referer('/', true));
         

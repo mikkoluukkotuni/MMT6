@@ -1,6 +1,11 @@
-
+<!--
     <ul class="side-nav">
-        <?php
+        
+    </ul>
+-->
+<div class="members index large-9 medium-18 columns content float: left">
+    <h3><?= __('Members') ?></h3>
+    <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
             // FIX: managers can also add new members
@@ -8,12 +13,8 @@
             
             if($admin || $supervisor || $manager ) {
         ?>
-            <li><?= $this->Html->link(__('New Member'), ['action' => 'add']) ?></li>
+            <button id="navbutton"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
         <?php } ?>
-    </ul>
-
-<div class="members index large-9 medium-18 columns content float: left">
-    <h3><?= __('Members') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -21,6 +22,7 @@
                 <th colspan="2"><?= __('Name') ?></th>
                 <th><?= $this->Paginator->sort('project_role') ?></th>
                 <th><?= __('Working hours') ?></th>
+                <th><?= __('Target hours') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -50,15 +52,25 @@
                 $total += $sum;?>
 
                 <td><?= h($sum) ?></td>
+                <td><?php 
+                    if ($member->project_role != 'supervisor' && $member->project_role != 'client') { 
+                        if ($member->target_hours != NULL)
+                            echo h($member->target_hours); 
+                        else
+                            echo h('100 (default)');
+                    }
+                ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $member->id]) ?>
                     <?php
 			$admin = $this->request->session()->read('is_admin');
-			$supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
-			if($admin || $supervisor){
+            $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+            //developer can edit own data
+            $current_member = ( $this->request->session()->read('selected_project_memberid') == $member->id ) ? 1 : 0;
+			if($admin || $supervisor || $current_member){
 			        ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $member->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $member->id], ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $member->id], ['confirm' => __('Are you sure you want to delete # {0}? Note: You must first delete logged tasks of this member', $member->id)]) ?>
                     <?php } ?>
                 </td>
             </tr>

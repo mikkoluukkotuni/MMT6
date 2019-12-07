@@ -65,6 +65,47 @@ $cakeDescription = 'MMT';
 	}
         
 ?>
+
+<!-- general black top naviagation bar -->
+<div id="navgeneral">
+	<div class="general-links">
+		<?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?>
+		<?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
+		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
+		<?php
+			if ( empty(!$this->request->session()->read('Auth.User')) && $this->request->session()->check('selected_project')) { ?>
+				<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
+			<?php }
+		?>
+	</div> <!-- general links end -->
+</div> <!-- navgeneral ends -->
+<?php
+	if ( empty(!$this->request->session()->read('Auth.User')) ) {
+		$name = $this->request->session()->read('Auth.User.first_name') ?>
+			<div class="dropdown">
+				<div class="dropbtn">
+					<?= __($name) ?>
+				</div> <!-- dropbtn ends -->
+  				<div class="dropdown-content">
+					<?php
+					if (($this->request->session()->read('selected_project_role')) != 'notmember' ) { ?>
+						<div id="role"><?=__($this->request->session()->read('selected_project_role')) ?></div> <?php
+					}
+					?>
+					<?= $this->Html->link(__('View Profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?>
+					<?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
+					<?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?>
+  				</div> <!-- dropdown content ends -->
+			</div> <!-- dropdown ends -->
+<?php
+	}
+	else { ?>
+		<div class="personal-links">
+			<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
+		</div>
+	<?php }
+?>
+
 <div id="area51">
 	<!-- This area is meant for notifications about new messages -->
 	<?php
@@ -91,8 +132,6 @@ $cakeDescription = 'MMT';
 						->where(['user_id =' => $userid])
 						->toArray();
 		}
-		
-		
 
 		// proceed only if ID's were found
 		if ( sizeof($memid) > 0) {
@@ -159,82 +198,6 @@ $cakeDescription = 'MMT';
 	}
 	?>
 	
-	<div class="dropdown">
-		<button title="Click to open">
-			<?php
-				// different label text depending on if logged in or not
-				if ( empty($this->request->session()->read('Auth.User')) ) {
-					echo '<span id="label">Log in</span>';
-				} else {
-					echo '<span id="label">Options</span>';
-				}
-			?>
-			<?= $this->Html->image('arrow.png'); ?>
-		</button>
-		<div class="dd-content">
-			<?= 
-                            //$this->Html->image('icon.png');
-                            $this->Custom->profileImage($this->request->session()->read('Auth.User')['id']);
-                        ?>
-			<div id="userinfo">
-				<div class="info">Logged in as</div>
-				<?php
-				/* Displays user information to every page
-				   Requirement ID: 23
-				   - Andy
-				*/
-				// checks if logged in
-				if ( empty($this->request->session()->read('Auth.User')) ){
-					print_r('Currently not logged in');
-				?>
-				<ul>
-                                    <li class="buttonIn"><?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?></li>					
-                                    <li class="buttonTop"><?= $this->Html->link(__('Sign up'), ['controller' => 'Users', 'action' => 'signup']) ?></li>
-				</ul>
-                                <br>
-                                <?= $this->Html->link(__('Forgot Password'), ['controller' => 'Users', 'action' => 'forgotpassword']) ?>
-				<?php
-
-				} else {
-					// prints user's full name
-					print_r( ($this->request->session()->read('Auth.User.first_name')).' '.($this->request->session()->read('Auth.User.last_name')) );
-					// checks if user has accessed any projects
-					if ($this->request->session()->check('selected_project') ) {
-
-						// fetch the name of current project
-						$selected_project = $this->request->session()->read('selected_project');
-						$name = $selected_project['project_name'];
-
-						echo "<div class=\"info\">On project</div>";
-
-						// the text part
-						if ($selected_project)
-							print_r($name);
-						else
-							print_r('none');
-						/* FIX 10.3.2016: now being a non-member is also shown
-						   Requirement ID: 23
-						   - Andy
-						*/
-						// display current role. Non-member status is also displayed
-						echo "<div class=\"info\">Project role</div>";
-						if (($this->request->session()->read('selected_project_role')) != 'notmember' ) {
-							print_r(($this->request->session()->read('selected_project_role')) );
-						} else {
-							print_r('not a member');
-						}
-					}
-				?>
-				<ul>
-                                    <li class="buttonTop"><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
-									<li class="buttonTop"><?= $this->Html->link(__('View profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?></li>
-                                    <li class="buttonTop"><?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
-                                    <li class="buttonOut"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
-                                </ul>
-				<?php } ?>
-			</div>
-		</div>
-	</div>
 	<!-- this non-breaking space is empty content that makes the page render correctly -->
 	&nbsp;
 	<!--<div id="topimg">
@@ -250,39 +213,79 @@ $cakeDescription = 'MMT';
 	<nav id="left-title">
 		<ul>
 			<li class="title-area">
-				<h1><a href=""><?= $this->fetch('title') ?></a></h1>
+				<h1>
+					<?= $project_name = $this->request->session()->read('selected_project')['project_name'];  ?>
+				</h1>
 			</li>
 		</ul>
 	</nav> 
 	
 	<!-- top navigation bar with every other button -->
-	<nav id="navtop" role="navigation" data-topbar>
-	    	<ul>
-                    <li class="navbutton"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>	
-	            <?php // Link to public statistics (only for admins and supervisors)
-                    if ($admin || $supervisor) { ?>
-                        <li class="navbutton"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
-                    <?php }
+	
+	<!-- Logged user -->
+	<?php
+	if ( !empty($this->request->session()->read('Auth.User')) ){ ?>
+		<nav id="navtop" role="navigation" data-topbar>
+			<ul>
+			<li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
+			<?php
 			// logged in with a project selected
 			if( $this->request->session()->check('selected_project') ) { ?>
-                            <li class="navbutton"><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
-                            <?php // if not a member, particular links are not shown 
-                            if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
-                                <li class="navbutton"><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
-                            <?php } ?>	
-                            <?php if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-                                <li class="navbutton"><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
-                                <li class="navbutton"><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
-                            <?php endif; ?>
-                            <li class="navbutton"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
-                            <?php  
-                        } ?>
-	        </ul> <!-- end -->
+				<li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+				
+				<?php // if not a member, particular links are not shown 
+				if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
+					<li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
+				<?php } // end if not a member
+				
+				// only manager, supervisor and admin can see Slack and Trello links
+				if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
+					<li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
+				<?php endif; ?> <!-- end if manager/supervisor/admin -->
+
+					<li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+				</ul>
+			</nav>
+			<?php } // end if logged with a project selected
+
+			else {
+				$admin = $this->request->session()->read('is_admin');
+				$supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+					
+				// Get the number of unread feedback for admin
+				$unreadNotes = Cake\ORM\TableRegistry::get('Notes')->find()
+								->select()
+								->where(['note_read IS' => NULL])
+								->toArray();
+							
+				// only admins/supervisors can add new projects
+				if($admin || $supervisor) { ?>
+					<li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+				<?php }
+				
+				if ($admin) { ?>
+					<li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+					<li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+					<li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+					<li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
+				<?php }
+				// link is visible only if there is unread feedback
+				if ($admin && (sizeof($unreadNotes)>0)) { ?>
+					<li><b><?= $this->Html->link(__('Unread feedback: ' . count($unreadNotes)), ['controller' => 'Notes', 'action' => 'index']) ?> </b></li>
+					<?php } ?>
+					</ul>
+					</nav><?php
+				} ?>
+				<div class="clearer"></div>
+	<?php } // end if logged in
+	
+	else { ?>		
 		<div class="clearer"></div>
-	</nav>
+	<?php } ?>
 
     <?= $this->Flash->render() ?>
     <section class="container clearfix">

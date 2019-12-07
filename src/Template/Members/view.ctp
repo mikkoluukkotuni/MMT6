@@ -1,22 +1,19 @@
 
-    <ul class="side-nav">
-        <?php
+<div class="members view large-8 medium-16 columns content float: left">
+    <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
+    <?php
         // Edit link not visible to devs or managers
         $admin = $this->request->session()->read('is_admin');
         $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
         if ($admin || $supervisor ) { ?>
-            <li><?= $this->Html->link(__('Edit Member'), ['action' => 'edit', $member->id]) ?> </li>
+            <button id="navbutton"><?= $this->Html->link(__('Edit Member'), ['action' => 'edit', $member->id]) ?> </button>
         <?php } 
         // if member has workinghours and member's role is dev or manager
         if (($member->project_role == 'developer') || ($member->project_role == 'manager')) { 
             if (!empty($member->workinghours)) {?>
-            <li><?= $this->Html->link(__('Member\'s logged tasks'), ['controller' => 'Workinghours', 'action' => 'tasks', $member->id]) ?> </li>
+            <button id="navbutton"><?= $this->Html->link(__('Member\'s logged tasks'), ['controller' => 'Workinghours', 'action' => 'tasks', $member->id]) ?> </button>
         <?php } 
         } ?>
-    </ul>
-
-<div class="members view large-8 medium-16 columns content float: left">
-    <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
     <div class="member-table">
         <div class="member-cell">
                 <table class="vertical-table">
@@ -36,6 +33,15 @@
                         <td><?php 
                                     if ($member->ending_date != NULL)
                                             echo h($member->ending_date->format('d.m.Y')); 
+                                    ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= __('Target hours') ?></th>
+                        <td><?php 
+                            if ($member->target_hours != NULL)
+                                echo h($member->target_hours); 
+                            else
+                                echo h('100');
                                     ?></td>
                     </tr>
                     <tr>
@@ -67,9 +73,6 @@
                     </tr>
                     
                 </table>
-            </div>
-            <div class="member-cell portrait">
-                    <?= $this->Custom->profileImage($member->user_id); ?>
             </div>
     </div>
     

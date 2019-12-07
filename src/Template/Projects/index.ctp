@@ -1,34 +1,4 @@
 
-    <ul class="side-nav">
-        <?php
-            $admin = $this->request->session()->read('is_admin');
-            $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
-            
-            // Get the number of unread feedback for admin
-            $unreadNotes = Cake\ORM\TableRegistry::get('Notes')->find()
-					->select()
-					->where(['note_read IS' => NULL])
-					->toArray();
-            // link is visible only if there is unread feedback
-            if ($admin && (sizeof($unreadNotes)>0)) { ?>
-                <li><b><?= $this->Html->link(__('Unread feedback: ' . count($unreadNotes)), ['controller' => 'Notes', 'action' => 'index']) ?> </b></li>
-            <?php } 
-            // only admins/supervisors can add new projects
-            if($admin || $supervisor) { ?>
-                <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
-            <?php }
-            if ($admin) { ?>
-                <li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-                <li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
-                <li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
-            <?php } ?>
-            <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
-            <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>
-            <li><?= $this->Html->link(__('About MMT 4.0'), ['controller' => 'Projects', 'action' => 'about']) ?> </li>
-            <?php if ($admin) { ?>
-                <li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
-            <?php } ?>
-    </ul>
 
 <div class="projects index large-9 medium-18 columns content float: left">
     <!-- List of the projects the user is a member of -->
@@ -38,7 +8,7 @@
             <thead>
                 <tr>
                     <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
-                    <th><?= $this->Paginator->sort('created_on') ?></th>
+                    <th><?= $this->Paginator->sort('created_on', ['label' => 'Starting Date']) ?> </th>
                     <th><?= __('Desciption') ?></th>
                     <?php // links to unread weekly reports for supervisors
                     $super = $this->request->session()->read('is_supervisor');
@@ -106,7 +76,7 @@
             <thead>
                 <tr>
                     <th colspan="2"><?= $this->Paginator->sort('project_name') ?></th>
-                    <th><?= $this->Paginator->sort('created_on') ?></th>
+                    <th><?= $this->Paginator->sort('created_on', ['label' => 'Starting Date']) ?></th>
                     <th><?= $this->Paginator->sort('description') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>

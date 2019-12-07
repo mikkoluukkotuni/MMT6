@@ -1,21 +1,25 @@
 
-    <ul class="side-nav">
-        <?php
+<!--
+        <ul class="side-nav">
+            <li></li> 
+        </ul>
+-->
+        
+<div class="weeklyreports index large-9 medium-18 columns content float: left">
+    <h3><?= __('Weekly reports') ?></h3>
+    <?php
             $admin = $this->request->session()->read('is_admin');
             $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
             $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;
+            
+            if($admin) { ?>
+                <button id="managing_button"><?= $this->Html->link(__('Weekly hours'), ['controller' => 'Weeklyhours', 'action' => 'index']) ?></button>
+            <?php }
 
-            if($admin || $supervisor || $manager) { ?>
-        	<li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?></li>
-        <?php } 
-        // link eventually be weeklyhours should be deleted
-        if($admin) { ?>
-            <li><?= $this->Html->link(__('Weeklyhours'), ['controller' => 'Weeklyhours', 'action' => 'index']) ?> </li> 
+            if($admin || $supervisor || $manager) {
+        ?>
+            <button id="navbutton"><?= $this->Html->link(__('+ New Report'), ['action' => 'add']) ?></button>
         <?php } ?>
-    </ul>
-
-<div class="weeklyreports index large-9 medium-18 columns content float: left">
-    <h3><?= __('Weekly reports') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

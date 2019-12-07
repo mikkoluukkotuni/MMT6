@@ -1,10 +1,4 @@
 
-    <ul class="side-nav">
-        <?php 
-        $project_id = $this->request->session()->read('selected_project')['id']; ?>
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $project_id]) ?></li>
-    </ul>
-
 <div class="notes form large-8 medium-16 columns content float: left">
     <?= $this->Form->create($note) ?>
     <fieldset>

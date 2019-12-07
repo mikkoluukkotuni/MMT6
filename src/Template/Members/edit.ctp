@@ -5,57 +5,63 @@ echo $this->Html->script('jquery-ui.min');
 ?>
 
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $member->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]
-            )
-        ?></li>
-    </ul>
-
 <div class="members form large-8 medium-16 columns content float: left">
-    <?= $this->Form->create($member) ?>
-    <fieldset>
-        <?php 
+    <?php 
         $userid = $member->user_id;
+        $target_hours = 100;
+        if ($member->target_hours != NULL) {
+            $target_hours = $member->target_hours;
+        }
         $queryName = Cake\ORM\TableRegistry::get('Users')
             ->find()
             ->select(['first_name','last_name'])          	
             ->where(['id =' => $userid])
             ->toArray(); 
             
-            if ($queryName != null) { ?>
-                <legend><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></legend>    
-            <?php } 
+        if ($queryName != null) { ?>
+            <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></h3>    
+    <?php } ?>
+    <button id="navbutton">
+        <?= $this->Form->postLink(
+                __('Delete member'),
+                ['action' => 'delete', $member->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $member->id)]
+            )
+        ?>
+    </button>
+    <?= $this->Form->create($member) ?>
+            <?php 
             
-            // echo $this->Form->input('user_id', ['options' => $users]);
-            
+            if ($admin || $supervisor) {
             echo $this->Form->input('project_role', 
                 ['options' => array('developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor', 'client' => 'client')]);
+            }
+
+            echo $this->Form->input('target_hours', array('type' => 'integer', 'value' => $target_hours, 'style' => 'width: 15%;'));
      
             ?><div style="overflow: auto"><div class="columns medium-6 no-padding"><?php
             
-            // Using jQuery UI datepicker
-            // Starting date
-            Cake\I18n\Time::setToStringFormat('MMMM d, yyyy');
             
-            echo $this->Form->input('starting_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);            
-            ?> 
-
-            <?php
-            // Ending date
-            echo $this->Form->input('ending_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker2']);
-            ?> 
+            if ($admin || $supervisor) {
+                // Using jQuery UI datepicker
+                // Starting date
+                Cake\I18n\Time::setToStringFormat('MMMM d, yyyy');
+                echo $this->Form->input('starting_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker1']);            
             
-            </div><?php
-              
-            ?><div class="columns medium-6 no-padding reset-buttons">
+                // Ending date
+                echo $this->Form->input('ending_date', ['type' => 'text', 'readonly' => true, 'id' => 'datepicker2']);
+            ?>
+            </div>
+            <div class="columns medium-6 no-padding reset-buttons">
             
                 <input type="button" value="Clear starting date" id="resetStart" /><br>
-            <input type="button" value="Clear ending date" id="resetEnd" />
+                <input type="button" value="Clear ending date" id="resetEnd" />
 
             </div></div>
+            <?php
+            }            
+            ?> 
+            
             
             <?php
             // Fetching from the db the date when the project was created          
@@ -77,11 +83,10 @@ echo $this->Html->script('jquery-ui.min');
             
             $isAdmin = $this->request->session()->read('is_admin');
     ?>           
-    </fieldset>
     <?= $this->Form->end() ?>
 </div>
 
-<script> 
+<script>         
     // minDate is the date the project was created, for admin there is no min date
     // maxDate is the current day
 

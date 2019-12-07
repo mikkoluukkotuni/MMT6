@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  * @property int $member_id
  * @property \App\Model\Entity\Member $member
  * @property \Cake\I18n\Time $date
+ * @property \Cake\I18n\Time $created_on
+ * @property \Cake\I18n\Time $updated_on
  * @property string $description
  * @property float $duration
  * @property int $worktype

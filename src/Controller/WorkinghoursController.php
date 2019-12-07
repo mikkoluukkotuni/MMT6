@@ -39,6 +39,26 @@ class WorkinghoursController extends AppController
         $this->set('workinghours', $this->paginate($this->Workinghours));
         $this->set(compact('memberlist', 'members'));               
         $this->set('_serialize', ['workinghours']);
+
+        $workinghour = $this->Workinghours->newEntity();
+        if ($this->request->is('post')) {
+            // get data from the form
+            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
+            // only allow members to add workinghours for themself
+            $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
+            
+            if ($this->Workinghours->save($workinghour)) {
+                $this->Flash->success(__('The workinghour has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
+            }
+        }
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $this->set(compact('workinghour', 'members', 'worktypes'));
+        $this->set('_serialize', ['workinghour']);
     }
     
     // For listing member's workinghours
@@ -98,6 +118,8 @@ class WorkinghoursController extends AppController
         if ($this->request->is('post')) {
             // get data from the form
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
+            $time = Time::now();
+            $workinghour['created_on'] = $time;
             // only allow members to add workinghours for themself
             $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
             
@@ -113,6 +135,8 @@ class WorkinghoursController extends AppController
         $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
+
+        
     }
     
     public function addlate()
@@ -121,6 +145,8 @@ class WorkinghoursController extends AppController
         if ($this->request->is('post')) {
             // get data from the form
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
+            $time = Time::now();
+            $workinghour['created_on'] = $time;
             // only allow members to add workinghours for themself
             $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
             
@@ -146,7 +172,9 @@ class WorkinghoursController extends AppController
     {
         $workinghour = $this->Workinghours->newEntity();
         if ($this->request->is('post')) {
-            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
+            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
+            $time = Time::now();
+            $workinghour['created_on'] = $time;
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -183,6 +211,8 @@ class WorkinghoursController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
+            $time = Time::now();
+            $workinghour['modified_on'] = $time;
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
                 return $this->redirect(['action' => 'index']);

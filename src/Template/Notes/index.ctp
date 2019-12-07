@@ -1,7 +1,3 @@
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-</ul>
-
 
 <div class="notes index large-9 medium-18 columns content float: left">
     <h3><?= __('Feedback') ?></h3>

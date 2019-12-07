@@ -5,18 +5,7 @@ echo $this->Html->script('jquery-ui.min');
 ?>
 
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $workinghour->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $workinghour->id)]
-            )
-        ?></li>
-    </ul>
-
 <div class="workinghours form large-8 medium-16 columns content float: left">
-    <?= $this->Form->create($workinghour) ?>
-    <fieldset>
             <?php
             
             // Print out the name of the member whose workinghour will be edited
@@ -31,20 +20,27 @@ echo $this->Html->script('jquery-ui.min');
             
                 $queryName = Cake\ORM\TableRegistry::get('Users')
                 ->find()
-           	->select(['first_name','last_name']) 
+           	    ->select(['first_name','last_name']) 
             	->where(['id =' => $userid])
                 ->toArray(); 
             
                 if ($queryName != null) { ?>
-                    <legend><?= __('Edit logged time for ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></legend>    
+                    <h3><?= __('Edit logged time for ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></h3>    
                 <?php }
             }    
             else { ?>
-                <legend><?= __('Edit logged time') ?></legend>
+                <h3><?= __('Edit logged time') ?></h3>
             <?php } ?>
-        
+            <button id="navbutton">
+                <?= $this->Form->postLink(
+                    __('Delete'),
+                    ['action' => 'delete', $workinghour->id],
+                    ['confirm' => __('Are you sure you want to delete # {0}?', $workinghour->id)]
+                )
+                ?>
+            </button>
+            <?= $this->Form->create($workinghour) ?>
         <?php
-
             // change the format of the date that comes from the db
             Cake\I18n\Time::setToStringFormat('MMMM d, yyyy');
             
@@ -70,11 +66,9 @@ echo $this->Html->script('jquery-ui.min');
            	->select(['year','week']) 
             	->where(['project_id =' => $project_id])
                 ->toArray(); 
-
             if ($query != null) {
                 // picking out the week of the last weekly report from the results
                 $max = max($query);
-
                 $maxYear = $max['year'];
                 $maxWeek = $max['week'];
                 
@@ -106,7 +100,6 @@ echo $this->Html->script('jquery-ui.min');
 			echo $this->Form->button(__('Submit'));
         ?>    
  
-    </fieldset>
     <?= $this->Form->end() ?>
 </div>
 

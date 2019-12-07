@@ -1,13 +1,5 @@
 <?php if($showForm){ ?>
 
-<!-- 
-    If the lower navigation bar needed, links go here
-    
-    <ul class="side-nav">
-        
-    </ul>
--->
-
 <div class="users form large-8 medium-16 columns content float: left">
     <?= $this->Form->create() ?>
     <fieldset>

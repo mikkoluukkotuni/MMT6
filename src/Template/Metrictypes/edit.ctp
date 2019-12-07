@@ -1,22 +1,19 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Form->postLink(
+<div class="metrictypes form large-8 medium-16 columns content float: left">
+    <h3><?= __('Edit Metrictype') ?></h3>
+    <button id="navbutton">
+        <?= $this->Form->postLink(
                 __('Delete'),
                 ['action' => 'delete', $metrictype->id],
                 ['confirm' => __('Are you sure you want to delete # {0}?', $metrictype->id)]
             )
-        ?></li>
-    </ul>
-
-<div class="metrictypes form large-8 medium-16 columns content float: left">
+        ?>
+    </button>
     <?= $this->Form->create($metrictype) ?>
-    <fieldset>
-        <legend><?= __('Edit Metrictype') ?></legend>
         <?php
             echo $this->Form->input('id');
             echo $this->Form->input('description');
 			echo $this->Form->button(__('Submit'));
         ?>
-    </fieldset>
     <?= $this->Form->end() ?>
 </div>

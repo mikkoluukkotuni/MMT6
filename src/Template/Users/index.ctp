@@ -1,10 +1,9 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-    </ul>
-
 <div class="users index large-9 medium-8 columns content float: left">
     <h3><?= __('Users') ?></h3>
+    <button id="navbutton">
+        <?= $this->Html->link(__('+ New User'), ['action' => 'add']) ?>
+    </button>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -16,6 +15,7 @@
                 <th><?= $this->Paginator->sort('last_name') ?></th>
                 <th><?= $this->Paginator->sort('phone') ?></th>
                 <th><?= $this->Paginator->sort('role') ?></th>
+                <th><?= $this->Paginator->sort('research_permission') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -30,6 +30,15 @@
                 <td><?= h($user->last_name) ?></td>
                 <td><?= h($user->phone) ?></td>
                 <td><?= h($user->role) ?></td>
+                <td><?php if ($user->research_allowed == 1){
+                        echo ("Allowed");
+                    } else if ($user->research_allowed == 0){
+                        echo ("Disallowed");
+                    } else if ($user->research_allowed == -1){
+                        echo ("No answer");
+                    } else {
+                        echo ("No answer");
+                    } ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>

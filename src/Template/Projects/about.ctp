@@ -1,9 +1,4 @@
 
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
-        <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>
-    </ul>    
-
 
 <div id="faq" class="projects index large-9 medium-18 columns content float: left">
     <h3><?= __('About MMT') ?></h3>

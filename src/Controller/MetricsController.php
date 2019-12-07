@@ -353,7 +353,7 @@ class MetricsController extends AppController
         $names[4] = 'Sprint backlog'; //reqProgress
         $names[5] = 'Done'; //reqClosed
         $names[6] = 'Rejected'; //reqRejected
-        $names[7] = 'Commits to the source code repository';
+        $names[7] = 'Commits in total';
         $names[8] = 'Passed test cases';
         $names[9] = 'Total number of test cases';
         

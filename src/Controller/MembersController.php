@@ -143,8 +143,8 @@ class MembersController extends AppController
                 return True;
             }
         }
-        // only supervisors and admins can edit and delete members
-        if ($this->request->action === 'edit' || $this->request->action === 'delete') 
+        // only supervisors and admins can delete members
+        if ($this->request->action === 'delete') 
         {
             if($project_role == "supervisor"){
                 return True;
@@ -154,6 +154,20 @@ class MembersController extends AppController
             // add edit and delete members. This is because after this if block we call the parent
             return False;
         }
+
+        // in addition to supervisors and admins, member can also edit own data
+        if ($this->request->action === 'edit') 
+        {
+            $id_length = ceil(log10(abs($this->request->session()->read('selected_project_memberid') + 1)));
+            if($project_role == "supervisor" || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -$id_length)){
+                return True;
+            }
+
+            // This return false is important, because if we didnt have it a manager could also
+            // add edit and delete members. This is because after this if block we call the parent
+            return False;
+        }
+
         // if not trying to add edit delete
         return parent::isAuthorized($user);        
     }

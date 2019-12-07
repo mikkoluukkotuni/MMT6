@@ -49,6 +49,12 @@ class MembersTable extends Table
                 'rule' => ['inList', ['developer', 'manager', 'supervisor', 'client']],
                 'message' => 'Please enter a valid project role'
                 ]);
+
+        $validator
+            ->add('target_hours', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('target_hours', 'create')
+            ->notEmpty('target_hours');
+
         
         // Removed for jQuery UI datepicker
         $validator
@@ -58,6 +64,7 @@ class MembersTable extends Table
         $validator
             //->add('ending_date', 'valid', ['rule' => 'date'])
             ->allowEmpty('ending_date');
+
 
         return $validator;
     }
@@ -77,7 +84,7 @@ class MembersTable extends Table
         $members = TableRegistry::get('Members');   
         $query = $members
             ->find()
-            ->select(['id', 'project_role', 'user_id'])    
+            ->select(['id', 'project_role', 'user_id', 'target_hours'])    
             ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
             ->andWhere(['project_id' => $project_id, 'project_role !=' => 'client'])
             //->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
