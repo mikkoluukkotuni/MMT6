@@ -90,4 +90,33 @@ function readURL(input) {
     }
 }
 
+function selectNavButton(clicked) {
+    var id = '#'+clicked.toLowerCase()+'Btn';
+    
+    const loc = $(location).attr('pathname');
 
+    if (loc === '/mmt-5/projects') {
+        id = '#homeBtn';
+    } else if (loc.substring(0, loc.lastIndexOf('/')+1) === '/mmt-5/projects/view/') {
+        id = '#projectViewBtn';
+    } else if (loc === '/mmt-5/users/add') {
+        id = '#usersBtn';
+    }
+    else if (loc === '/mmt-5/projects/add') {
+        id = '#addBtn';
+    }
+    else if (loc === '/mmt-5/metrictypes') {
+        id = '#metricsBtn';
+    }
+    else if (loc === '/mmt-5/worktypes') {
+        id = '#workTypeBtn';
+    }
+    else if (loc === '/mmt-5/notes') {
+        id = '#notesBtn';
+    }
+
+
+    $('.navtop ul a').removeClass('selectedLink');
+
+    $(id+ ' a').addClass('selectedLink');
+}

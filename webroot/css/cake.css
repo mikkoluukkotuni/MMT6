@@ -156,7 +156,7 @@ nav ul {
 #navgeneral a:hover {
 	border-bottom: 5px;
 	border-bottom-style: solid;
-	border-color: #78C4E6;
+	border-color: rgb(253, 253, 253);
 }
 
 /* Links in the black navigation */
@@ -270,7 +270,7 @@ nav ul {
 #navtop li a:hover {
 	border-bottom: 5px;
 	border-bottom-style: solid;
-	border-color: #78C4E6;
+	border-color: #FFFFFF;
 }
   
 .statistics {
@@ -304,7 +304,7 @@ nav ul {
 	color: #ffffff;
 	border: 2px;
 	border-style: solid;
-	border-color: #78C4E6;
+	border-color: #ffffff;
 }
 
 /* The other button, possibly next to navbutton. Usually only available for admin or manager, i.e. "Log time for another member" */
@@ -1402,7 +1402,11 @@ label.requiredEmail:after {
 	color: #C3232D;
 	display:inline;
 }
-	  
+.selectedLink {
+	border-bottom: 5px;
+	border-bottom-style: solid;
+	border-color: #ffffff;
+  }  
 	  
 	  
 /* Colors for test layout*/
