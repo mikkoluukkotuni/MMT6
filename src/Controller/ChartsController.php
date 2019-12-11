@@ -249,9 +249,7 @@ class ChartsController extends AppController
             'styleFont' => '18px Metrophobic, Arial, sans-serif',
             'styleColor' => '#0099ff',
         );
-        // body of the chart
-        $myChart->chart->width =  800;
-        $myChart->chart->height = 500;
+        
         /* (This part is removed from other functions. Kept here as backup.)
          $myChart->chart->marginTop = 60;
          $myChart->chart->marginLeft = 90;
@@ -294,9 +292,6 @@ class ChartsController extends AppController
         		'styleColor' => '#0099ff',
         );
         $myChart->subtitle->text = 'in numbers';
-        // body of the chart
-        $myChart->chart->width =  800;
-        $myChart->chart->height = 500;
 
         // $myChart->chart->alignTicks = FALSE;
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -336,10 +331,6 @@ class ChartsController extends AppController
         		'styleColor' => '#0099ff',
         );
     	$myChart->subtitle->text = 'in %';
-    	
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -373,10 +364,6 @@ class ChartsController extends AppController
         	'styleColor' => '#0099ff',
         );
 		$myChart->subtitle->text = 'in total';
-    	
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -406,10 +393,6 @@ class ChartsController extends AppController
         	'styleFont' => '18px Metrophobic, Arial, sans-serif',
         	'styleColor' => '#0099ff',
         );
-    	
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -445,10 +428,6 @@ class ChartsController extends AppController
         	'styleColor' => '#0099ff',
         );
     	$myChart->subtitle->text = "categorized by type";
-    
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -489,10 +468,6 @@ class ChartsController extends AppController
         	'styleColor' => '#0099ff',
         );
     	$myChart->subtitle->text = "per week";
-    
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -527,10 +502,6 @@ class ChartsController extends AppController
 			'styleColor' => '#0099ff',
 		);
 		$myChart->subtitle->text = 'submitted to weekly reports';
-		
-		// body of the chart
-		$myChart->chart->width =  800;
-		$myChart->chart->height = 500;
 
 		// $myChart->chart->alignTicks = FALSE;
 		$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
@@ -562,9 +533,6 @@ class ChartsController extends AppController
             'styleFont' => '18px Metrophobic, Arial, sans-serif',
             'styleColor' => '#0099ff',
         );
-        // body of the chart
-        $myChart->chart->width =  800;
-        $myChart->chart->height = 500;
       
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
@@ -596,9 +564,6 @@ class ChartsController extends AppController
             'styleFont' => '18px Metrophobic, Arial, sans-serif',
             'styleColor' => '#0099ff',
         );
-        // body of the chart
-        $myChart->chart->width =  800;
-        $myChart->chart->height = 500;
       
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
@@ -630,9 +595,6 @@ class ChartsController extends AppController
             'styleFont' => '18px Metrophobic, Arial, sans-serif',
             'styleColor' => '#0099ff',
         );
-        // body of the chart
-        $myChart->chart->width =  800;
-        $myChart->chart->height = 500;
       
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
@@ -668,10 +630,6 @@ class ChartsController extends AppController
         	'styleFont' => '18px Metrophobic, Arial, sans-serif',
         	'styleColor' => '#0099ff',
         );
-    	
-    	// body of the chart
-    	$myChart->chart->width =  800;
-    	$myChart->chart->height = 500;
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
