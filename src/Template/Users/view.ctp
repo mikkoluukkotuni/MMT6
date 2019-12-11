@@ -4,7 +4,7 @@
     <?php   $admin = $this->request->session()->read('is_admin');
             
             if($admin) { ?>
-            <button id="navbutton"><?= $this->Html->link(__('Manage User'), ['action' => 'edit', $user->id]) ?></button>
+            <button id="navbutton"><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?></button>
             <?php } ?>
     <table class="vertical-table">
         <tr>
@@ -15,16 +15,6 @@
             <th><?= __('Email') ?></th>
             <td><?= h($user->email) ?></td>
         </tr>
-		<!-- redundant info
-        <tr>
-            <th><?= __('First Name') ?></th>
-            <td><?= h($user->first_name) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Last Name') ?></th>
-            <td><?= h($user->last_name) ?></td>
-        </tr>
-		-->
         <tr>
             <th><?= __('Phone') ?></th>
             <td><?= h($user->phone) ?></td>

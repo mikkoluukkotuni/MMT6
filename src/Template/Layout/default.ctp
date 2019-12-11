@@ -69,6 +69,7 @@ $cakeDescription = 'MMT';
 <!-- general black top naviagation bar -->
 <div id="navgeneral">
 	<div class="general-links">
+		<?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?>
 		<?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?>
 		<?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
 		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
@@ -93,8 +94,8 @@ $cakeDescription = 'MMT';
 					}
 					?>
 					<?= $this->Html->link(__('View Profile'), ['controller' => 'Users', 'action' => 'view', $this->request->session()->read('Auth.User.id')]) ?>
-					<?= $this->Html->link(__('Edit profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
-					<?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?>
+					<?= $this->Html->link(__('Edit Profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
+					<?= $this->Html->link(__('Log Out'), ['controller' => 'Users', 'action' => 'logout']) ?>
   				</div> <!-- dropdown content ends -->
 			</div> <!-- dropdown ends -->
 <?php
@@ -225,29 +226,28 @@ $cakeDescription = 'MMT';
 	<!-- Logged user -->
 	<?php
 	if ( !empty($this->request->session()->read('Auth.User')) ){ ?>
-		<nav id="navtop" role="navigation" data-topbar>
-			<ul>
-			<li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
 			<?php
 			// logged in with a project selected
 			if( $this->request->session()->check('selected_project') ) { ?>
-				<li><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+			<nav id="navtop" role="navigation" data-topbar>
+			<ul>
+				<li id="projectViewBtn" class="navbutton"><?= $this->Html->link(__('Project Info'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
 				
 				<?php // if not a member, particular links are not shown 
 				if ( $this->request->session()->read('selected_project_role') != 'notmember' ) { ?>
-					<li><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-					<li><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-					<li><?= $this->Html->link(__('Log time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
-					<li><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
+					<li id="membersBtn" class="navbutton"><?= $this->Html->link(__('Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
+ 					<li id="weeklyreportsBtn" class="navbutton"><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+ 					<li id="workinghoursBtn" class="navbutton"><?= $this->Html->link(__('Log Time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+ 					<li id="risksBtn" class="navbutton"><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
 				<?php } // end if not a member
 				
 				// only manager, supervisor and admin can see Slack and Trello links
 				if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-					<li><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
-					<li><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
+					<li id="slackBtn" class="navbutton"><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
+ 					<li id="trelloBtn" class="navbutton"><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
 				<?php endif; ?> <!-- end if manager/supervisor/admin -->
 
-					<li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+					<li id="chartsBtn" class="navbutton"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
 				</ul>
 			</nav>
 			<?php } // end if logged with a project selected
@@ -264,15 +264,17 @@ $cakeDescription = 'MMT';
 							
 				// only admins/supervisors can add new projects
 				if($admin || $supervisor) { ?>
-					<li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+				<nav id="navtop" role="navigation" data-topbar>
+				<ul>
+					<li id="addBtn" class="navbutton"><?= $this->Html->link(__('New Project'), ['controller' => 'Projects','action' => 'add']) ?></li>
 				<?php }
 				
 				if ($admin) { ?>
-					<li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-					<li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
-					<li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
-					<li><?= $this->Html->link(__('All feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
-				<?php }
+					<li id="usersBtn" class="navbutton"><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+ 					<li id="metricsBtn" class="navbutton"><?= $this->Html->link(__('Metric Types'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+ 					<li id="workTypeBtn" class="navbutton"><?= $this->Html->link(__('Work Types'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+ 					<li id="notesBtn" class="navbutton"><?= $this->Html->link(__('All Feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
+ 				<?php }
 				// link is visible only if there is unread feedback
 				if ($admin && (sizeof($unreadNotes)>0)) { ?>
 					<li><b><?= $this->Html->link(__('Unread feedback: ' . count($unreadNotes)), ['controller' => 'Notes', 'action' => 'index']) ?> </b></li>
@@ -281,6 +283,10 @@ $cakeDescription = 'MMT';
 					</nav><?php
 				} ?>
 				<div class="clearer"></div>
+				<?php
+ 	         	    $title = $this->fetch('title');
+ 	                echo "<script type='text/javascript'>selectNavButton('$title')</script>"
+ 	            ?>
 	<?php } // end if logged in
 	
 	else { ?>		
@@ -309,9 +315,9 @@ $cakeDescription = 'MMT';
 		<div class="footerblock">
 			<h6>PUBLIC PAGES</h6>
 			<ul>
-                            <li><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></li>      
+                            <li><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>      
                             <li><?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?> </li>
-                            <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
+                            <li><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
                             <li><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?> </li>                   
 			</ul>
 		</div>

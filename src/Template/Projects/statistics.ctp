@@ -16,7 +16,7 @@
 <?php } ?>
 
 <div class="projects view large-9 medium-18 columns content float: left">
-    <h3><?= h('Public statistics') ?></h3>
+    <h3><?= h('Statistics') ?></h3>
     
     <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
         <h4><?= h('Weekly reports') ?></h4>

@@ -12,9 +12,9 @@ echo $this->Html->script('jquery-ui.min');
     </ul>
 -->
 <div class="projects form large-8 medium-16 columns content float: left">
+    <h3><?= __('Add Project') ?></h3>
     <?= $this->Form->create($project) ?>
-    <fieldset>
-        <legend><?= __('Add Project') ?></legend>
+
         <?php
             // jQuery UI datepicker
                         
@@ -24,7 +24,6 @@ echo $this->Html->script('jquery-ui.min');
             echo $this->Form->input('is_public', array('label' => "This project is public"));
 			echo $this->Form->button(__('Submit'));
         ?>
-    </fieldset>
     <?= $this->Form->end() ?>
 </div>
 <script> 

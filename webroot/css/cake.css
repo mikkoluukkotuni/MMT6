@@ -199,6 +199,8 @@ nav ul {
 	padding: 0.5em 0em;
 	border: none;
 	background-color: #000;
+	white-space: nowrap;
+	text-align: right;
   }
 
 .dropdown {
@@ -1356,6 +1358,10 @@ div.message.hidden {
 	border-bottom: 0px;
 }
 
+h4 {
+	margin-top: 1em;
+}
+
 h5 {
 	color: #000;
 	padding-bottom: 0.5rem;
@@ -1363,7 +1369,7 @@ h5 {
 }
 
 .chart {
-	width: 800px;
+	width: 100%;
 }
 	  
 div.input{
@@ -1402,8 +1408,24 @@ label.requiredEmail:after {
 	color: #C3232D;
 	display:inline;
 }
-	  
-	  
+
+.selectedLink {
+	border-bottom: 5px;
+	border-bottom-style: solid;
+	border-color: #78C4E6;
+}
+
+div.input.number {
+	display: inline-block;
+	width: 24%;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+}
+
+/*
+input#weekmin, input#weekmax, input#yearmin, input#yearmax {
+	
+} */
 	  
 /* Colors for test layout*/
 
