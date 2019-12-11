@@ -1,26 +1,3 @@
-// Opens and closes dropdown menu
-$(document).on('click','.dropdown button',function(){
-    
-    $(this).closest('.dropdown').toggleClass('on');
-    
-    
-});
-
-
-// Closes the dropdown menu when clicked outside
-$(document).mouseup(function (e) {
-
-    if ($('.dropdown.on').length > 0) {
-        var container = $('.dropdown.on');
-
-        if ((!container.is(e.target) && container.has(e.target).length === 0)) {
-
-            container.removeClass('on');
-        }
-    }
-});
-
-
 // Opening and closing edit mode for comments
 $(document).on('click','.messagebox .msgaction a.edit',function(){
     
@@ -70,9 +47,6 @@ $(document).on('onmousemove', 'body',function(){
     $('.message').delay(2500).fadeOut(1000);
 });
 
-
-
-
 //These two functions are for previewing the uploaded image.
 $(document).on('change','input.preview',function(){
     readURL(this);
@@ -90,4 +64,33 @@ function readURL(input) {
     }
 }
 
+function selectNavButton(clicked) {
+    var id = '#'+clicked.toLowerCase()+'Btn';
 
+    const loc = $(location).attr('pathname');
+
+    if (loc === '/mmt-5/projects') {
+        id = '#homeBtn';
+    } else if (loc.substring(0, loc.lastIndexOf('/')+1) === '/mmt-5/projects/view/') {
+        id = '#projectViewBtn';
+    } else if (loc === '/mmt-5/users/add') {
+        id = '#usersBtn';
+    }
+    else if (loc === '/mmt-5/projects/add') {
+        id = '#addBtn';
+    }
+    else if (loc === '/mmt-5/metrictypes') {
+        id = '#metricsBtn';
+    }
+    else if (loc === '/mmt-5/worktypes') {
+        id = '#workTypeBtn';
+    }
+    else if (loc === '/mmt-5/notes') {
+        id = '#notesBtn';
+    }
+
+
+    $('.navtop ul a').removeClass('selectedLink');
+
+    $(id+ ' a').addClass('selectedLink');
+}
