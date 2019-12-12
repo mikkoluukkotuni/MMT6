@@ -61,7 +61,7 @@ class ChartsController extends AppController
         $risksImpactChart = $this->risksImpactChart();
         $risksCombinedChart = $this->risksCombinedChart();
         $derivedChart = $this->derivedChart();
-        $testiChart = $this->testiChart();
+        $hoursComparisonChart = $this->hoursComparisonChart();
         
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
@@ -74,7 +74,7 @@ class ChartsController extends AppController
         $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $totalhourData = $this->Charts->totalhourLineData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
-        $testiData = $this->Charts->testiData($weeklyreports['id'], $weeklyreports['weeks']);
+        $hoursComparisonData = $this->Charts->hoursComparisonData($weeklyreports['id'], $weeklyreports['weeks']);
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -135,7 +135,7 @@ class ChartsController extends AppController
             )
         );
         
-        // weeklyhourChart 
+        // totalhourChart
         $totalhourChart->xAxis->categories = $weeklyreports['weeks'];    
         $totalhourChart->series[] = array(
             'name' => 'total hours',
@@ -220,21 +220,18 @@ class ChartsController extends AppController
 
 
         // TESTICHART
-        $testiChart->xAxis->categories = $weeklyreports['weeks'];    
-        $testiChart->series[] = array();
-        foreach($testiData as $project_data) {
-            $project_line = array(
-                'data' => $project_data
+        $hoursComparisonChart->xAxis->categories = $weeklyreports['weeks'];    
+        foreach($hoursComparisonData as $project_data) {
+            $hoursComparisonChart->series[] = array(
+                'name' => $project_data['name'],
+                'data' => $project_data['data']
             );
-            array_push($testiChart->series['data'], 'data');
-        }
-        $this->Flash->success($testiChart->series['data']);
-        
+        }        
 
 
         // This sets the charts visible in the actual charts page "Charts/index.php"
         $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 
-            'risksImpactChart', 'risksCombinedChart', 'derivedChart', 'testiChart'));
+            'risksImpactChart', 'risksCombinedChart', 'derivedChart', 'hoursComparisonChart'));
 
     }
     // All the following functions are similar
@@ -708,19 +705,18 @@ class ChartsController extends AppController
     	return $myChart;
     }    
 
-    public function testiChart(){
+    public function hoursComparisonChart(){
 		$myChart = $this->Highcharts->createChart();
-		$myChart->chart->renderTo = 'testiwrapper';
+		$myChart->chart->renderTo = 'hourscomparisonwrapper';
 		$myChart->chart->type = 'line';
 	
 		$myChart->title = array(
-			'text' => 'Total hours of each project',
+			'text' => 'Total hours of each public project',
 			'y' => 20,
 			'align' => 'center',
 			'styleFont' => '18px Metrophobic, Arial, sans-serif',
 			'styleColor' => '#0099ff',
 		);
-		$myChart->subtitle->text = 'cumulative';
 		
 		// body of the chart
 		$myChart->chart->width =  800;
@@ -730,8 +726,9 @@ class ChartsController extends AppController
 		$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
 		$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
 		
-		// this chart doesn't need a legend
-		$myChart->legend->enabled = false;
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
 		
 		// labels to describe the content of axes
 		$myChart->xAxis->title->text = 'Week number';
@@ -739,7 +736,7 @@ class ChartsController extends AppController
 		
         $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
         return 'Total hours at this point ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}");
         $myChart->plotOptions->area->marker->enabled = false;
         return $myChart;
     }

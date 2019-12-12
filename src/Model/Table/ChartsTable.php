@@ -396,7 +396,6 @@ class ChartsTable extends Table
         $sum = 0;
         foreach($weeklist as $temp){
             
-            // $sum = 0;
             if(!empty($queryW)) {
                 foreach($queryW as $result) {
                     // date of workinghours need to be turned to week
@@ -412,18 +411,21 @@ class ChartsTable extends Table
         return $data;
     }
 
-
-    // TESTING FOR COMPARISON CHART OF PROJECTS'S HOURS
-    public function testiData($idlist, $weeklist) {
+    // For admin to compare working hours of public projects
+    public function hoursComparisonData($idlist, $weeklist) {
         $projects = TableRegistry::get('Projects');
         $query2 = $projects
             ->find()
-            ->select(['id'])
+            ->select(['id', 'project_name'])
             ->where(['is_public' => 1])
             ->toArray();     
         $public_projects = array();
+        // get id and name of each public project
         foreach($query2 as $temp) {
-            $public_projects[] = $temp->id;
+            $temp2 = array();
+            $temp2['id'] = $temp->id;
+            $temp2['project_name'] = $temp->project_name;
+            $public_projects[] = $temp2;
         }
 
         $combined_data = array();
@@ -431,12 +433,11 @@ class ChartsTable extends Table
         foreach($public_projects as $public_project) {
 
             $members = TableRegistry::get('Members');
-            
             // get a list of the members in the project
             $query = $members
                     ->find()
                     ->select(['id'])
-                    ->where(['project_id =' => $public_project])
+                    ->where(['project_id =' => $public_project['id']])
                     ->toArray();
             $memberlist = array();
             if(!empty($query)) {
@@ -453,10 +454,10 @@ class ChartsTable extends Table
                             ->toArray();
             }
             $data = array();
+            $temp_data = array();
             $sum = 0;
             foreach($weeklist as $temp){
                 
-                // $sum = 0;
                 if(!empty($queryW)) {
                     foreach($queryW as $result) {
                         // date of workinghours need to be turned to week
@@ -468,34 +469,15 @@ class ChartsTable extends Table
                 }
                 $data[] = $sum;
             }
-
-            array_push($combined_data, $data);
+            // store name and a list of weekly workinghours sums for each project
+            $tmp = array();
+            $tmp['name'] = $public_project['project_name'];
+            $tmp['data'] = $data;
+            $combined_data[] = $tmp;
         }
 
         return $combined_data;            
-    }
-    
-    // public function weeklyhourAreaData($idlist){
-    //     $weeklyhours = TableRegistry::get('Weeklyhours');
-        
-    //     $weeklyhourData = array();
-        
-    //     foreach($idlist as $temp){  
-    //         $query = $weeklyhours
-    //                 ->find()
-    //                 ->select(['duration'])
-    //                 ->where(['weeklyreport_id =' => $temp])
-    //                 ->toArray();
-    //         $duration = 0;
-    //         foreach($query as $dur){
-    //             $duration += $dur->duration;
-    //         }
-    //         $weeklyhourData[] = $duration;
-    //     }
-        
-    //     return $weeklyhourData;
-    // }
-    
+    }   
     
     public function riskData($idlist, $projectId){
         

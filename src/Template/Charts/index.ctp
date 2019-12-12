@@ -98,19 +98,19 @@
     </div>
     
     <?php 
-    // The chart for derived metrics is visible only to admins
+    // The charts for derived metrics is visible only to admins
     $admin = $this->request->session()->read('is_admin');
     if ($admin) { ?>  
         <div class="chart">
-            <h4>Derived Metrics Chart</h4>
+            <h4>Derived Charts for Admin</h4>
             <div id="derivedwrapper">
                 <?php echo $this->Highcharts->render($derivedChart, 'testcasechart'); ?>
             </div>
         </div>
+        </br>
         <div class="chart">
-            <h4>TESTI</h4>
-            <div id="testiwrapper">
-                <?php echo $this->Highcharts->render($testiChart, 'testichart'); ?>
+            <div id="hourscomparisonwrapper">
+                <?php echo $this->Highcharts->render($hoursComparisonChart, 'hoursComparisonChart'); ?>
             </div>
         </div>
     <?php } ?>
