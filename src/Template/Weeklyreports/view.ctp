@@ -255,6 +255,7 @@
                     <th colspan="2"><?= __('Risk') ?></th>                 
                     <th><?= __('Impact') ?></th>
                     <th><?= __('Probability') ?></th>
+                    <th><?= __('Date') ?></th>
                     <?php
                     if ( $admin || $supervisor || $manager) { ?> 
                         <th class="actions"><?= __('Actions') ?></th>
@@ -267,6 +268,13 @@
                     <td colspan="2"><?= h($risk->description) ?></td>
                     <td><?= h($risk->impact) ?></td>
                     <td><?= h($risk->probability) ?></td>
+                    <?php
+                    // if weeklyrisk does not have date value, display weeklyreport's created_on value
+                    if ($risk->date != NULL) { ?>                    
+                        <td><?= h($risk->date->format('d.m.Y')) ?></td>
+                    <?php } else { ?>
+                        <td><?= h($weeklyreport->created_on->format('d.m.Y')) ?></td>
+                    <?php } ?>  
                     <?php           
                     // admins and supervisors can edit weeklyrisks
                     if ( $admin || $supervisor || $manager) { ?>     

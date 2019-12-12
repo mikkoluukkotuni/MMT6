@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
+use Cake\I18n\Time;
 
 class WeeklyrisksController extends AppController {
 
@@ -16,6 +17,8 @@ class WeeklyrisksController extends AppController {
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             $risk = $this->Weeklyrisks->patchEntity($risk, $this->request->data);
+            $time = Time::now();
+            $risk['date'] = $time;
             if ($this->Weeklyrisks->save($risk)) {
                 $this->Flash->success(__('The risk has been saved.'));
                 return $this->redirect(['controller' => 'weeklyreports', 'action' => 'view', $wr_id]); 

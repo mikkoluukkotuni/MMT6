@@ -71,6 +71,7 @@ class WeeklyreportsController extends AppController
             $risk->description = TableRegistry::get('Risks')->get($weeklyRisk['risk_id'])['description'];
             $risk->impact = $riskTypes[$weeklyRisk['impact']];
             $risk->probability = $riskTypes[$weeklyRisk['probability']];
+            $risk->date = $weeklyRisk->date;
             $risk->id = $weeklyRisk->id;
             
             $risks[] = $risk;
