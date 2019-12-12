@@ -143,7 +143,7 @@ class WeeklyhoursTable extends Table
         
         //saving the weekly risks
         $tableWeeklyrisks = TableRegistry::get('Weeklyrisks');
-       
+        $time = Time::now();
         foreach($risks as $id => $prob){
             
             $weeklyRisk = $tableWeeklyrisks->newEntity();
@@ -152,6 +152,7 @@ class WeeklyhoursTable extends Table
             $weeklyRisk['risk_id'] = $id;
             $weeklyRisk['probability'] = $prob['probability'];
             $weeklyRisk['impact'] = $prob['impact'];
+            $weeklyRisk['date'] = $time;
             
             if (!$tableWeeklyrisks->save($weeklyRisk)) {
                 return False;
