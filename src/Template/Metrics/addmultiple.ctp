@@ -46,10 +46,19 @@
             echo $this->Form->input('reqRejected', 
                 array('value' => $current_metrics[5]['value'], 'label' => $metricNames[6],'type' => 'number', 'required'=>true));
             ?></div><?php
+
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
+
             echo $this->Form->input('commits', 
-                array('value' => $current_metrics[6]['value'], 'label' => $metricNames[7],'type' => 'number', 'required'=>true));
+                array('value' => $current_metrics[6]['value'], 'label' => $metricNames[7],'type' => 'number', 'required'=>true)); 
+                    
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
+
             echo $this->Form->input('passedTestCases', 
                 array('value' => $current_metrics[7]['value'], 'label' => $metricNames[8],'type' => 'number', 'required'=>true));
+
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
+
             echo $this->Form->input('totalTestCases', 
                 array('value' => $current_metrics[8]['value'], 'label' => $metricNames[9],'type' => 'number', 'required'=>true));
 		?>
@@ -62,3 +71,6 @@
    
     <?= $this->Form->end() ?>
 </div>
+<style>
+   .infoicon{float: right; margin-top: 31px; margin-left: 10px;}
+</style>
