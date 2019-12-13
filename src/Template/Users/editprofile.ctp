@@ -1,7 +1,6 @@
 
 <div class="users form large-8 medium-16 columns content float: left">
     <h3>Edit profile</h3>
-    <button id="navbutton"><?= $this->Html->link(__('Change Password'), ['action' => 'password']) ?></button>
     <?= $this->Form->create($user) ?>
             <?php
             echo $this->Form->input('email');
@@ -13,6 +12,8 @@
             ?>
             <button>Submit</button>
     <?= $this->Form->end() ?>
+</div>
+<div class="users form large-8 medium-16 columns content float: left">
     <?= $this->Form->create() ?>
         <h3><?= __('Reset Password') ?></h3>
             <?php
