@@ -1,17 +1,17 @@
 
 <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
     <div class="statistics">
-        <h3><?= __('Edit limits') ?></h3>
-            <?= $this->Form->create() ?>
-            <fieldset>
-                <?php
-                    echo $this->Form->input('weekmin', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmin']));
-                    echo $this->Form->input('weekmax', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmax']));
-                    echo $this->Form->input('year', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['year']));
-					echo $this->Form->button(__('Submit'));
-                ?>
-            </fieldset>
-            <?= $this->Form->end() ?>
+        <h3><?= __('Edit limits') ?></h3> 
+        <?= $this->Form->create() ?>
+        <div id="chart-limits">
+        <?php
+            echo $this->Form->input('weekmin', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmin']));
+            echo $this->Form->input('weekmax', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmax']));
+            echo $this->Form->input('year', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['year']));
+        ?>
+        </div>
+        <button>Submit</button>
+        <?= $this->Form->end() ?>
     </div>
 <?php } ?>
 
