@@ -69,15 +69,17 @@ $cakeDescription = 'MMT';
 <!-- general black top naviagation bar -->
 <div id="navgeneral">
 	<div class="general-links">
-		<?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?>
-		<?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?>
-		<?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?>
-		<?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?>
-		<?php
-			if ( empty(!$this->request->session()->read('Auth.User')) && $this->request->session()->check('selected_project')) { ?>
-				<?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?>
-			<?php }
-		?>
+		<ul>
+			<li id="projectsBtn"><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
+			<li id="aboutBtn"><?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?></li>
+			<li id="statsBtn"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
+			<li id="faqBtn"><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?></li>
+			<?php
+				if ( empty(!$this->request->session()->read('Auth.User')) && $this->request->session()->check('selected_project')) { ?>
+					<li id="feedbackBtn"><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?></li>
+				<?php }
+			?>
+		</ul>
 	</div> <!-- general links end -->
 </div> <!-- navgeneral ends -->
 <?php
@@ -271,8 +273,8 @@ $cakeDescription = 'MMT';
 				
 				if ($admin) { ?>
 					<li id="usersBtn" class="navbutton"><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
- 					<li id="metricsBtn" class="navbutton"><?= $this->Html->link(__('Metric Types'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
- 					<li id="workTypeBtn" class="navbutton"><?= $this->Html->link(__('Work Types'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+ 					<li id="metrictypesBtn" class="navbutton"><?= $this->Html->link(__('Metric Types'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+ 					<li id="worktypesBtn" class="navbutton"><?= $this->Html->link(__('Work Types'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
  					<li id="notesBtn" class="navbutton"><?= $this->Html->link(__('All Feedback'), ['controller' => 'Notes', 'action' => 'index']) ?></li> 
  				<?php }
 				// link is visible only if there is unread feedback

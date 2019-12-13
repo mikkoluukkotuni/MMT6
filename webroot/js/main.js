@@ -65,32 +65,46 @@ function readURL(input) {
 }
 
 function selectNavButton(clicked) {
+    // Getting the id of the button automatically from the name of the link
     var id = '#'+clicked.toLowerCase()+'Btn';
+    // console.log(id);
 
+    // Getting the path name
     const loc = $(location).attr('pathname');
+    // console.log(loc);
+    // console.log(loc.substring(0, loc.lastIndexOf('/')+1));
 
-    if (loc === '/mmt-5/projects') {
-        id = '#homeBtn';
-    } else if (loc.substring(0, loc.lastIndexOf('/')+1) === '/mmt-5/projects/view/') {
-        id = '#projectViewBtn';
-    } else if (loc === '/mmt-5/users/add') {
-        id = '#usersBtn';
-    }
-    else if (loc === '/mmt-5/projects/add') {
+    /* Few exceptions, where the automatic id getting needs to be fixed.
+     * Otherwise, the rest of the links follow the automatic name getting.
+     */
+    if (loc === '/projects/add') {
         id = '#addBtn';
     }
-    else if (loc === '/mmt-5/metrictypes') {
-        id = '#metricsBtn';
+    else if (loc.substring(0, loc.lastIndexOf('/')+1) === '/projects/view/') {
+        id = '#projectViewBtn';
     }
-    else if (loc === '/mmt-5/worktypes') {
-        id = '#workTypeBtn';
+    else if (loc.substring(0, loc.lastIndexOf('/')+1) === '/projects/edit/') {
+        id = '#projectViewBtn';
     }
-    else if (loc === '/mmt-5/notes') {
-        id = '#notesBtn';
+    else if (loc === '/notes/add') {
+        id = '#feedbackBtn';
+    }
+    else if (loc === '/metrics') {
+        id = '#projectViewBtn';
+    }
+    else if (loc === '/projects/about') {
+        id = '#aboutBtn';
+    }
+    else if (loc === '/projects/statistics') {
+        id = '#statsBtn';
+    }
+    else if (loc === '/projects/faq') {
+        id = '#faqBtn';
     }
 
-
+    // Removing the previous class of the link
     $('.navtop ul a').removeClass('selectedLink');
 
+    // Creating a new class for the link
     $(id+ ' a').addClass('selectedLink');
 }

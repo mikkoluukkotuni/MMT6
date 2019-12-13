@@ -147,13 +147,23 @@ nav ul {
 	display: block;
 }
 
-#navgeneral a {
+#navgeneral ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#navgeneral li {
+	display: inline;
+}
+
+#navgeneral li a {
 	color: white;
 	margin-left: 1em;
 	margin-right: 1em;
 }
   
-#navgeneral a:hover {
+#navgeneral li a:hover {
 	border-bottom: 5px;
 	border-bottom-style: solid;
 	border-color: #78C4E6;
