@@ -75,6 +75,16 @@
                 </td>
             </tr>
             <?php endforeach; ?>
+
+            <?php
+            $totalTarget = 0;
+            foreach ($members as $member):
+            if ($member->target_hours != NULL)
+                $totalTarget= $totalTarget + $member->target_hours;
+            if (($member->project_role == 'developer' || $member->project_role == 'manager') && $member->target_hours == NULL)
+                $totalTarget = $totalTarget + 100;
+            endforeach;
+            ?>
             
             <?php if (!empty($member->project_id)) { ?>
             <tr style="border-top: 2px solid black;">
@@ -82,6 +92,7 @@
                 <td colspan="2"><b><?= __('Total') ?></b></td>
                 <td></td>
                 <td><b><?= h($total) ?></b></td>
+                <td><b><?= h($totalTarget) ?></b></td>
                 <td></td>
             </tr> 
             <?php } ?>
