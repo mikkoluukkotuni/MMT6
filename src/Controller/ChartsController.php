@@ -538,11 +538,7 @@ class ChartsController extends AppController
 			'styleFont' => '18px Metrophobic, Arial, sans-serif',
 			'styleColor' => '#0099ff',
 		);
-<<<<<<< HEAD
-		$myChart->subtitle->text = 'cumulative (based on weeklyreports)';
-=======
 		$myChart->subtitle->text = 'cumulative';
->>>>>>> d9ad739... Fix error
 		
 		// body of the chart
 		$myChart->chart->width =  800;
