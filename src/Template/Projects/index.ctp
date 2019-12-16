@@ -11,6 +11,7 @@
                     <th><?= $this->Paginator->sort('created_on', ['label' => 'Starting Date']) ?> </th>
                     <th><?= __('Desciption') ?></th>
                     <?php // links to unread weekly reports for supervisors
+                    $admin = $this->request->session()->read('is_admin');
                     $super = $this->request->session()->read('is_supervisor');
                     if ($admin || $super) { ?>
                         <th colspan="2"><?= __('Unread Weekly Reports') ?></th>
@@ -29,7 +30,7 @@
                             // Links to unread weeklyreports are visible to supervisors
                             // admin can only see the column (no links)
                             // code is the same as in Statistics.ctp
-                            if ($admin || $super || $supervisor) {
+                            if ($admin || $super) {
                                 
                                 $userid = $this->request->session()->read('Auth.User.id');
                                 $query = Cake\ORM\TableRegistry::get('Weeklyreports')
