@@ -14,12 +14,14 @@ echo $this->Html->script('jquery-ui.min');
         }
         $queryName = Cake\ORM\TableRegistry::get('Users')
             ->find()
-            ->select(['first_name','last_name'])          	
+            ->select(['first_name','last_name', 'role'])          	
             ->where(['id =' => $userid])
             ->toArray(); 
             
         if ($queryName != null) { ?>
-            <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name'] ?></h3>    
+        <?= $rooli = ""; if($queryName[0]['role'] == inactive){$rooli = "(inactive)";}?>
+            <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name']
+            . " " . $rooli ?></h3>    
     <?php } ?>
     <button id="navbutton">
         <?= $this->Form->postLink(
