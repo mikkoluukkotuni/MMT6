@@ -20,6 +20,8 @@
         
             echo $this->Form->input('phase', 
                 array('value' => $current_metrics[0]['value'], 'label' => $metricNames[1],'type' => 'number', 'required'=>true));
+            
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This can be for example number of sprints.', 'class' => 'infoicon']);
             echo $this->Form->input('totalPhases', 
                 array('value' => $current_metrics[1]['value'], 'label' => $metricNames[2],'type' => 'number', 'required'=>true));
             ?>
@@ -37,8 +39,10 @@
             <?php endif; ?>
                 
                 <?php
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Product backlog is a list of the upcoming features.', 'class' => 'infoicon']);
             echo $this->Form->input('reqNew', 
                 array('value' => $current_metrics[2]['value'], 'label' => $metricNames[3],'type' => 'number', 'required'=>true));
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Sprint backlog is a list of features in progress.', 'class' => 'infoicon']);
             echo $this->Form->input('reqInProgress', 
                 array('value' => $current_metrics[3]['value'], 'label' => $metricNames[4],'type' => 'number', 'required'=>true));
             echo $this->Form->input('reqClosed', 
@@ -47,17 +51,13 @@
                 array('value' => $current_metrics[5]['value'], 'label' => $metricNames[6],'type' => 'number', 'required'=>true));
             ?></div><?php
 
-            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of commits of all branches on your GitHub etc', 'class' => 'infoicon']);
 
             echo $this->Form->input('commits', 
                 array('value' => $current_metrics[6]['value'], 'label' => $metricNames[7],'type' => 'number', 'required'=>true)); 
-                    
-            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
 
             echo $this->Form->input('passedTestCases', 
                 array('value' => $current_metrics[7]['value'], 'label' => $metricNames[8],'type' => 'number', 'required'=>true));
-
-            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'ADD INFO TEXT HERE', 'class' => 'infoicon']);
 
             echo $this->Form->input('totalTestCases', 
                 array('value' => $current_metrics[8]['value'], 'label' => $metricNames[9],'type' => 'number', 'required'=>true));
