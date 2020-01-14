@@ -7,6 +7,8 @@ echo $this->Html->script('jquery-ui.min');
 
 <div class="members form large-8 medium-16 columns content float: left">
     <?php 
+        $admin = $this->request->session()->read('is_admin');
+        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
         $userid = $member->user_id;
         $target_hours = 100;
         if ($member->target_hours != NULL) {
