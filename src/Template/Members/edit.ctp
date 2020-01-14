@@ -19,7 +19,7 @@ echo $this->Html->script('jquery-ui.min');
             ->toArray(); 
             
         if ($queryName != null) { ?>
-        <?= $rooli = ""; if($queryName[0]['role'] == inactive){$rooli = "(inactive)";}?>
+        <?= $rooli = ""; if($queryName[0]['role'] == 'inactive'){$rooli = "(inactive)";}?>
             <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name']
             . " " . $rooli ?></h3>    
     <?php } ?>

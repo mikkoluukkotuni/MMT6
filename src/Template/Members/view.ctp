@@ -1,6 +1,6 @@
 
 <div class="members view large-8 medium-16 columns content float: left">
-    <?= $rooli = ""; if($member->user->role == inactive){ $rooli = "(inactive)";}?>
+    <?= $rooli = ""; if($member->user->role == 'inactive'){ $rooli = "(inactive)";}?>
     <h3>
         <?= h($member->user->first_name . " ". $member->user->last_name . " ". $rooli) ?>
     </h3>
