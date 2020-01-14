@@ -1,6 +1,9 @@
 
 <div class="members view large-8 medium-16 columns content float: left">
-    <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
+    <?= $rooli = ""; if($member->user->role == inactive){ $rooli = "(inactive)";}?>
+    <h3>
+        <?= h($member->user->first_name . " ". $member->user->last_name . " ". $rooli) ?>
+    </h3>
     <?php
         // Edit link not visible to devs or managers
         $admin = $this->request->session()->read('is_admin');

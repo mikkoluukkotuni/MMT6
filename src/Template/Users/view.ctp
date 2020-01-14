@@ -1,6 +1,7 @@
 
 <div class="users view large-7 medium-14 columns content float: left">
-    <h3><?= h($user->first_name ." ". $user->last_name) ?></h3>
+    <?= $rooli = ""; if($user->role == inactive){ $rooli = "(inactive)";}?>
+    <h3><?= h($user->first_name ." ". $user->last_name . " ". $rooli) ?></h3>
     <?php   $admin = $this->request->session()->read('is_admin');
             
             if($admin) { ?>
