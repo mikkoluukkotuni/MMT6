@@ -63,6 +63,11 @@
         <p>Reset forgotten passwords</p>
     </p>
     <h4>Previous versions</h4>
+	<p>
+	    Version 5.0 were implemented during the fall term of 2019 as a coursework for TIEA4 Project Work course and TIETS19 Software Project Management course. 
+            The team consisted of two project managers (Hanna-Riikka Rantamaa and Henna Lehto) 
+            and four developers (Kimi af Forselles, Mikko Luukko, Tommi Piili and Ville Niemi). 
+	</p>
         <p>
             Version 4.0 were implemented by Murat Pojon as a TIETS16 programming project 
             during the spring term of 2017. 
