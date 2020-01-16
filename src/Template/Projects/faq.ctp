@@ -91,7 +91,11 @@
 
     <h4 id="Q3">3. What is the research permission for?</h4>
     <p>
-     Will be updated.
+	<ul>
+	Will be updated.
+	</ul>
+
+
       <a href="#">[back to the top]</a>
     </p>
 
@@ -117,7 +121,7 @@
     <h4 id="Q5">5. I forgot my password. How do I get a new one?</h4>
     <p>
         <ul>
-            <li>There is “Forgot Your Password?” link on log in page.</li>
+            There is “Forgot Your Password?” link on log in page.
        </ul>
        <a href="#">[back to the top]</a>
     </p>
@@ -125,29 +129,30 @@
     <h4 id="Q6">6. How can I change my password or edit my profile?</h4>
     <p>
         <ul>
-            <li>You can change your password and edit your profile by hovering over your name and choose “Edit profile”.</li>
+            You can change your password and edit your profile by hovering over your name and choose “Edit profile”.
         </ul>    
       <a href="#">[back to the top]</a>
     </p>
 
     <h4 id="Q7">7. As a project manager, how do I do the weekly reporting of my project?</h4>
     <p>
+	<ul>
 	On weekly reports the admin and supervisor can follow the progress of the project. 
 	Weekly reports are done by manager and project’s charts are made by these.
-    </p>
+    	</ul>
 
-	<p>
+	<ul>
 	The deadline for returning weekly reports is on Monday night. After that, the weekly report will be late.
-	</p>
+	</ul>
 
-	<p>
+	<ul>
 	In the first page of weekly report is for the basic information. The project manager can add information
 	about team meetings, challenges and other relevant information. The weekly reports are made for the previous
 	week so there will be automatically previous week’s week number. There is also a slot to provide a link for 
 	project requirements. It can be for example link to Trello, if that is used. Note, that you can sync Trello to MMT.
-	</p>
+	</ul>
 	
-	<p>
+	<ul>
 	The second page is for metrics. For all teams, the phase will be 0 in the first weekly report. After that
 	the phases can be planned for example by sprints. Product backlog means the total numbers of new 
 	tasks and features. Sprint backlog is the number of tasks/features that are in progress. If you 
@@ -155,23 +160,27 @@
 	in total from your code version control tool, like GitHub. Note that this means the total number 
 	of commits of all branches. New features need to be tested and documented. There is a slot for all
 	test cases and passed test cases.
-	</p>
+	</ul>
 
-	<p>
+	<ul>
 	The third page is for risks.
-	</p>
+	</ul>
 
-	<p>
+	<ul>
 	The fourth page is a summary of member’s weekly working hours and you cannot edit that.
-	    
+	</ul>   
+
       <a href="#">[back to the top]</a>
     </p>
 
 
     <h4 id="Q8">8. Can I edit weekly reports?</h4>
     <p>
+	<ul>    
 	Yes. Choose the report you would like to edit. Scroll down to see the metric that needs to be edited.
 	Then click edit and do your changes. Changes will be updated to charts immediately. 
+	</ul>
+
       <a href="#">[back to the top]</a>
      </p>
 
