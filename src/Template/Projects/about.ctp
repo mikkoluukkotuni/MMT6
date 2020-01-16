@@ -55,12 +55,12 @@
     </p>
     <h4>Release notes</h4>
     <p>
-        <h5>Version 4.0 (May 2017)</h5>
-        <p>Mobile Interface</p>
-        <p>Risk metric</p>
-        <p>Trello and Slack Integrations</p>
-        <p>Comment edit functionality</p>
-        <p>Reset forgotten passwords</p>
+        <h5>Version 5.0 (January 2020)</h5>
+        <p>New user interface</p>
+        <p>New diagrams: Cumulative work hours and total hours of each public project</p>
+        <p>HTTPS protocol</p>
+        <p>Bug fixing</p>
+        <p>Other small features</p>
     </p>
     <h4>Previous versions</h4>
 	<p>
