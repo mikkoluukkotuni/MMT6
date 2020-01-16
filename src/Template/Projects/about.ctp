@@ -17,8 +17,7 @@
 	<br>
 	
 	<!-- See also <a href="http://metricsmonitoring.sis.uta.fi/publications" target="_blank">publications</a> related to MMT -->
-	See also <?= $this->Html->link(__('publications'), ['controller' => 'Projects', 'action' => 'publications']) ?> related to MMT
-	    See also this <a href="https://metricsmonitoring.sis.uta.fi/projects/publications" target="_blank">publications</a> jej.
+	See also <?= $this->Html->link(__('publications'), ['controller' => 'Projects', 'action' => 'publications']) ?> related to MMT.
     </p>
 	
 	
