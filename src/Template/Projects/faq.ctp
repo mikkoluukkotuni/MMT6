@@ -33,7 +33,7 @@
          </p>
         <p><a href="#">[back to the top]</a></p>
     </p>
-    <h4 id="Q1">1. For students of PW and SPM courses in fall 2020</h4>
+    <h4 id="Q1">1. For students of PW and SPM courses in spring 2020</h4>
     <p>
     For developers and managers:
           <ul>
@@ -44,7 +44,7 @@
     For managers:
       	<ul>    
             <li>The first week you'll need to write a weekly report for is week 5.</li>
-            <li>Submit the first weekly report latest on Monday.</li>
+            <li>Submit the first weekly report latest on Monday 27th of January.</li>
             <li>For all teams, the phase will be 0 in the first weekly report.</li>
         </ul>
     In the current version of MMT:
@@ -261,10 +261,10 @@
 
     <h4 id="Q12">12. How can I view the progress of other projects?</h4>
     <p>
-      You can view the progress of other projects similarly as your own project in <a accesskey="alt+9" href="#Q9"> How can I view the progress of my project?</a>, 
+      You can view the progress of other projects similarly as your own project in <a accesskey="alt+11" href="#Q11"> How can I view the progress of my project?</a>, 
 	if the project is classified as "public" in the project's basic data by the administrator. 
       <br />
-      Additionally, you can view the combined statistics of all public projects by clicking the "Public statistics"
+      Additionally, you can view the combined statistics of all public projects by clicking the "Statistics"
       link in the footer.
       <br />
       <br />
