@@ -140,14 +140,17 @@
 	On weekly reports the admin and supervisor can follow the progress of the project. 
 	Weekly reports are done by manager and project’s charts are made by these.
       <br />
+      <br />
 
 	The deadline for returning weekly reports is on Monday night. After that, the weekly report will be late.
+      <br />
       <br />
 
 	In the first page of weekly report is for the basic information. The project manager can add information
 	about team meetings, challenges and other relevant information. The weekly reports are made for the previous
 	week so there will be automatically previous week’s week number. There is also a slot to provide a link for 
 	project requirements. It can be for example link to Trello, if that is used. Note, that you can sync Trello to MMT.
+      <br />
       <br />
 
 	The second page is for metrics. For all teams, the phase will be 0 in the first weekly report. After that
@@ -158,8 +161,10 @@
 	of commits of all branches. New features need to be tested and documented. There is a slot for all
 	test cases and passed test cases.
       <br />
+      <br />
 
 	The third page is for risks.
+      <br />
       <br />
 
 	The fourth page is a summary of member’s weekly working hours and you cannot edit that.
