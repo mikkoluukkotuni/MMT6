@@ -4,18 +4,18 @@
     <h3><?= __('FAQ') ?></h3>
     <ol start="0">
       <li style="list-style-type:none;"><a accesskey="alt+0 "href="#Q0">Video tutorials</a></li>
-      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in fall 2018</a></li>
-      <li><a accesskey="alt+2" href="#Q2">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
-      <li><a accesskey="alt+3" href="#Q3">How do I get started?</a></li>
-      <li><a accesskey="alt+4" href="#Q4">I forgot my password. How do I get a new one?</a></li>
-      <li><a accesskey="alt+5" href="#Q5">How can I change my password?</a></li>
-      <li><a accesskey="alt+6" href="#Q6">As a project manager, how do I do the weekly reporting of my project?</a></li>
-      <li><a accesskey="alt+7" href="#Q7">How do I log my daily working time?</a></li>
-      <li><a accesskey="alt+8" href="#Q8">Where can I find team's/member's logged working time and the total number of working hours?</a></li>
-      <li><a accesskey="alt+9" href="#Q9">How can I view the progress of my project?</a></li>
-      <li><a href="#Q10">How can I view the progress of other projects?</a></li>
-	  <li><a href="#Q11">How can I automatically get the number of requirements to MMT from TRELLO?</a></li>
-	  <li><a href="#Q12">How can I see my MMT-events (like new reports) on my SLACK channel?</a></li>
+      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in spring 2020</a></li>
+	<li><a accesskey="alt+2 "href="#Q2">What is the research permission for?</a></li>
+      <li><a accesskey="alt+3" href="#Q3">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
+      <li><a accesskey="alt+4" href="#Q4">How do I get started?</a></li>
+      <li><a accesskey="alt+5" href="#Q5">I forgot my password. How do I get a new one?</a></li>
+      <li><a accesskey="alt+6" href="#Q6">How can I change my password?</a></li>
+      <li><a accesskey="alt+7" href="#Q7">As a project manager, how do I do the weekly reporting of my project?</a></li>
+	<li><a accesskey="alt+8 "href="#Q8">Can I edit weekly reports?</a></li>
+      <li><a accesskey="alt+9" href="#Q9">How do I log my daily working time?</a></li>
+      <li><a accesskey="alt+10" href="#Q10">Where can I find team's/member's logged working time and the total number of working hours?</a></li>
+      <li><a accesskey="alt+11" href="#Q11">How can I view the progress of my project?</a></li>
+      <li><a href="#Q12">How can I view the progress of other projects?</a></li>
 	  <li><a href="#Q13">How can I try this application and/or see a DEMO?</a></li>
     </ol>
     
@@ -33,18 +33,18 @@
          </p>
         <p><a href="#">[back to the top]</a></p>
     </p>
-    <h4 id="Q1">1. For students of PW and SPM courses in fall 2018</h4>
+    <h4 id="Q1">1. For students of PW and SPM courses in fall 2020</h4>
     <p>
     For developers and managers:
           <ul>
             <li>Unless you created your user account yourself, change the password during your first log in.</li>
-            <li>The first weekly report is written for week 38.</li>
+            <li>The first weekly report is written for week 4.</li>
             <li>The working hours that are in the table on Members' page include all working hours, even the ones that are not covered by a weekly report.</li>   
           </ul>
     For managers:
       	<ul>    
-            <li>The first week you'll need to write a weekly report for is week 39.</li>
-            <li>Submit the first weekly report latest on Monday, 24th of September 2018</li>
+            <li>The first week you'll need to write a weekly report for is week 5.</li>
+            <li>Submit the first weekly report latest on Monday.</li>
             <li>For all teams, the phase will be 0 in the first weekly report.</li>
         </ul>
     In the current version of MMT:
@@ -62,24 +62,11 @@
     <h4 id="Q2">2. What can I use the Metrics Monitoring Tool (MMT) for?</h4>
     <p>
 	
-	Everyone can (no need for logging):
-        <ul>
-            <li>view the progress of public projects</li>
-            <li>give feedback on MMT</li>
-			<li>create an account</li>
-         
-        </ul>
-	
-	
     All project members  can:
         <ul>
             <li>view the progress of your project</li>
             <li>leave comments on the weekly reports of your project</li>
             <li>give feedback on MMT</li>
-            <ul>
-                <li>log in and select your project</li>
-                <li>click the "Give feedback" link on left hand side</li>
-            </ul>
         </ul>
     As a project manager you can:
       	<ul >
@@ -102,7 +89,15 @@
     <a href="#">[back to the top]</a> 
     </p>
 
-    <h4 id="Q3">3. How do I get started?</h4>
+    <h4 id="Q3">3. What is the research permission for?</h4>
+    <p>
+     Will be updated.
+      <a href="#">[back to the top]</a>
+    </p>
+
+
+
+    <h4 id="Q4">4. How do I get started?</h4>
     <p>
       As a project manager:
       	<ul >
@@ -119,48 +114,69 @@
       <a href="#">[back to the top]</a>
     </p>
 
-    <h4 id="Q4">4. I forgot my password. How do I get a new one?</h4>
+    <h4 id="Q5">5. I forgot my password. How do I get a new one?</h4>
     <p>
         <ul>
-            <li>Contact the MMT administrator Pekka Mäkiaho at pekka.makiaho(at)uta.fi, who will send you a new password.</li>
+            <li>There is “Forgot Your Password?” link on log in page.</li>
        </ul>
        <a href="#">[back to the top]</a>
     </p>
 
-    <h4 id="Q5">5. How can I change my password or edit my profile?</h4>
+    <h4 id="Q6">6. How can I change my password or edit my profile?</h4>
     <p>
         <ul>
-            <li>You can change your password and edit your profile by clicking the "Profile" link at the top right corner of MMT.</li> 
-            <li>"Change password" link is on the left-side menu of "Edit profile" page.</li> 
-            <li>Make the desired changes and click "Submit".</li>
+            <li>You can change your password and edit your profile by hovering over your name and choose “Edit profile”.</li>
         </ul>    
       <a href="#">[back to the top]</a>
     </p>
 
-    <h4 id="Q6">6. As a project manager, how do I do the weekly reporting of my project?</h4>
+    <h4 id="Q7">7. As a project manager, how do I do the weekly reporting of my project?</h4>
     <p>
-        A weekly report covers a calendar week. 
-        A report should be send on Monday that follows the weekly report week. 
+	On weekly reports the admin and supervisor can follow the progress of the project. 
+	Weekly reports are done by manager and project’s charts are made by these.
     </p>
-    <p>
-    You can enter the weekly project reports into MMT as follows:
-      	<ul>
-           <li>log in and select the project you want to enter a weekly report for</li>
-	   <li>click the "Weeklyreports" tab at the top of the screen</li>
-	   <li>click the "New Weeklyreport" link on the left hand side</li>
-	   <li>weekly report form consists of
-                <ul>
-                    <li>page 1: enter the basic data</li>
-                    <li>page 2: enter the metric data</li>
-                    <li>page 3: preview of working hours of your team members</li>
-                </ul>
-           </li>
-	   <li>click "Submit" once you are done, and your weekly report is saved</li>
-        </ul> 
+
+	<p>
+	The deadline for returning weekly reports is on Monday night. After that, the weekly report will be late.
+	</p>
+
+	<p>
+	In the first page of weekly report is for the basic information. The project manager can add information
+	about team meetings, challenges and other relevant information. The weekly reports are made for the previous
+	week so there will be automatically previous week’s week number. There is also a slot to provide a link for 
+	project requirements. It can be for example link to Trello, if that is used. Note, that you can sync Trello to MMT.
+	</p>
+	
+	<p>
+	The second page is for metrics. For all teams, the phase will be 0 in the first weekly report. After that
+	the phases can be planned for example by sprints. Product backlog means the total numbers of new 
+	tasks and features. Sprint backlog is the number of tasks/features that are in progress. If you 
+	have sync Trello you will get these numbers automatically. You will get the number of your commits 
+	in total from your code version control tool, like GitHub. Note that this means the total number 
+	of commits of all branches. New features need to be tested and documented. There is a slot for all
+	test cases and passed test cases.
+	</p>
+
+	<p>
+	The third page is for risks.
+	</p>
+
+	<p>
+	The fourth page is a summary of member’s weekly working hours and you cannot edit that.
+	    
       <a href="#">[back to the top]</a>
     </p>
 
-    <h4 id="Q7">7. How do I log my daily working time?</h4>
+
+    <h4 id="Q8">8. Can I edit weekly reports?</h4>
+    <p>
+	Yes. Choose the report you would like to edit. Scroll down to see the metric that needs to be edited.
+	Then click edit and do your changes. Changes will be updated to charts immediately. 
+      <a href="#">[back to the top]</a>
+     </p>
+
+
+    <h4 id="Q9">9. How do I log my daily working time?</h4>
     <p>
         <!--Working hours can be logged starting from Monday 
         that follows the week that is covered by last weekly report.--> 
@@ -181,7 +197,7 @@
       <a href="#">[back to the top]</a>
      </p>
 
-    <h4 id="Q8">8. Where can I find team's/member's logged working time and the total number of working hours?</h4>
+    <h4 id="Q10">10. Where can I find team's/member's logged working time and the total number of working hours?</h4>
        <p>
            You can view the total numbers of working hours as follows 
             <ul>
@@ -203,7 +219,7 @@
                 <li>log in and select your project</li>
                 <li>to view team's logged tasks:</li> 
                     <ul>
-                        <li>click the "Log time" tab at the top menu</li>
+                        <li>click the "Log time" tab at the top menu and scroll down</li>
                     </ul>
                 
                 <li>if a member has logged workinghours, you can view his/her logged tasks:
@@ -215,13 +231,13 @@
                     <ul>
                         <li>click the "Members" tab at the top menu</li>
                         <li>click member's name on the list</li> 
-                        <li>click the "Logged tasks" link on the left-hand side</li>
+                        <li>click the "Logged tasks" button</li>
                     </ul>
             </ul>    
         <a href="#">[back to the top]</a>
        </p>
 
-    <h4 id="Q9">9. How can I view the progress of my project?</h4>
+    <h4 id="Q11">11. How can I view the progress of my project?</h4>
     <p>
       You can view the progress of your project as follows:
 	<ul >
@@ -233,7 +249,7 @@
       <a href="#">[back to the top]</a>
     </p>
 
-    <h4 id="Q10">10. How can I view the progress of other projects?</h4>
+    <h4 id="Q12">12. How can I view the progress of other projects?</h4>
     <p>
       You can view the progress of other projects similarly as your own project in <a accesskey="alt+9" href="#Q9"> How can I view the progress of my project?</a>, 
 	if the project is classified as "public" in the project's basic data by the administrator. 
@@ -245,23 +261,6 @@
       <a href="#">[back to the top]</a>
     </p>
 	
-	
-	 <h4 id="Q11">11. How can I link TRELLO with MMT?</h4>
-    <p>
-      <a href="/trello/about">See TRELLO instructions</a> 
-      
-      <br />
-      <br />
-      <a href="#">[back to the top]</a>
-    </p>
-	
-	 <h4 id="Q12">12. How can I link Slack with MMT?</h4>
-  <p>
-      <a href="/slack/about">See SLACK instructions</a> 
-      
-      <br />
-      <br />
-      <a href="#">[back to the top]</a>
 	  
 	  <h4 id="Q13">13. How can I try this application and/or see a DEMO?</h4>
   <p>
@@ -275,15 +274,7 @@
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 </div>
