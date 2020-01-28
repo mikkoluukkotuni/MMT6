@@ -65,10 +65,8 @@
                 // query iterator, resets after finishing one row
                 $i = 0;
 
-                            foreach ($project['reports'] as $report):
-                            // if current project is already finished (= non-empty finished_date), print empty data cells in else
-                    if ( empty( $project['finished_date'] ) ) {
-                                    ?>
+                            foreach ($project['reports'] as $report):                          
+                                ?>
                             <td>
                             <?php
                             // missing ones print normally
@@ -117,11 +115,7 @@
                                     <?= h($report) ?>
                             <?php } ?>
                                         </td>
-                                <?php
-                                } // end if (else = print empty data cells)
-                                else { ?>
-                                <td></td>
-                                <?php } ?>
+      
                         <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
