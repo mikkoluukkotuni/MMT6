@@ -1,7 +1,7 @@
 # Installation
 - If not installed, download Composer (https://getcomposer.org/download/)
 - Clone this repository
-- Run `composer install` in the mmt-5 -folder
+- Run `composer install` in the mmt-6 -folder
 
 ## Configuration
 
