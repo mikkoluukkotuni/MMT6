@@ -107,13 +107,3 @@
         </div>
     </div>
 </div>
-
-
-
-<?php if (!$mobileOptional) { ?>
-<script> 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    window.location = '<?= $this->Url->build(['controller' => 'Mobile', 'action' => 'index']) ?>'; 
-}
-</script>
-<?php } ?>
