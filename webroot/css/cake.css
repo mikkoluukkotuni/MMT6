@@ -176,7 +176,7 @@ nav ul {
 }
 
 /* Log in link in the black navigation */
-.personal-links {
+/* .personal-links {
 	display: inline;
 	position: absolute;
   	top: 0;
@@ -194,10 +194,10 @@ nav ul {
 	border-bottom-style: solid;
 	border-color: #78C4E6;
 	color: #ffffff;
-}
+} */
 
 /* Dropdown Button */
-.dropbtn {
+/* .dropbtn {
 	color: #ffffff;
 	margin-right: 0em;
 	margin-left: 0em;
@@ -211,9 +211,9 @@ nav ul {
 	background-color: #000;
 	white-space: nowrap;
 	text-align: right;
-  }
+  } */
 
-.dropdown {
+/* .dropdown {
 	position: absolute;
 	display: inline;
 	top: 0;
@@ -223,35 +223,35 @@ nav ul {
 
 .dropdown-content {
 	display: none;
-	position: absolute;
+	position: relative;
 	background-color: #f1f1f1;
 	min-width: 8em;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-  
+   */
 /* Links inside the dropdown */
-.dropdown-content a {
+/* .dropdown-content a {
 	color: black;
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
-}
+} */
 
 /* Project role shown in the dropdown */
-#role {
+/* #role {
 	text-transform: uppercase;
 	padding: 12px 16px 0px 16px;
 	font-weight: bold;
-}
+} */
   
-.dropdown-content a:hover {
+/* .dropdown-content a:hover {
 	background-color: #ddd;
-}
+} */
   
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
+/* .dropdown:hover .dropdown-content {
 	display: block;
-}
+} */
 
 /* Purple navigation bar */
 #navtop {

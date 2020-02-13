@@ -79,17 +79,14 @@ $cakeDescription = 'MMT';
 					<li id="feedbackBtn"><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?></li>
 				<?php }
 			?>
-		</ul>
-	</div> <!-- general links end -->
-</div> <!-- navgeneral ends -->
+
 <?php
 	if ( empty(!$this->request->session()->read('Auth.User')) ) {
 		$name = $this->request->session()->read('Auth.User.first_name') ?>
-			<div class="dropdown">
+			<li class="dropdown">
 				<div class="dropbtn">
 					<?= __($name) ?>
-				</div> <!-- dropbtn ends -->
-  				<div class="dropdown-content">
+					<div class="dropdown-content">
 					<?php
 					if (($this->request->session()->read('selected_project_role')) != 'notmember' ) { ?>
 						<div id="role"><?=__($this->request->session()->read('selected_project_role')) ?></div> <?php
@@ -99,15 +96,23 @@ $cakeDescription = 'MMT';
 					<?= $this->Html->link(__('Edit Profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
 					<?= $this->Html->link(__('Log Out'), ['controller' => 'Users', 'action' => 'logout']) ?>
   				</div> <!-- dropdown content ends -->
-			</div> <!-- dropdown ends -->
+				</div> <!-- dropbtn ends -->
+  				
+			</li> <!-- dropdown ends -->
 <?php
 	}
 	else { ?>
-		<div class="personal-links">
+		<li class="personal-links">
 			<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
-		</div>
+	</li>
 	<?php }
 ?>
+
+		</ul>
+	</div> <!-- general links end -->
+	
+</div> <!-- navgeneral ends -->
+
 
 <div id="area51">
 	<!-- This area is meant for notifications about new messages -->
