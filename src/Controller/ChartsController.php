@@ -66,15 +66,19 @@ class ChartsController extends AppController
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
         $weeklyreports = $this->Charts->reports($project_id, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $allTheWeeks = $this->Charts->weekList($chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
         $phaseData = $this->Charts->phaseAreaData($weeklyreports['id']);
         $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
+        // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);
-        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
-        $totalhourData = $this->Charts->totalhourLineData($project_id, $weeklyreports['id'], $weeklyreports['weeks']);
+        // Line chart displaying the amount of hours done by the team per week 
+        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $allTheWeeks);
+        // Line chart displaying the cumulative amount of hours done in the project
+        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks);
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
-        $hoursComparisonData = $this->Charts->hoursComparisonData($weeklyreports['id'], $weeklyreports['weeks']);
+        $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks);
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -136,14 +140,14 @@ class ChartsController extends AppController
         );
         
         // totalhourChart
-        $totalhourChart->xAxis->categories = $weeklyreports['weeks'];    
+        $totalhourChart->xAxis->categories = $allTheWeeks;    
         $totalhourChart->series[] = array(
             'name' => 'total hours',
             'data' => $totalhourData
         );
         
         //workinghours per week  
-        $hoursPerWeekChart->xAxis->categories = $weeklyreports['weeks'];
+        $hoursPerWeekChart->xAxis->categories = $allTheWeeks;
         $hoursPerWeekChart->series[] = array(
             'name' => 'Working hours per week',
             'data' => $hoursperweekData
@@ -171,39 +175,33 @@ class ChartsController extends AppController
         // risksProbChart
         $risksProbChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){
-            
+        foreach ($riskData as $risk){            
             $risksProbChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['probability']
-            );
-        
+            );        
         }
         
         
         // risksImpactChart
         $risksImpactChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){
-            
+        foreach ($riskData as $risk){            
             $risksImpactChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['impact']
-            );
-        
+            );        
         }
         
         
         // risksCombinedChart
         $risksCombinedChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){
-            
+        foreach ($riskData as $risk){            
             $risksCombinedChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['combined']
-            );
-        
+            );        
         }     
         
               
@@ -219,15 +217,14 @@ class ChartsController extends AppController
         );
 
 
-        // TESTICHART
-        $hoursComparisonChart->xAxis->categories = $weeklyreports['weeks'];    
+        // Total hours of each public project
+        $hoursComparisonChart->xAxis->categories = $allTheWeeks;    
         foreach($hoursComparisonData as $project_data) {
             $hoursComparisonChart->series[] = array(
                 'name' => $project_data['name'],
                 'data' => $project_data['data']
             );
-        }        
-
+        }
 
         // This sets the charts visible in the actual charts page "Charts/index.php"
         $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 
@@ -426,6 +423,7 @@ class ChartsController extends AppController
     	return $myChart;
     }
     
+    // Working hours categorized by type
     public function hoursChart(){
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'hourswrapper';
@@ -466,6 +464,7 @@ class ChartsController extends AppController
     
     	return $myChart;
     }
+    
     public function hoursPerWeekChart(){
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'hoursperweekwrapper';

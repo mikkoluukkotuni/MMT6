@@ -89,9 +89,40 @@ class ChartsTable extends Table
         $data = array();
         $data['id'] = $idlist;
         $data['weeks'] = $weeklist;
-
+        
         return $data;
     }
+
+
+    // Return a list of all the weeknumbers in the selected time period
+    // This is used for line charts of workinghours
+    public function weekList($weekmin, $weekmax, $yearmin, $yearmax){
+        $weeklist = array();
+        if($yearmin == $yearmax) {
+            for($i = $weekmin; $i <= $weekmax; $i++) {
+                array_push($weeklist, $i);
+            }
+        } else {
+            for($i = $yearmin; $i <= $yearmax; $i++) {
+                if($i == $yearmin) {
+                    for($j = $weekmin; $j <= 52; $j++) {
+                        array_push($weeklist, $j);
+                    }
+                } else if ($i == $yearmax) {
+                    for($j = 1; $j <= $weekmax; $j++) {
+                        array_push($weeklist, $j);
+                    }
+                } else {
+                    for($j = 1; $j <= 52; $j++) {
+                        array_push($weeklist, $j);
+                    }
+                }
+            }
+        }
+        
+        return $weeklist;
+    }
+
     
     // the rest of the functions are for getting the actual data for the charts
     // this is done with multiple querys, based on the project id and the weeklyreport id's
@@ -325,7 +356,7 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function hoursperweekData($project_id, $idlist, $weeklist) {
+    public function hoursPerWeekData($project_id, $weeklist) {
         
         $members = TableRegistry::get('Members');
         
@@ -368,7 +399,7 @@ class ChartsTable extends Table
         return $data;
     }
 
-    public function totalhourLineData($project_id, $idlist, $weeklist) {
+    public function totalhourLineData($project_id, $weeklist) {
         
         $members = TableRegistry::get('Members');
         
@@ -412,7 +443,7 @@ class ChartsTable extends Table
     }
 
     // For admin to compare working hours of public projects
-    public function hoursComparisonData($idlist, $weeklist) {
+    public function hoursComparisonData($weeklist) {
         $projects = TableRegistry::get('Projects');
         $query2 = $projects
             ->find()
