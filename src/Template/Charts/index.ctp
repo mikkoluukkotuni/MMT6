@@ -98,11 +98,10 @@
     </div>
     
     <?php 
-    // The charts for derived metrics is visible only to admins
-    $admin = $this->request->session()->read('is_admin');
-    if ($admin) { ?>  
+    // The charts for derived metrics is visible only to admins and supervisor
+    if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>  
         <div class="chart">
-            <h4>Derived Charts for Admin</h4>
+            <h4>Derived charts for admins and supervisors</h4>
             <div id="derivedwrapper">
                 <?php echo $this->Highcharts->render($derivedChart, 'testcasechart'); ?>
             </div>
