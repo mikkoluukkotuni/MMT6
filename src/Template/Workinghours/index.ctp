@@ -18,7 +18,7 @@ echo $this->Html->script('jquery-ui.min');
         $developer = ( $this->request->session()->read('selected_project_role') == 'developer' ) ? 1 : 0;
         if($admin || $supervisor || $manager) { ?>
             <button id="navbutton"> <?= $this->Html->link(__('Log time for another member'), ['action' => 'adddev']) ?></button>
-    <?php } ?>
+    <?php } else { ?>
     <?= $this->Form->create($workinghour) ?>
           <?php 
             /*
@@ -90,6 +90,7 @@ echo $this->Html->script('jquery-ui.min');
 	    echo $this->Form->button(__('Submit'));
         ?>    
     <?= $this->Form->end() ?>
+    <?php } ?>
 </div>
 
 <div class="workinghours index large-9 medium-18 columns content float: left">
