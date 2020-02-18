@@ -85,8 +85,8 @@ class MembersTable extends Table
         $query = $members
             ->find()
             ->select(['id', 'project_role', 'user_id', 'target_hours'])    
-            ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
-            ->andWhere(['project_id' => $project_id, 'project_role !=' => 'client'])
+            // ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
+            // ->andWhere(['project_id' => $project_id, 'project_role !=' => 'client'])
             //->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
             //->orWhere(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date IS' => NULL])
             ->toArray();

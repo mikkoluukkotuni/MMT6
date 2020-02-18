@@ -47,7 +47,9 @@ class WorkinghoursController extends AppController
             // only allow members to add workinghours for themself
             $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
             
-            if ($this->Workinghours->save($workinghour)) {
+            if ($this->Workinghours->save($workinghour)
+                && ($this->request->session()->read('selected_project_role') == 'manager'
+                || $this->request->session()->read('selected_project_role') == 'developer')) {
                 $this->Flash->success(__('The workinghour has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
