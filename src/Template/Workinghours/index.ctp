@@ -18,7 +18,8 @@ echo $this->Html->script('jquery-ui.min');
         $developer = ( $this->request->session()->read('selected_project_role') == 'developer' ) ? 1 : 0;
         if($admin || $supervisor || $manager) { ?>
             <button id="navbutton"> <?= $this->Html->link(__('Log time for another member'), ['action' => 'adddev']) ?></button>
-    <?php } else { ?>
+    <?php } ?> 
+    <?php if ($manager || $developer) { ?>
     <?= $this->Form->create($workinghour) ?>
           <?php 
             /*
