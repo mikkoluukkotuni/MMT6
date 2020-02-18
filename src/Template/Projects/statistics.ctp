@@ -123,12 +123,12 @@
         </table>
     <?php }?>
 
-    <table class="stylized-table half-width">
+    <table class="stylized-table" style="width:640px;">
         <h4><?= h('Total numbers of working hours') ?></h4>
         <tbody>
             <tr class="header">
-                <td>Project name</td>
-                <td>Number of members</td>
+                <td style="width:280px;">Project name</td>
+                <td style="width:160px;">Number of members</td>
                 <td>Total number of working hours</td>
             </tr>
             <?php foreach ($projects as $project): ?>

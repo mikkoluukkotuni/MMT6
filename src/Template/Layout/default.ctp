@@ -70,23 +70,22 @@ $cakeDescription = 'MMT';
 <div id="navgeneral">
 	<div class="general-links">
 		<ul>
-			<li id="projectsBtn"><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-			<li id="aboutBtn"><?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?></li>
-			<li id="statsBtn"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
-			<li id="faqBtn"><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?></li>
+			<li class="navBtn" id="projectsBtn"><?= $this->Html->link(__('Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
+			<li class="navBtn" id="aboutBtn"><?= $this->Html->link(__('About MMT'), ['controller' => 'Projects', 'action' => 'about']) ?></li>
+			<li class="navBtn" id="statsBtn"><?= $this->Html->link(__('Statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?></li>
+			<li class="navBtn" id="faqBtn"><?= $this->Html->link(__('FAQ'), ['controller' => 'Projects', 'action' => 'faq']) ?></li>
 			<?php
 				if ( empty(!$this->request->session()->read('Auth.User')) && $this->request->session()->check('selected_project')) { ?>
-					<li id="feedbackBtn"><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?></li>
+					<li class="navBtn" id="feedbackBtn"><?= $this->Html->link(__('Give feedback'), ['controller' => 'Notes', 'action' => 'add']) ?></li>
 				<?php }
 			?>
 
 <?php
 	if ( empty(!$this->request->session()->read('Auth.User')) ) {
 		$name = $this->request->session()->read('Auth.User.first_name') ?>
-			<li class="dropdown">
-				<div class="dropbtn">
-					<?= __($name) ?>
-					<div class="dropdown-content">
+			<li class="navBtn" id="dropbtn"><a>My links</a>
+				
+				<div class="dropdown-content">
 					<?php
 					if (($this->request->session()->read('selected_project_role')) != 'notmember' ) { ?>
 						<div id="role"><?=__($this->request->session()->read('selected_project_role')) ?></div> <?php
@@ -96,17 +95,15 @@ $cakeDescription = 'MMT';
 					<?= $this->Html->link(__('Edit Profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?>
 					<?= $this->Html->link(__('Log Out'), ['controller' => 'Users', 'action' => 'logout']) ?>
   				</div> <!-- dropdown content ends -->
-				</div> <!-- dropbtn ends -->
-  				
 			</li> <!-- dropdown ends -->
-<?php
-	}
-	else { ?>
-		<li class="personal-links">
-			<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
-	</li>
-	<?php }
-?>
+		<?php
+			}
+			else { ?>
+				<li class="navBtn">
+					<?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?>
+				</li>
+			<?php }
+		?>
 
 		</ul>
 	</div> <!-- general links end -->

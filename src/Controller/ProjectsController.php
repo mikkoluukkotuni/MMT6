@@ -92,7 +92,7 @@ class ProjectsController extends AppController
             // fetch values using helpers
             $min = $data['weekmin'];
             $max = $data['weekmax'];
-		$year = $data['year'];
+		    $year = $data['year'];
             
             // correction for nonsensical values for week numbers
             if ( $min < 1 )  $min = 1;
