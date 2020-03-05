@@ -1,14 +1,17 @@
 <?php echo $this->Highcharts->includeExtraScripts(); ?>
+<?php use Cake\I18n\Time; ?>
 
 <div class="statistics">
         <h3><?= __('Edit limits') ?></h3> 
         <?= $this->Form->create() ?>
             <div id="chart-limits">
             <?php
-                echo $this->Form->input('weekmin', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['weekmin']));
-                echo $this->Form->input('weekmax', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['weekmax']));
-                echo $this->Form->input('yearmin', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['yearmin']));
-                echo $this->Form->input('yearmax', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['yearmax']));
+                // Set min and max values for input fields
+                $time = Time::now();
+                echo $this->Form->input('weekmin', array('type' => 'number', 'min' => 1, 'max' => 52, 'value' => $this->request->session()->read('chart_limits')['weekmin']));
+                echo $this->Form->input('weekmax', array('type' => 'number', 'min' => 1, 'max' => 52, 'value' => $this->request->session()->read('chart_limits')['weekmax']));
+                echo $this->Form->input('yearmin', array('type' => 'number', 'min' => 2015, 'max' => $time->year, 'value' => $this->request->session()->read('chart_limits')['yearmin']));
+                echo $this->Form->input('yearmax', array('type' => 'number', 'min' => 2015, 'max' => $time->year, 'value' => $this->request->session()->read('chart_limits')['yearmax']));
             ?>
             </div>
             <button>Submit</button>
