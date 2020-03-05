@@ -448,86 +448,86 @@ class ChartsTable extends Table
         $hourSumPerWeek = array();
         $totalSum = 0;
 
-        foreach($queryW as $result) {
-            $totalSum += $result['duration'];
-        }
-
-        $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
-        $weekOfLastHour = date('W', strtotime($queryW[(sizeof($queryW))-1]['date']));
-        $yearOfFirstHour = date('Y', strtotime($queryW[0]['date']));
-        $yearOfLastHour = date('Y', strtotime($queryW[(sizeof($queryW))-1]['date']));
-        $dateOfFirstHour = $queryW[0]['date'];
-        $dateOfLastHour = $queryW[(sizeof($queryW))-1]['date'];
-
-        // get sums per week and store them to array where key is weeknumber 
         if(!empty($queryW)) {
-            for($i = 1; $i <= 52; $i++) {
-                $sum = 0;
-                foreach($queryW as $result) {
-                    // date of workinghours need to be turned to week
-                    $weekWH = date('W', strtotime($result['date']));
-                    if($i == $weekWH) {
-                        $sum += $result['duration'];
-                    }
-                }
-                $temp = [$i => $sum];
-                $hoursPerWeek = array_replace($hoursPerWeek, $temp);
+            foreach($queryW as $result) {
+                $totalSum += $result['duration'];
             }
-        }
 
-        // count cumulative sum per week and store it in array where key is weeknumber
-        $sum = 0;
-        
-        if($weekOfFirstHour > $weekOfLastHour) {            
-            for($i = $weekOfFirstHour; $i <= 52; $i++) {
-                $sum += $hoursPerWeek[$i];
-                if($dateOfLastHour > $datemin) {
+            $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+            $weekOfLastHour = date('W', strtotime($queryW[(sizeof($queryW))-1]['date']));
+            $yearOfFirstHour = date('Y', strtotime($queryW[0]['date']));
+            $yearOfLastHour = date('Y', strtotime($queryW[(sizeof($queryW))-1]['date']));
+            $dateOfFirstHour = $queryW[0]['date'];
+            $dateOfLastHour = $queryW[(sizeof($queryW))-1]['date'];
+
+            // get sums per week and store them to array where key is weeknumber         
+                for($i = 1; $i <= 52; $i++) {
+                    $sum = 0;
+                    foreach($queryW as $result) {
+                        // date of workinghours need to be turned to week
+                        $weekWH = date('W', strtotime($result['date']));
+                        if($i == $weekWH) {
+                            $sum += $result['duration'];
+                        }
+                    }
                     $temp = [$i => $sum];
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
-                } else {
-                    $temp = [$i => $totalSum];
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    $hoursPerWeek = array_replace($hoursPerWeek, $temp);
                 }
-            }
-            for($i = 1; $i <= ($weekOfFirstHour - 1); $i++) {
-                $sum += $hoursPerWeek[$i];
-                if($dateOfLastHour > $datemin) {
-                    if($i > $weekmax) {
-                        $temp = [$i => 0];
-                    } else {
-                        $temp = [$i => $sum];
-                    }
-                    
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
-                } else {
-                    $temp = [$i => $totalSum];
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
-                }
-            }
-        } else {
-            for($i = 1; $i <= 52; $i++) {
-                $sum += $hoursPerWeek[$i];
-                if($dateOfLastHour > $datemin) {
-                    if($i > $weekmax) {
-                        $temp = [$i => 0];
-                    } else {
-                        $temp = [$i => $sum];
-                    }
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
-                } else {
-                    $temp = [$i => $totalSum];
-                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
-                }
-            }
-        }    
-        
+            
 
-        if($dateOfFirstHour <= $datemax) {
-            foreach($weeklist as $week) {
-                $data[] = $hourSumPerWeek[$week];
+            // count cumulative sum per week and store it in array where key is weeknumber
+            $sum = 0;
+            
+            if($weekOfFirstHour > $weekOfLastHour) {            
+                for($i = $weekOfFirstHour; $i <= 52; $i++) {
+                    $sum += $hoursPerWeek[$i];
+                    if($dateOfLastHour > $datemin) {
+                        $temp = [$i => $sum];
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    } else {
+                        $temp = [$i => $totalSum];
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    }
+                }
+                for($i = 1; $i <= ($weekOfFirstHour - 1); $i++) {
+                    $sum += $hoursPerWeek[$i];
+                    if($dateOfLastHour > $datemin) {
+                        if($i > $weekmax) {
+                            $temp = [$i => 0];
+                        } else {
+                            $temp = [$i => $sum];
+                        }
+                        
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    } else {
+                        $temp = [$i => $totalSum];
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    }
+                }
+            } else {
+                for($i = 1; $i <= 52; $i++) {
+                    $sum += $hoursPerWeek[$i];
+                    if($dateOfLastHour > $datemin) {
+                        if($i > $weekmax) {
+                            $temp = [$i => 0];
+                        } else {
+                            $temp = [$i => $sum];
+                        }
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    } else {
+                        $temp = [$i => $totalSum];
+                        $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                    }
+                }
+            }    
+            
+
+            if($dateOfFirstHour <= $datemax) {
+                foreach($weeklist as $week) {
+                    $data[] = $hourSumPerWeek[$week];
+                }
             }
         }
-
         return $data;
     }
 
