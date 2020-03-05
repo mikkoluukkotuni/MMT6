@@ -18,6 +18,11 @@ class UsersController extends AppController
     
     public function login()
     {
+        if ($this->Auth->user('id') != NULL) {
+            return $this->redirect(
+                ['controller' => 'Projects', 'action' => 'index']
+            );  
+        }
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {

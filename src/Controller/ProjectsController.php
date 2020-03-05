@@ -37,11 +37,11 @@ class ProjectsController extends AppController
             );            
         }
         $mobileOptional = false;
-        $referer = \Cake\Routing\Router::parse($this->referer('/', true));
+        // $referer = \Cake\Routing\Router::parse($this->referer('/', true));
         
-        if($referer['controller'] === 'Mobile'){
-            $mobileOptional = true;
-        }
+        // if($referer['controller'] === 'Mobile'){
+        //     $mobileOptional = true;
+        // }
         
         $this->set('projects', $this->paginate($this->Projects));
         $this->set('_serialize', ['projects']);
