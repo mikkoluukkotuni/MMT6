@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 class ChartsTable extends Table
 {
@@ -67,7 +68,7 @@ class ChartsTable extends Table
 
             $organize[] = $temparray ;
         }
-        
+
         // get the weeks and years of the reports
         $week = array();
         $year = array();
@@ -88,7 +89,7 @@ class ChartsTable extends Table
         // save in the correct format and return
         $data = array();
         $data['id'] = $idlist;
-        $data['weeks'] = $weeklist;
+        $data['weeks'] = $weeklist;        
         
         return $data;
     }
@@ -160,6 +161,7 @@ class ChartsTable extends Table
         return $data;
     }
     
+
     public function commitAreaData($idlist){
         $metrics = TableRegistry::get('Metrics');
 
@@ -238,6 +240,7 @@ class ChartsTable extends Table
         return $data;
     }
     
+
     public function phaseAreaData($idlist){
         $metrics = TableRegistry::get('Metrics');
         
@@ -271,6 +274,7 @@ class ChartsTable extends Table
         return $data;
     }
     
+
     public function hoursData($project_id){   
         $members = TableRegistry::get('Members');
         
@@ -356,8 +360,14 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function hoursPerWeekData($project_id, $weeklist) {
-        
+
+    public function hoursPerWeekData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
+        $datemin = new Time('midnight');
+        $datemin->setISODate($yearmin, $weekmin);
+        $datemax = new Time('midnight');
+        $datemax->setISODate($yearmax, $weekmax);
+        $datemax->modify('+7 days');
+
         $members = TableRegistry::get('Members');
         
         // get a list of the members in the project
@@ -377,9 +387,10 @@ class ChartsTable extends Table
             $queryW = $workinghours
                         ->find()
                         ->select(['date', 'duration'])
-                        ->where(['member_id IN' => $memberlist])
+                        ->where(['member_id IN' => $memberlist, 'date >= ' => $datemin, 'date <= ' => $datemax])
                         ->toArray();
         }
+
         $data = array();
         foreach($weeklist as $temp){
             
@@ -399,8 +410,14 @@ class ChartsTable extends Table
         return $data;
     }
 
-    public function totalhourLineData($project_id, $weeklist) {
-        
+
+    public function totalhourLineData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
+        $datemin = new Time('midnight');
+        $datemin->setISODate($yearmin, $weekmin);
+        $datemax = new Time('midnight');
+        $datemax->setISODate($yearmax, $weekmax);
+        $datemax->modify('+7 days');
+
         $members = TableRegistry::get('Members');
         
         // get a list of the members in the project
@@ -415,42 +432,117 @@ class ChartsTable extends Table
                 $memberlist[] = $temp->id;
             }
         }
+
         $workinghours = TableRegistry::get('Workinghours');
         if(!empty($memberlist)) {
             $queryW = $workinghours
                         ->find()
                         ->select(['date', 'duration'])
                         ->where(['member_id IN' => $memberlist])
+                        ->order('date')
                         ->toArray();
         }
+
         $data = array();
-        $sum = 0;
-        foreach($weeklist as $temp){
-            
-            if(!empty($queryW)) {
+        $hoursPerWeek = array();
+        $hourSumPerWeek = array();
+        $totalSum = 0;
+
+        foreach($queryW as $result) {
+            $totalSum += $result['duration'];
+        }
+
+        $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+        $weekOfLastHour = date('W', strtotime($queryW[(sizeof($queryW))-1]['date']));
+        $yearOfFirstHour = date('Y', strtotime($queryW[0]['date']));
+        $yearOfLastHour = date('Y', strtotime($queryW[(sizeof($queryW))-1]['date']));
+        $dateOfFirstHour = $queryW[0]['date'];
+        $dateOfLastHour = $queryW[(sizeof($queryW))-1]['date'];
+
+        // get sums per week and store them to array where key is weeknumber 
+        if(!empty($queryW)) {
+            for($i = 1; $i <= 52; $i++) {
+                $sum = 0;
                 foreach($queryW as $result) {
                     // date of workinghours need to be turned to week
                     $weekWH = date('W', strtotime($result['date']));
-                    if ($temp == $weekWH) {
+                    if($i == $weekWH) {
                         $sum += $result['duration'];
-                    }        
+                    }
+                }
+                $temp = [$i => $sum];
+                $hoursPerWeek = array_replace($hoursPerWeek, $temp);
+            }
+        }
+
+        // count cumulative sum per week and store it in array where key is weeknumber
+        $sum = 0;
+        
+        if($weekOfFirstHour > $weekOfLastHour) {            
+            for($i = $weekOfFirstHour; $i <= 52; $i++) {
+                $sum += $hoursPerWeek[$i];
+                if($dateOfLastHour > $datemin) {
+                    $temp = [$i => $sum];
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                } else {
+                    $temp = [$i => $totalSum];
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
                 }
             }
-            $data[] = $sum;
+            for($i = 1; $i <= ($weekOfFirstHour - 1); $i++) {
+                $sum += $hoursPerWeek[$i];
+                if($dateOfLastHour > $datemin) {
+                    if($i > $weekmax) {
+                        $temp = [$i => 0];
+                    } else {
+                        $temp = [$i => $sum];
+                    }
+                    
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                } else {
+                    $temp = [$i => $totalSum];
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                }
+            }
+        } else {
+            for($i = 1; $i <= 52; $i++) {
+                $sum += $hoursPerWeek[$i];
+                if($dateOfLastHour > $datemin) {
+                    if($i > $weekmax) {
+                        $temp = [$i => 0];
+                    } else {
+                        $temp = [$i => $sum];
+                    }
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                } else {
+                    $temp = [$i => $totalSum];
+                    $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
+                }
+            }
+        }    
+        
+
+        if($dateOfFirstHour <= $datemax) {
+            foreach($weeklist as $week) {
+                $data[] = $hourSumPerWeek[$week];
+            }
         }
 
         return $data;
     }
 
+
     // For admin to compare working hours of public projects
-    public function hoursComparisonData($weeklist) {
+    public function hoursComparisonData($weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
         $projects = TableRegistry::get('Projects');
         $query2 = $projects
             ->find()
             ->select(['id', 'project_name'])
             ->where(['is_public' => 1])
             ->toArray();     
+        
         $public_projects = array();
+        
         // get id and name of each public project
         foreach($query2 as $temp) {
             $temp2 = array();
@@ -462,54 +554,18 @@ class ChartsTable extends Table
         $combined_data = array();
 
         foreach($public_projects as $public_project) {
+            $data = $this->totalhourLineData($public_project['id'], $weeklist,  $weekmin, $weekmax, $yearmin, $yearmax);
 
-            $members = TableRegistry::get('Members');
-            // get a list of the members in the project
-            $query = $members
-                    ->find()
-                    ->select(['id'])
-                    ->where(['project_id =' => $public_project['id']])
-                    ->toArray();
-            $memberlist = array();
-            if(!empty($query)) {
-                foreach($query as $temp){
-                    $memberlist[] = $temp->id;
-                }
-            }
-            $workinghours = TableRegistry::get('Workinghours');
-            if(!empty($memberlist)) {
-                $queryW = $workinghours
-                            ->find()
-                            ->select(['date', 'duration'])
-                            ->where(['member_id IN' => $memberlist])
-                            ->toArray();
-            }
-            $data = array();
-            $temp_data = array();
-            $sum = 0;
-            foreach($weeklist as $temp){
-                
-                if(!empty($queryW)) {
-                    foreach($queryW as $result) {
-                        // date of workinghours need to be turned to week
-                        $weekWH = date('W', strtotime($result['date']));
-                        if ($temp == $weekWH) {
-                            $sum += $result['duration'];
-                        }        
-                    }
-                }
-                $data[] = $sum;
-            }
             // store name and a list of weekly workinghours sums for each project
             $tmp = array();
             $tmp['name'] = $public_project['project_name'];
             $tmp['data'] = $data;
             $combined_data[] = $tmp;
         }
-
         return $combined_data;            
     }   
     
+
     public function riskData($idlist, $projectId){
         
         $risks = TableRegistry::get('Risks');

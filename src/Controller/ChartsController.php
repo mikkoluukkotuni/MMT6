@@ -21,14 +21,20 @@ class ChartsController extends AppController
         // When the chart limits are updated this is where they are saved
         if ($this->request->is('post')) {
             $data = $this->request->data;
-            $chart_limits['weekmin'] = $data['weekmin'];
-            $chart_limits['weekmax'] = $data['weekmax'];
-            $chart_limits['yearmin'] = $data['yearmin'];
-            $chart_limits['yearmax'] = $data['yearmax'];
-			
-            $this->request->session()->write('chart_limits', $chart_limits);
-            // refreshin the page to apply the new limits
-            $page = $_SERVER['PHP_SELF'];
+            
+            // If user tries to select more than 52 weeks, display error and don't save time limits
+            if (($data['yearmin'] < $data['yearmax']) && (53 - $data['weekmin'] + $data['weekmax'] > 52)) {
+                $this->Flash->error(__('Can\'t display more than 52 weeks'));
+            } else {
+                $chart_limits['weekmin'] = $data['weekmin'];
+                $chart_limits['weekmax'] = $data['weekmax'];
+                $chart_limits['yearmin'] = $data['yearmin'];
+                $chart_limits['yearmax'] = $data['yearmax'];
+                $this->request->session()->write('chart_limits', $chart_limits);
+                // refreshin the page to apply the new limits
+                $page = $_SERVER['PHP_SELF'];
+            }
+
         }
         // Set the stock limits for the chart limits
         // They are only set once, if the "chart_limits" cookie is not in the session
@@ -36,8 +42,8 @@ class ChartsController extends AppController
             $time = Time::now();
             // show last year, current year and next year
             $chart_limits['weekmin'] = 1;
-            $chart_limits['weekmax'] =  52;
-            $chart_limits['yearmin'] = $time->year - 1;
+            $chart_limits['weekmax'] = date('W', strtotime($time));
+            $chart_limits['yearmin'] = $time->year;
             $chart_limits['yearmax'] = $time->year;
             
             $this->request->session()->write('chart_limits', $chart_limits);
@@ -74,11 +80,11 @@ class ChartsController extends AppController
         // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);
         // Line chart displaying the amount of hours done by the team per week 
-        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $allTheWeeks);
+        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
         // Line chart displaying the cumulative amount of hours done in the project
-        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks);
+        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
-        $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks);
+        $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -431,13 +437,13 @@ class ChartsController extends AppController
     	$myChart->plotOptions->column->stacking = "normal";
     
     	$myChart->title = array(
-        	'text' => 'Working hours',
+        	'text' => 'Working hours categorized by type',
         	'y' => 20,
         	'align' => 'center',
         	'styleFont' => '18px Metrophobic, Arial, sans-serif',
         	'styleColor' => '#0099ff',
         );
-    	$myChart->subtitle->text = "categorized by type";
+    	$myChart->subtitle->text = "project total hours - not affected by time limits";
 
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
