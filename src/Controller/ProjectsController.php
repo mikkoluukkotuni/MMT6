@@ -92,18 +92,19 @@ class ProjectsController extends AppController
             // fetch values using helpers
             $min = $data['weekmin'];
             $max = $data['weekmax'];
-		    $year = $data['year'];
+            $yearmin = $data['yearmin'];
+            $yearmax = $data['yearmax'];
             
             // correction for nonsensical values for week numbers
-            if ( $min < 1 )  $min = 1;
-            if ( $min > 53 ) $min = 53;
-            if ( $max < 1 )  $max = 1;
-            if ( $max > 53 ) $max = 53;
-            if ( $max < $min ) {
-            	$temp = $max;
-            	$max = $min;
-            	$min = $temp;
-            }
+            // if ( $min < 1 )  $min = 1;
+            // if ( $min > 53 ) $min = 53;
+            // if ( $max < 1 )  $max = 1;
+            // if ( $max > 53 ) $max = 53;
+            // if ( $max < $min ) {
+            // 	$temp = $max;
+            // 	$max = $min;
+            // 	$min = $temp;
+            // }
 			
 			/*
 			 * REMOVED after deemed too restricting, but I left the code so it can easily be implemented if needed
@@ -125,7 +126,8 @@ class ProjectsController extends AppController
             
             $statistics_limits['weekmin'] = $min;
             $statistics_limits['weekmax'] = $max;
-            $statistics_limits['year'] = $year;
+            $statistics_limits['yearmin'] = $yearmin;
+            $statistics_limits['yearmax'] = $yearmax;
             
             $this->request->session()->write('statistics_limits', $statistics_limits);
             // reload page
@@ -188,7 +190,7 @@ class ProjectsController extends AppController
         // functions in "ProjectsTable.php"
         foreach($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
-            $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
+            $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['yearmin'],$statistics_limits['yearmax']);
             $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $project['sum'] = $this->Projects->getHoursDuration($project['id']);
             $project['user_members'] = $this->Projects->getUserMember($project['id']);

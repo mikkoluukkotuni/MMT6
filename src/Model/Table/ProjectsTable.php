@@ -167,7 +167,7 @@ class ProjectsTable extends Table
     // 'X' if that weeks report was returned
     // 'L' if that weeks report should have been returned but its not
     // ' ' if there is no report but its still not late
-    public function getWeeklyreportWeeks($project_id, $min, $max, $year){
+    public function getWeeklyreportWeeks($project_id, $min, $max, $yearmin, $yearmax){
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         /* BUG FIX: editing weekly limits now works fine
          */

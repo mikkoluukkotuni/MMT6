@@ -5,9 +5,10 @@
         <?= $this->Form->create() ?>
         <div id="chart-limits">
         <?php
-            echo $this->Form->input('weekmin', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmin']));
-            echo $this->Form->input('weekmax', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['weekmax']));
-            echo $this->Form->input('year', array('type' => 'number', 'value' => $this->request->session()->read('statistics_limits')['year']));
+            echo $this->Form->input('weekmin', array('type' => 'number', 'min' => 1, 'max' => 52, 'value' => $this->request->session()->read('statistics_limits')['weekmin']));
+            echo $this->Form->input('weekmax', array('type' => 'number', 'min' => 1, 'max' => 52, 'value' => $this->request->session()->read('statistics_limits')['weekmax']));
+            echo $this->Form->input('yearmin', array('type' => 'number', 'min' => 2015, 'max' => $time->year, 'value' => $this->request->session()->read('statistics_limits')['yearmin']));
+            echo $this->Form->input('yearmax', array('type' => 'number', 'min' => 2015, 'max' => $time->year, 'value' => $this->request->session()->read('statistics_limits')['yearmax']));
         ?>
         </div>
         <button>Submit</button>
@@ -29,18 +30,19 @@
                     <?php 
                     $min = $this->request->session()->read('statistics_limits')['weekmin'];
                     $max = $this->request->session()->read('statistics_limits')['weekmax'];
-                    $year = $this->request->session()->read('statistics_limits')['year'];
+                    $yearmin = $this->request->session()->read('statistics_limits')['yearmin'];
+                    $yearmax = $this->request->session()->read('statistics_limits')['yearmax'];
                     
                     // correction for nonsensical values
-                    if ( $min < 1 )  $min = 1;
-                    if ( $min > 53 ) $min = 53;
-                    if ( $max < 1 )  $max = 1;
-                    if ( $max > 53 ) $max = 53;
-                    if ( $max < $min ) { 
-                $temp = $max;
-                        $max = $min;
-                        $min = $temp;
-                    }
+                //     if ( $min < 1 )  $min = 1;
+                //     if ( $min > 53 ) $min = 53;
+                //     if ( $max < 1 )  $max = 1;
+                //     if ( $max > 53 ) $max = 53;
+                //     if ( $max < $min ) { 
+                // $temp = $max;
+                //         $max = $min;
+                //         $min = $temp;
+                //     }
                     
             /* REMOVED after deemed too restricting. If you want to implement this again, 
                     * find and change this piece of code also in ProjectsController.
@@ -49,9 +51,18 @@
                 $max = $min + 9;
             } */
 
+                if($yearmin == $yearmax) {
                     for ($x = $min; $x <= $max; $x++) {
                         echo "<td>$x</td>";
-                    } 
+                    }
+                } else {
+                    for ($x = $min; $x <= 52; $x++) {
+                        echo "<td>$x</td>";
+                    }
+                    for ($x = 1; $x <= $max; $x++) {
+                        echo "<td>$x</td>";
+                    }
+                } 
                     ?>
                 </tr>
                 
@@ -76,40 +87,79 @@
                                     }
                             // adding link to X's if admin or supervisor
                             // BUG FIX 31.3.: links to weeklyreports now actually link to correct reports
-                                    elseif ( ($report == 'X' || $report == 'L') && ($admin || $supervisor) ) { 
-                                        // fetching the ID for current weeklyreport's view-page
-                                        $query = Cake\ORM\TableRegistry::get('Weeklyreports')
-                                                ->find()
-                                                ->select(['id'])
-                                                ->where(['project_id =' => $project['id'], 
-                                                        'week >=' => $min, 'year >=' => $year])
-                                                ->toArray();
-                                        // transforming returned query item to integer
-                                        $reportId = $query[$i++]->id;
+                            elseif ( ($report == 'X' || $report == 'L') && ($admin || $supervisor) ) { 
+
+                                if($yearmin == $yearmax) {
+                                    // fetching the ID for current weeklyreport's view-page
+                                    $query = Cake\ORM\TableRegistry::get('Weeklyreports')
+                                            ->find()
+                                            ->select(['id'])
+                                            ->where(['project_id =' => $project['id'], 
+                                                    'week >=' => $min, 'year >=' => $yearmin])
+                                            ->toArray();
+                                    // transforming returned query item to integer
+                                    $reportId = $query[$i++]->id;
+                                        
+                                    // X's have normal link color so they echo normally
+                                    if ($report == 'X') {
+                                        echo $this->Html->link(__($report.' (view)'), [
+                                            'controller' => 'Weeklyreports',
+                                            'action' => 'view',
+                                            $reportId ]);
+                                            // unread weeklyreports have some mark indicating it
+                                            $userid = $this->request->session()->read('Auth.User.id');
+                                            $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
+                                                    ->select()
+                                                    ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
+                                                    ->toArray();
+                                            if ( sizeof($newreps) > 0 ) {
+                                                    echo "<div class='unread'>unread</div>";
+                                            }
                                             
-                                        // X's have normal link color so they echo normally
-                                        if ($report == 'X') {
-                                            echo $this->Html->link(__($report.' (view)'), [
-                                                'controller' => 'Weeklyreports',
-                                                'action' => 'view',
-                                                $reportId ]);
-                                                // unread weeklyreports have some mark indicating it
-                                                $userid = $this->request->session()->read('Auth.User.id');
-                                                $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
-                                                        ->select()
-                                                        ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
-                                                        ->toArray();
-                                                if ( sizeof($newreps) > 0 ) {
-                                                        echo "<div class='unread'>unread</div>";
-                                                }
-                                                
-                                        } else {
-                                            echo $this->Html->link(__($report.' (view)'), [
-                                                'controller' => 'Weeklyreports',
-                                                'action' => 'view',
-                                                $reportId ], ['style'=>'color: orange;']);
-                                        } ?>
-                            <?php
+                                    } else {
+                                        echo $this->Html->link(__($report.' (view)'), [
+                                            'controller' => 'Weeklyreports',
+                                            'action' => 'view',
+                                            $reportId ], ['style'=>'color: orange;']);
+                                    } ?>
+                                <?php
+
+                                // Weekmin and Weekmax are not on the same year
+                                } else {
+                                    // fetching the ID for current weeklyreport's view-page
+                                    $query = Cake\ORM\TableRegistry::get('Weeklyreports')
+                                            ->find()
+                                            ->select(['id'])
+                                            ->where(['project_id =' => $project['id'], 
+                                                    'OR' => [['week >=' => $min, 'year ==' => $yearmin], ['week <=' => $max, 'year ==' => $yearmax]]])
+                                            ->toArray();
+                                    // transforming returned query item to integer
+                                    $reportId = $query[$i++]->id;
+                                        
+                                    // X's have normal link color so they echo normally
+                                    if ($report == 'X') {
+                                        echo $this->Html->link(__($report.' (view)'), [
+                                            'controller' => 'Weeklyreports',
+                                            'action' => 'view',
+                                            $reportId ]);
+                                            // unread weeklyreports have some mark indicating it
+                                            $userid = $this->request->session()->read('Auth.User.id');
+                                            $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
+                                                    ->select()
+                                                    ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
+                                                    ->toArray();
+                                            if ( sizeof($newreps) > 0 ) {
+                                                    echo "<div class='unread'>unread</div>";
+                                            }
+                                            
+                                    } else {
+                                        echo $this->Html->link(__($report.' (view)'), [
+                                            'controller' => 'Weeklyreports',
+                                            'action' => 'view',
+                                            $reportId ], ['style'=>'color: orange;']);
+                                    } ?>
+                                <?php
+                                }
                             // displays X without a link to other users
                             } else { ?>
                                     <?= h($report) ?>
