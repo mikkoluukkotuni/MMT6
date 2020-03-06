@@ -45,13 +45,12 @@ class MembersController extends AppController
 
         // Chart for workinghour prediction
         // Find and store info that will be needed by chart data function in MembersTable
-        $member_id =  $this->request->session()->read('selected_project_memberid', $project_memberid);
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $endingDate = $this->request->session()->read('selected_project')['finished_date'];
 
         $predictiveMemberChart = $this->predictiveMemberChart();
-        $predictiveMemberData = $this->Members->predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate);
-       
+        $predictiveMemberData = $this->Members->predictiveMemberData($project_id, $member['id'], $projectStartDate, $endingDate);
+
         // Define axis data for chart
         $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
         foreach($predictiveMemberData as $data) {
