@@ -3,10 +3,20 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Highcharts\Controller\Component\HighchartsComponent;
+use Cake\I18n\Time;
 
 class MembersController extends AppController
 {
-    
+    // public $name = 'Charts';
+    public $helpers = ['Highcharts.Highcharts'];
+    // public $uses = array();
+
+    public function initialize() {
+        parent::initialize();
+        $this->loadComponent('Highcharts.Highcharts');
+    }
+
     public function index()
     {
         // Only members of the current project are loaded
@@ -32,7 +42,64 @@ class MembersController extends AppController
         ]);
         $this->set('member', $member);
         $this->set('_serialize', ['member']);
+
+        // Charts for workinghour prediction
+        $member_id =  $this->request->session()->read('selected_project_memberid', $project_memberid);
+        $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
+        $endingDate = $this->request->session()->read('selected_project')['finished_date'];
+
+        $predictiveMemberChart = $this->predictiveMemberChart();
+        $predictiveMemberData = $this->Members->predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate);
+       
+        // var_dump($predictiveMemberData);
+        $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
+        foreach($predictiveMemberData as $data) {
+            $predictiveMemberChart->series[] = array(
+                'name' => $data['name'],
+                'data' => $data['hours']
+            );
+        }
+
+        $this->set(compact('predictiveMemberChart'));
     }
+
+
+    public function predictiveMemberChart(){
+    	$myChart = $this->Highcharts->createChart();
+    	$myChart->chart->renderTo = 'predictiveMemberChartWrapper';
+    	$myChart->chart->type = 'line';
+
+    
+    	$myChart->title = array(
+        	'text' => 'Working hours prediction',
+        	'y' => 20,
+        	'align' => 'center',
+        	'styleFont' => '18px Metrophobic, Arial, sans-serif',
+        	'styleColor' => '#0099ff',
+        );
+    	$myChart->subtitle->text = "per week";
+
+    	// $myChart->chart->alignTicks = FALSE;
+    	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+    	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+    	
+        // labels of axes
+    	
+        $myChart->xAxis->title->text = 'Week number';
+	    $myChart->yAxis->title->text = 'Working hours';
+    	
+	    // tooltips etc
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return 'Total hours: ' +' <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}");
+    	$myChart->plotOptions->area->marker->enabled = false;
+    
+    	return $myChart;
+    }
+
     
     public function add()
     {

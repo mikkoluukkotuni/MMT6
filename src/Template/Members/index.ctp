@@ -1,8 +1,7 @@
-<!--
-    <ul class="side-nav">
-        
-    </ul>
--->
+<?php echo $this->Highcharts->includeExtraScripts(); ?>
+<?php use Cake\I18n\Time; ?>
+
+
 <div class="members index large-9 medium-18 columns content float: left">
     <h3><?= __('Members') ?></h3>
     <?php

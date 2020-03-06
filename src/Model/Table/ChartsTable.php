@@ -617,4 +617,5 @@ class ChartsTable extends Table
         
         return $data;
     }
+
 }

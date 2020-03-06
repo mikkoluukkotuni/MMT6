@@ -169,5 +169,11 @@
                 </tr>    
             </table>
         <?php endif; ?>          
-    </div>   
+    </div>  
+
+    <div class="chart">
+        <div id="predictiveMemberChartWrapper">
+		    <?php echo $this->Highcharts->render($predictiveMemberChart, 'predictiveMemberChart'); ?>
+	    </div>
+    </div> 
 </div>
