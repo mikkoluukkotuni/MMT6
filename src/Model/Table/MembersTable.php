@@ -160,12 +160,17 @@ class MembersTable extends Table
             // Populate array of cumulative working hour sum for each week
             $sum = 0;
             foreach($weekList as $weekNumber) {
+                $hoursLogged = False;
                 foreach($queryW as $result) {
                     if(date('W', strtotime($result['date'])) == $weekNumber) {
                         $sum += $result['duration'];
+                        $hoursLogged = True;
                     }
                 }
-                array_push($hourSumPerWeek, $sum);
+                if($hoursLogged == True) {
+                    array_push($hourSumPerWeek, $sum);
+                }
+                
             }
             
             // Store actual working hour data at index 0
