@@ -127,25 +127,23 @@ class MembersTable extends Table
         $totalSum = 0;
 
         if(!empty($queryW)) {
+            // Count the total sum of member's hours
             foreach($queryW as $result) {
                 $totalSum += $result['duration'];
-            }
-
-            $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
-            // $weekOfLastHour = date('W', strtotime($queryW[(sizeof($queryW))-1]['date']));
-            $yearOfFirstHour = date('Y', strtotime($queryW[0]['date']));
-            // $yearOfLastHour = date('Y', strtotime($queryW[(sizeof($queryW))-1]['date']));
-            $dateOfFirstHour = $queryW[0]['date'];
-            // $dateOfLastHour = $queryW[(sizeof($queryW))-1]['date'];
-
+            }            
 
             // Create array $weekList of weeknumbers for x-axis
+
+            // If project has no estimated completion date then ending date is +20 weeks from user's first logged working hour
             if($endingDate == NULL) {
                 $endingDate = $projectStartDate;
                 $endingDate->modify('+20 weeks');
             }
+            $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
             $xLastWeek = date('W', strtotime($endingDate));
             $weekList = array();
+
+            // Populate array of week numbers to be used as x axis
             if($weekOfFirstHour > $xLastWeek) {
                 for($i = $weekOfFirstHour; $i <= 52; $i++) {
                     array_push($weekList, $i);
@@ -158,12 +156,24 @@ class MembersTable extends Table
                     array_push($weekList, $i);
                 }
             }
-            
-            $data[0]['weekList'] = $weekList;
 
-            $data[0]['hours'] = [10,15,25,30,45,50,55,65,75,78,84,95,109,111,115,130,150,160];
+            // Populate array of cumulative working hour sum for each week
+            $sum = 0;
+            foreach($weekList as $weekNumber) {
+                foreach($queryW as $result) {
+                    if(date('W', strtotime($result['date'])) == $weekNumber) {
+                        $sum += $result['duration'];
+                    }
+                }
+                array_push($hourSumPerWeek, $sum);
+            }
+            
+            // Store actual working hour data at index 0
+            $data[0]['weekList'] = $weekList;
+            $data[0]['hours'] = $hourSumPerWeek;
             $data[0]['name'] = 'Actual hours';
 
+            // Populate array of cumulative average hour sum for each week
             $average = $totalSum / sizeof($data[0]['hours']);
             $predictedHours = array();
             $tempSum = 0;
@@ -172,8 +182,7 @@ class MembersTable extends Table
                 array_push($predictedHours, $tempSum);
             }
 
-            // var_dump($predictedHours);
-            $data[1]['weekList'] = $weekList;
+            // Store predicted working hour data at index 1
             $data[1]['hours'] = $predictedHours;
             $data[1]['name'] = 'Predicted hours';
 

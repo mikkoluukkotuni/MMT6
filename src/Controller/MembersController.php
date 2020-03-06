@@ -43,7 +43,8 @@ class MembersController extends AppController
         $this->set('member', $member);
         $this->set('_serialize', ['member']);
 
-        // Charts for workinghour prediction
+        // Chart for workinghour prediction
+        // Find and store info that will be needed by chart data function in MembersTable
         $member_id =  $this->request->session()->read('selected_project_memberid', $project_memberid);
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $endingDate = $this->request->session()->read('selected_project')['finished_date'];
@@ -51,7 +52,7 @@ class MembersController extends AppController
         $predictiveMemberChart = $this->predictiveMemberChart();
         $predictiveMemberData = $this->Members->predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate);
        
-        // var_dump($predictiveMemberData);
+        // Define axis data for chart
         $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
         foreach($predictiveMemberData as $data) {
             $predictiveMemberChart->series[] = array(
@@ -60,10 +61,11 @@ class MembersController extends AppController
             );
         }
 
+        // This sets the chart visible in the actual page
         $this->set(compact('predictiveMemberChart'));
     }
 
-
+    // Predictive working hours chart for individual member
     public function predictiveMemberChart(){
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'predictiveMemberChartWrapper';
@@ -86,8 +88,7 @@ class MembersController extends AppController
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
     	
-        // labels of axes
-    	
+        // labels of axes    	
         $myChart->xAxis->title->text = 'Week number';
 	    $myChart->yAxis->title->text = 'Working hours';
     	
