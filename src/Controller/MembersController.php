@@ -89,7 +89,9 @@ class MembersController extends AppController
     	
         // labels of axes    	
         $myChart->xAxis->title->text = 'Week number';
-	    $myChart->yAxis->title->text = 'Working hours';
+        $myChart->yAxis->title->text = 'Working hours';
+        
+        $myChart->colors = array('#fc0303', '#036ffc');
     	
 	    // tooltips etc
     	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {

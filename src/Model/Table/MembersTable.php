@@ -125,23 +125,23 @@ class MembersTable extends Table
         $hoursPerWeek = array();
         $hourSumPerWeek = array();
         $totalSum = 0;
+        // Create array $weekList of weeknumbers for x-axis
+        $weekList = array();
+        $predictedHours = array();
 
         if(!empty($queryW)) {
             // Count the total sum of member's hours
             foreach($queryW as $result) {
                 $totalSum += $result['duration'];
-            }            
-
-            // Create array $weekList of weeknumbers for x-axis
-
+            }     
+            
             // If project has no estimated completion date then ending date is +20 weeks from user's first logged working hour
             if($endingDate == NULL) {
                 $endingDate = $projectStartDate;
                 $endingDate->modify('+20 weeks');
             }
             $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
-            $xLastWeek = date('W', strtotime($endingDate));
-            $weekList = array();
+            $xLastWeek = date('W', strtotime($endingDate));            
 
             // Populate array of week numbers to be used as x axis
             if($weekOfFirstHour > $xLastWeek) {
@@ -172,26 +172,23 @@ class MembersTable extends Table
                 }
                 
             }
-            
-            // Store actual working hour data at index 0
-            $data[0]['weekList'] = $weekList;
-            $data[0]['hours'] = $hourSumPerWeek;
-            $data[0]['name'] = 'Actual hours';
 
             // Populate array of cumulative average hour sum for each week
-            $average = $totalSum / sizeof($data[0]['hours']);
-            $predictedHours = array();
+            $average = $totalSum / sizeof($hourSumPerWeek);            
             $tempSum = 0;
             for($i = 1; $i <= sizeof($weekList); $i++) {
                 $tempSum += $average;
                 array_push($predictedHours, $tempSum);
             }
+        } 
+        // Store actual working hour data at index 0
+        $data[0]['weekList'] = $weekList;
+        $data[0]['hours'] = $hourSumPerWeek;
+        $data[0]['name'] = 'Actual hours';
 
-            // Store predicted working hour data at index 1
-            $data[1]['hours'] = $predictedHours;
-            $data[1]['name'] = 'Predicted hours';
-
-        }
+        // Store predicted working hour data at index 1
+        $data[1]['hours'] = $predictedHours;
+        $data[1]['name'] = 'Predicted hours';
 
         return $data;
     }
