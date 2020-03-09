@@ -154,7 +154,7 @@ class ProjectsTable extends Table
                 ->select(['duration'])
                 ->where(['weeklyreport_id IN' => $ids])
                 ->toArray();            
-            if(!empty($query)) {
+            if (!empty($query)) {
                 foreach($query as $temp){
                     $duration += $temp->duration;
                 }
@@ -179,7 +179,7 @@ class ProjectsTable extends Table
 
         $weeks = array();
 		$createdates = array();
-        foreach($query as $temp){
+        foreach ($query as $temp) {
             $weeks[] = $temp->week;
 			$createdates[] = $temp->created_on;
         }
@@ -189,9 +189,9 @@ class ProjectsTable extends Table
 		
 		// iterator for weeks and createdates array, resets to zero after "finishing" with one project's reports
 		$i = 0;
-        for($count = $min; $count <= $max; $count++){
+        for ($count = $min; $count <= $max; $count++){
             // if the week is found
-            if(in_array($count, $weeks)){
+            if (in_array($count, $weeks)){
 				// fetch the weekday when report was sent; protip: Sunday = 0 (so Monday = 1)
 				$weekday = date( "w", strtotime($createdates[$i]));
 				// also fetch the weeknumber when report was sent
@@ -200,7 +200,7 @@ class ProjectsTable extends Table
 				// weeklyreport is late
 				// IF a) it was created on next week AND the weekday was after monday
 				// OR b) it was created several weeks later
-                if( ($weeks[$i] +1 == $weekno && $weekday > 1) || ($weeks[$i] +1 < $weekno) ) {
+                if ( ($weeks[$i] +1 == $weekno && $weekday > 1) || ($weeks[$i] +1 < $weekno) ) {
 					$completeList[] = 'L';
                 } else {
 					$completeList[] = 'X';

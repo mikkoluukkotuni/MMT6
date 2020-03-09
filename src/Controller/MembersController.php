@@ -28,7 +28,7 @@ class MembersController extends AppController
         ];
         $this->set('members', $this->paginate($this->Members));
         $this->set('_serialize', ['members']);
-
+        $temp = $this->Members->getMembers($project_id);
     }
 
     public function view($id = null)
@@ -53,7 +53,7 @@ class MembersController extends AppController
 
         // Define axis data for chart
         $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
-        foreach($predictiveMemberData as $data) {
+        foreach ($predictiveMemberData as $data) {
             $predictiveMemberChart->series[] = array(
                 'name' => $data['name'],
                 'data' => $data['hours']
@@ -119,7 +119,7 @@ class MembersController extends AppController
            	 ->select(['id']) 
             	->where(['email =' => $email])
                 ->toArray(); 
-            foreach($query as $temp) {
+            foreach ($query as $temp) {
                 $id = $temp['id'];
             }
             //Get matching user id's from current project
@@ -208,14 +208,14 @@ class MembersController extends AppController
         // managers can add members, but cannot add new supervisors
         if ($this->request->action === 'add') 
         {
-            if($project_role == "manager" || $project_role == "supervisor"){
+            if ($project_role == "manager" || $project_role == "supervisor") {
                 return True;
             }
         }
         // only supervisors and admins can delete members
         if ($this->request->action === 'delete') 
         {
-            if($project_role == "supervisor"){
+            if ($project_role == "supervisor") {
                 return True;
             }
 
@@ -228,7 +228,7 @@ class MembersController extends AppController
         if ($this->request->action === 'edit') 
         {
             $id_length = ceil(log10(abs($this->request->session()->read('selected_project_memberid') + 1)));
-            if($project_role == "supervisor" || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -$id_length)){
+            if ($project_role == "supervisor" || $this->request->session()->read('selected_project_memberid') == substr($this->request->url, -$id_length)) {
                 return True;
             }
 

@@ -10,7 +10,7 @@
             // FIX: managers can also add new members
             $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;
             
-            if($admin || $supervisor || $manager ) {
+            if ($admin || $supervisor || $manager ) {
         ?>
             <button id="navbutton"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
         <?php } ?>
@@ -21,7 +21,7 @@
                 <th colspan="2"><?= __('Name') ?></th>
                 <th><?= $this->Paginator->sort('project_role') ?></th>
                 <th><?= __('Working hours') ?></th>
-                <th><?= __('Target hours') ?></th>
+                <th><?= __('Last seen') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -45,19 +45,32 @@
                         $hours[] = $key->duration;
                         $sum = array_sum($hours);   
                     }
+
+                    // Get the date of member's latest working hour                   
+                    $temp = $member->workinghours;
+                    usort($temp, function($a, $b) {
+                        return $a['date'] <= $b['date'];
+                    });
+                    $lastSeen = $temp1[0]->date;
                 }
                 else {
                     $sum = "";
                 }
-                $total += $sum;?>
-
-                <td><?= h($sum) ?></td>
+                $total += $sum;
+                $target = $member->target_hours;
+                if($target == NULL) {
+                    $target = 100;
+                } ?>
+                <td>
+                <?php if ($member->project_role != 'supervisor' && $member->project_role != 'client') {
+                    echo ($sum . ' / ' . $target); 
+                } ?></td>
                 <td><?php 
                     if ($member->project_role != 'supervisor' && $member->project_role != 'client') { 
-                        if ($member->target_hours != NULL)
-                            echo h($member->target_hours); 
+                        if ($lastSeen != NULL)
+                            echo ($lastSeen->format('d.m.Y')); 
                         else
-                            echo h('100 (default)');
+                            echo ('Never');
                     }
                 ?></td>
                 <td class="actions">

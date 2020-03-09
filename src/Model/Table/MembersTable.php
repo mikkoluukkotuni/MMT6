@@ -92,7 +92,7 @@ class MembersTable extends Table
             ->toArray();
         
         $users = TableRegistry::get('Users'); 
-        foreach($query as $temp){         
+        foreach ($query as $temp){         
             $query2 = $users
                 ->find()
                 ->select(['role', 'first_name', 'last_name'])
@@ -101,7 +101,7 @@ class MembersTable extends Table
             
             $temp_memberinfo['id'] = $temp->id;
             $temp_memberinfo['member_name'] = $query2[0]->first_name." ".$query2[0]->last_name." - ".$temp->project_role; 
-
+            
             $memberinfo[] = $temp_memberinfo; 
         }
         
@@ -159,15 +159,15 @@ class MembersTable extends Table
 
             // Populate array of cumulative working hour sum for each week
             $sum = 0;
-            foreach($weekList as $weekNumber) {
+            foreach ($weekList as $weekNumber) {
                 $hoursLogged = False;
-                foreach($queryW as $result) {
-                    if(date('W', strtotime($result['date'])) == $weekNumber) {
+                foreach ($queryW as $result) {
+                    if (date('W', strtotime($result['date'])) == $weekNumber) {
                         $sum += $result['duration'];
                         $hoursLogged = True;
                     }
                 }
-                if($hoursLogged == True) {
+                if ($hoursLogged == True) {
                     array_push($hourSumPerWeek, $sum);
                 }
                 
@@ -176,7 +176,7 @@ class MembersTable extends Table
             // Populate array of cumulative average hour sum for each week
             $average = $totalSum / sizeof($hourSumPerWeek);            
             $tempSum = 0;
-            for($i = 1; $i <= sizeof($weekList); $i++) {
+            for ($i = 1; $i <= sizeof($weekList); $i++) {
                 $tempSum += $average;
                 array_push($predictedHours, $tempSum);
             }

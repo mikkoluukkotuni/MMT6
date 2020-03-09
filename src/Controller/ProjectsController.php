@@ -14,23 +14,23 @@ class ProjectsController extends AppController
     {
         // list of the projects that should be shown in the front page
         $project_list = $this->request->session()->read('project_list');
-        if($project_list != NULL){
+        if ($project_list != NULL){
             $this->paginate = [
                 'conditions' => array('id IN' => $project_list),
                 'order' => ['project_name' => 'ASC']
             ];   
         }
-        else{
+        else {
             $this->paginate = [
                 'conditions' => array('id' => NULL),
                 'order' => ['project_name' => 'ASC']
             ];     
         }
-        if($this->Auth->user('id') != NULL) {
+        if ($this->Auth->user('id') != NULL) {
             $this->request->session()->write('selected_project', NULL);
         }
         // this is used so that normal user can be directed straight to workinghours after login when having only one project
-        if(count($this->request->session()->read('project_memberof_list')) == 1 && $this->Auth->user('role') == 'user' 
+        if (count($this->request->session()->read('project_memberof_list')) == 1 && $this->Auth->user('role') == 'user' 
                 && $this->request->session()->read('first_view') == True) {
             return $this->redirect(
                 ['controller' => 'Projects', 'action' => 'view', (string)$this->request->session()->read('project_memberof_list')[0]]
@@ -56,7 +56,7 @@ class ProjectsController extends AppController
         ]);
 
         // when normal user opens the project first time after login it redirect to Workinghours
-        if($this->Auth->user('role') == 'user' && $this->request->session()->read('first_view') == True) {
+        if ($this->Auth->user('role') == 'user' && $this->request->session()->read('first_view') == True) {
             $this->request->session()->write('first_view', False);
             $this->request->session()->write('selected_project', $project);
             return $this->redirect(
@@ -67,7 +67,7 @@ class ProjectsController extends AppController
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
         // if the selected project is a new one
-        if($this->request->session()->read('selected_project')['id'] != $project['id']){
+        if ($this->request->session()->read('selected_project')['id'] != $project['id']) {
             // write the new id 
             $this->request->session()->write('selected_project', $project);
             // remove the all data from the weeklyreport form if any exists
@@ -132,7 +132,7 @@ class ProjectsController extends AppController
             $page = $_SERVER['PHP_SELF'];
         }
         // current default settings
-        if(!$this->request->session()->check('statistics_limits')){
+        if (!$this->request->session()->check('statistics_limits')) {
             $time = Time::now();
             $week = date('W');
             $month = date('m');
@@ -186,7 +186,7 @@ class ProjectsController extends AppController
         $projects = array();
         // the weeklyreport weeks and the total weeklyhours duration is loaded for all projects
         // functions in "ProjectsTable.php"
-        foreach($publicProjects as $project){
+        foreach ($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
             $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
