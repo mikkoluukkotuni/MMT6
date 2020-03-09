@@ -55,7 +55,7 @@
                     $lastSeen = $temp[0]->date;
                 }
                 else {
-                    $sum = "";
+                    $sum = 0;
                 }
                 $total += $sum;
                 $target = $member->target_hours;
