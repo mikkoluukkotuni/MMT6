@@ -51,7 +51,7 @@
                     usort($temp, function($a, $b) {
                         return $a['date'] <= $b['date'];
                     });
-                    $lastSeen = $temp1[0]->date;
+                    $lastSeen = $temp[0]->date;
                 }
                 else {
                     $sum = "";
