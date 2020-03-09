@@ -36,7 +36,8 @@
                 <?= $rooli = ""; if($member->user->role == 'inactive'){$rooli = "(inactive)";}?>
                 <td colspan="2"><?= $member->has('user') ? $this->Html->link($member->user->first_name . " ". $member->user->last_name . " ".$rooli, ['controller' => 'Members', 'action' => 'view', $member->id]) : '' ?></td>  
                 <td><?= h($member->project_role) ?></td><?php
-                // Get the sum of workinghours for a member who has working hours              
+                // Get the sum of workinghours for a member who has working hours
+                $lastSeen = NULL;              
                 if (!empty($member->workinghours)) {
                     $query = $member->workinghours;
                     $hours = array();
