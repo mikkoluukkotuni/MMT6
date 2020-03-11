@@ -38,6 +38,7 @@
                                             echo h($member->ending_date->format('d.m.Y')); 
                                     ?></td>
                     </tr>
+                <?php if (($member->project_role == 'developer') || ($member->project_role == 'manager')) { ?>
                     <tr>
                         <th><?= __('Target hours') ?></th>
                         <td><?php 
@@ -47,6 +48,7 @@
                                 echo h('100');
                                     ?></td>
                     </tr>
+                <?php } ?>
                     <tr>
                         <?php
 
@@ -171,9 +173,11 @@
         <?php endif; ?>          
     </div>  
 
+    <?php if (($member->project_role == 'developer') || ($member->project_role == 'manager')) { ?>
     <div class="chart">
         <div id="predictiveMemberChartWrapper">
 		    <?php echo $this->Highcharts->render($predictiveMemberChart, 'predictiveMemberChart'); ?>
 	    </div>
     </div> 
+    <?php } ?>
 </div>

@@ -110,9 +110,31 @@ class MembersTable extends Table
 
 
     public function predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate){
+        // Get list of project's members ids
+        $members = TableRegistry::get('Members');
+        $query = $members
+        ->find()
+        ->select(['id'])
+        ->where(['project_id' => $project_id])
+        ->toArray();
+        $memberlist = array();
+        if(!empty($query)) {
+            foreach($query as $temp){
+                $memberlist[] = $temp->id;
+            }
+        }
 
         // Get all hours of the member and store in array in date order
         $workinghours = TableRegistry::get('Workinghours');
+        $queryW = $workinghours
+                    ->find()
+                    ->select(['date'])
+                    ->where(['member_id IN' => $memberlist])
+                    ->order('date')
+                    ->toArray();
+
+        $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+
         $queryW = $workinghours
                     ->find()
                     ->select(['date', 'duration'])
@@ -135,12 +157,12 @@ class MembersTable extends Table
                 $totalSum += $result['duration'];
             }     
             
-            // If project has no estimated completion date then ending date is +20 weeks from user's first logged working hour
+            // If project has no estimated completion date then ending date is +20 weeks from project's first logged working hour
             if($endingDate == NULL) {
                 $endingDate = $projectStartDate;
                 $endingDate->modify('+20 weeks');
             }
-            $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+
             $xLastWeek = date('W', strtotime($endingDate));            
 
             // Populate array of week numbers to be used as x axis
@@ -167,10 +189,9 @@ class MembersTable extends Table
                         $hoursLogged = True;
                     }
                 }
-                if ($hoursLogged == True) {
+                if ($hoursLogged == True || ($hoursLogged == False && $sum == 0)) {
                     array_push($hourSumPerWeek, $sum);
-                }
-                
+                }                
             }
 
             // Populate array of cumulative average hour sum for each week

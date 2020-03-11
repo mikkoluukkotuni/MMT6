@@ -16,14 +16,14 @@ class ProjectsController extends AppController
         $project_list = $this->request->session()->read('project_list');
         if ($project_list != NULL){
             $this->paginate = [
-                'conditions' => array('id IN' => $project_list),
-                'order' => ['project_name' => 'ASC']
+                'conditions' => array('id IN' => $project_list), 'limit' => 25,
+                'order' => ['created_on' => 'DESC']
             ];   
         }
         else {
             $this->paginate = [
                 'conditions' => array('id' => NULL),
-                'order' => ['project_name' => 'ASC']
+                'order' => ['created_on' => 'DESC']
             ];     
         }
         if ($this->Auth->user('id') != NULL) {
