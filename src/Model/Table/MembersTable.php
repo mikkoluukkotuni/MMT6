@@ -135,7 +135,7 @@ class MembersTable extends Table
 
         $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
 
-        $queryW = $workinghours
+        $queryW2 = $workinghours
                     ->find()
                     ->select(['date', 'duration'])
                     ->where(['member_id =' => $member_id])
@@ -151,13 +151,13 @@ class MembersTable extends Table
         $weekList = array();
         $predictedHours = array();
 
-        if(!empty($queryW)) {
+        if(!empty($queryW2)) {
             // Count the total sum of member's hours
-            foreach($queryW as $result) {
+            foreach($queryW2 as $result) {
                 $totalSum += $result['duration'];
             }     
             
-            // If project has no estimated completion date then ending date is +20 weeks from project's first logged working hour
+            // If project has no estimated completion date then ending date is +20 weeks from project's start date
             if($endingDate == NULL) {
                 $endingDate = $projectStartDate;
                 $endingDate->modify('+20 weeks');
@@ -183,7 +183,7 @@ class MembersTable extends Table
             $sum = 0;
             foreach ($weekList as $weekNumber) {
                 $hoursLogged = False;
-                foreach ($queryW as $result) {
+                foreach ($queryW2 as $result) {
                     if (date('W', strtotime($result['date'])) == $weekNumber) {
                         $sum += $result['duration'];
                         $hoursLogged = True;
