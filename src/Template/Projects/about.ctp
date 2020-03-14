@@ -55,18 +55,24 @@
     </p>
     <h4>Release notes</h4>
     <p>
-        <h5>Version 5.0 (January 2020)</h5>
-        <p>New user interface</p>
-        <p>New diagrams: Cumulative work hours and total hours of each public project</p>
-        <p>HTTPS protocol</p>
-        <p>Bug fixing</p>
-        <p>Other small features</p>
+        <h5>Version 6.0 (March 2020)</h5>
+        <ul>
+            <li>Increase of the mobile usability</li>
+            <li>Last activity of a project  member shown</li>
+            <li>Personal working hours chart and prediction of the total hours during the project</li>
+            <li>Bugs fixed: HTTPS-redirection issues, diagram visibility issues for supervisors, working hours diagrams issues</li>
+            <li>Coming soon: linking to version control systems, usability improvements, prediction for the project…</li>
+        </ul>
+
     </p>
     <h4>Previous versions</h4>
 	<p>
 	    Version 5.0 were implemented during the fall term of 2019 as a coursework for TIEA4 Project Work course and TIETS19 Software Project Management course. 
             The team consisted of two project managers (Hanna-Riikka Rantamaa and Henna Lehto) 
             and four developers (Kimi af Forselles, Mikko Luukko, Tommi Piili and Ville Niemi). 
+            Updates included: new interface with TUNI-Theme (logo and brand of the new Tampere University), 
+            new diagrams like comparing the total hours of the project to the all parallel public projects, 
+            HTTPS protocol, bug fixing and other smaller features.
 	</p>
         <p>
             Version 4.0 were implemented by Murat Pojon as a TIETS16 programming project 
