@@ -175,19 +175,27 @@ nav ul {
 }
 
 .dropdown-content {
-	display: none;
+	/* display: none;
 	padding: 0;
 	background-color: #f1f1f1;
 	margin: 0;
 	min-width: 8em;
-	left: 9.5em;
-	top: 1.5em;
+	 */
+	/* left: 9.5em; */
+	background-color: #f1f1f1;
+    margin-top: 1em;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	position: absolute;
+	display: none;
+	/* align-content: center; */
+	margin-left: -8em;
+	width: 8em;
+	z-index: 111;
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
-	position: center;
+	/* position: static; */
 	color: black;
 	padding: 12px 2px;
 	text-decoration: none;
@@ -196,7 +204,7 @@ nav ul {
 
 /* Project role shown in the dropdown */
 #role {
-	position: center;
+	/* position: static; */
 	color: black;
 	text-transform: uppercase;
 	padding: 12px 0px 0px 0px;
@@ -215,9 +223,13 @@ nav ul {
   
 /* Show the dropdown menu on hover */
 #dropbtn:hover .dropdown-content {
-	position: absolute;
 	display: inline-block;
-	z-index: 1;
+	/* position: relative;
+	display: inline-block;
+	align-content: center;
+
+	width: 8em;
+	z-index: 1; */
 }
 
 /* Purple navigation bar */
