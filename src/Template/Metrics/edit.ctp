@@ -27,7 +27,7 @@
         ?> 
     <?= $this->Form->create($metric) ?>
         <?php
-            echo $this->Form->input('value', array('style' => 'width: 30%;'));
+            echo $this->Form->input('value', array('type' => 'number', 'min' => 0, 'style' => 'width: 30%;'));
 			echo $this->Form->button(__('Submit'));
         ?>
     <?= $this->Form->end() ?>

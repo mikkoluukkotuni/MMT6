@@ -13,9 +13,9 @@
     <?= $this->Form->create($weeklyreport) ?>
         <?php
             echo $this->Form->input('title');
-            echo $this->Form->input('week', array('style' => 'width: 35%;'));
-            echo $this->Form->input('year', array('style' => 'width: 35%;'));
-            echo $this->Form->input('meetings');
+            echo $this->Form->input('week', array('type' => 'number', 'min' => 1, 'max' => 52, 'style' => 'width: 40%;'));
+            echo $this->Form->input('year', array('style' => 'width: 50%;'));
+            echo $this->Form->input('meetings', array('type' => 'number', 'min' => 0, 'style' => 'width: 40%;'));
             echo $this->Form->input('reglink', ['label' => 'Requirements link']);
             echo $this->Form->input('problems', array('label' => 'Challenges, issues, etc.'));
             echo $this->Form->input('additional');

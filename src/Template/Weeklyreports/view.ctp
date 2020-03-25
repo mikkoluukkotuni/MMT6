@@ -322,7 +322,7 @@
 			<?= $this->Form->textarea('content') ?>
 			<?= $this->Form->hidden('user_id', array('type' => 'numeric', 'value' => $this->request->session()->read('Auth.User.id') ) ) ?>
 			<?= $this->Form->hidden('weeklyreport_id', array('type' => 'numeric', 'value' => $weeklyreport->id ) ) ?>
-			<?php echo $this->Form->button('Submit', ['name' => 'submit', 'value' => 'submit']); ?>
+			<?php echo $this->Form->button('Submit comment', ['name' => 'submit', 'value' => 'submit']); ?>
 		</fieldset>
 		<?= $this->Form->end() ?>
     </div>
