@@ -216,6 +216,8 @@ class MetricsController extends AppController
             'conditions' => ['project_id' => $project_id]
                 ])->first();
 
+        $commitCount = null;
+
         if ($git != null) {
             $http = new Client();
 
