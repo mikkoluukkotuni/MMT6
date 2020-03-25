@@ -41,7 +41,7 @@ echo $this->Html->script('jquery-ui.min');
                 ['options' => array('developer' => 'developer', 'manager' => 'manager', 'supervisor' => 'supervisor', 'client' => 'client')]);
             }
 
-            echo $this->Form->input('target_hours', array('type' => 'integer', 'value' => $target_hours, 'style' => 'width: 15%;'));
+            echo $this->Form->input('target_hours', array('value' => $target_hours, 'min' => 0, 'style' => 'width: 40%;'));
      
             ?><div style="overflow: auto"><div class="columns medium-6 no-padding"><?php
             
