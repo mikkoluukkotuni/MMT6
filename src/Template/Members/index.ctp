@@ -38,7 +38,7 @@
                 <td><?= h($member->project_role) ?></td><?php
                 // Get the sum of workinghours for a member who has working hours
                 $lastSeen = NULL;              
-                if (!empty($member->workinghours)) {
+                if (($member->project_role == 'developer' || $member->project_role == 'manager') && !empty($member->workinghours)) {
                     $query = $member->workinghours;
                     $hours = array();
                     $sum = 0;
@@ -63,11 +63,11 @@
                     $target = 100;
                 } ?>
                 <td>
-                <?php if ($member->project_role != 'supervisor' && $member->project_role != 'client') {
+                <?php if ($member->project_role == 'developer' || $member->project_role == 'manager') {
                     echo ($sum . ' / ' . $target); 
                 } ?></td>
                 <td><?php 
-                    if ($member->project_role != 'supervisor' && $member->project_role != 'client') { 
+                    if ($member->project_role == 'developer' || $member->project_role == 'manager') { 
                         if ($lastSeen != NULL)
                             echo ($lastSeen->format('d.m.Y')); 
                         else
@@ -93,7 +93,7 @@
             <?php
             $totalTarget = 0;
             foreach ($members as $member):
-            if ($member->target_hours != NULL)
+            if (($member->project_role == 'developer' || $member->project_role == 'manager') && $member->target_hours != NULL)
                 $totalTarget= $totalTarget + $member->target_hours;
             if (($member->project_role == 'developer' || $member->project_role == 'manager') && $member->target_hours == NULL)
                 $totalTarget = $totalTarget + 100;
@@ -105,8 +105,8 @@
                 <td></td>
                 <td colspan="2"><b><?= __('Total') ?></b></td>
                 <td></td>
-                <td><b><?= h($total) ?></b></td>
-                <td><b><?= h($totalTarget) ?></b></td>
+                <td><b><?= h($total . ' / ' . $totalTarget) ?></b></td>
+                <td></td>
                 <td></td>
             </tr> 
             <?php } ?>
