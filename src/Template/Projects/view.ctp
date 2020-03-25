@@ -36,6 +36,10 @@
 			?></tr>
         </tr>
         <tr>
+            <th><?= __('Github connection settings') ?></th>
+            <td><?= $this->Html->link(__('Click here'), ['controller' => 'Git', 'action' => 'index']) ?></td>
+         </tr>
+        <tr>
             <th><?= __('Is Public') ?></th>
             <td><?= $project->is_public ? __('Yes') : __('No'); ?></td>
          </tr>

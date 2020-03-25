@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
+use Cake\Http\Client;
 
 class MetricsController extends AppController
 {
@@ -207,11 +208,30 @@ class MetricsController extends AppController
             'conditions' => ['project_id' => $project_id],
             'contain' => ['Trellolinks'
                 ]])->first();
+
+
+        $gitTable = TableRegistry::get('Git');
+
+        $git = $gitTable->find('all', [
+            'conditions' => ['project_id' => $project_id]
+                ])->first();
+
+        if ($git != null) {
+            $http = new Client();
+
+            // Gets the number of commits in master branch from the last 52 weeks (excluding commits made today)
+            $response = $http->get('https://api.github.com/repos/' . $git->owner . '/' . $git->repository . '/stats/participation');
+            $commits = $response->json['all'];
+            $commitCount = 0;
+            foreach ($commits as $commit) {
+                $commitCount += $commit;
+            }
+        }
         
         $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
         $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
-        $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports','metricNames','trello'));
+        $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports','metricNames','trello','commitCount'));
         $this->set('_serialize', ['metric']);
     }
     
