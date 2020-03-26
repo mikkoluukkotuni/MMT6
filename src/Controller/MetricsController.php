@@ -5,7 +5,7 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
-use Cake\Http\Client;
+use Cake\Network\Http\Client;
 
 class MetricsController extends AppController
 {
