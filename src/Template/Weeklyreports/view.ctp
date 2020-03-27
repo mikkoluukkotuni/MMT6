@@ -67,6 +67,14 @@
             $this->request->session()->delete('current_weeklyhours');
 			
         }
+
+        $creatorQuery = Cake\ORM\TableRegistry::get('Users')->find()
+     			->select(['first_name', 'last_name'])
+				->where(['id =' => $weeklyreport->created_by])
+                ->toArray();
+
+        $created_by = $creatorQuery[0]->first_name ." ". $creatorQuery[0]->last_name;
+    
 	}
 ?>
 
@@ -107,6 +115,10 @@
             <td><?= h($weeklyreport->additional) ?></td>
         </tr>
         <tr>
+            <th><?= __('Created by') ?></th>
+            <td><?= h($created_by) ?></td>
+        </tr>
+        <tr>
             <th><?= __('Created on') ?></th>
             <td><?= h($weeklyreport->created_on->format('d.m.Y')) ?></td>
         </tr>
@@ -143,13 +155,13 @@
                 $m_id = $member->id;
                 $u_id = $member->user_id;
                 $queryForHours = Cake\ORM\TableRegistry::get('Workinghours')->find()
-				->select()
-				->where(['member_id =' => $m_id])
-				->toArray();
+                        ->select()
+                        ->where(['member_id =' => $m_id])
+                        ->toArray();
                 $queryForName = Cake\ORM\TableRegistry::get('Users')->find()
-     				->select(['first_name', 'last_name'])
-				->where(['id =' => $u_id])
-				->toArray();                   
+                        ->select(['first_name', 'last_name'])
+                        ->where(['id =' => $u_id])
+                        ->toArray();                   
                 $sum = 0;
                 if(!empty($queryForHours)) {
                     $hours = array();

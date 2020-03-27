@@ -95,6 +95,7 @@ class WeeklyreportsController extends AppController
             $report = $this->request->data;  
             $report['project_id'] = $project_id;
             $report['created_on'] = Time::now();
+            $report['created_by'] = $this->request->session()->read('Auth.User.id');
             
             //$minWeek = $projectBdate->format('W');
             //$minYear = $projectBdate->format('Y');
