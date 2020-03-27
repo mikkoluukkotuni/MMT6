@@ -147,6 +147,7 @@ class WeeklyreportsController extends AppController
             $weeklyreport['project_id'] = $project_id;
             // updated_on date is automatic
             $weeklyreport['updated_on'] = Time::now();
+            $weeklyreport['updated_by'] = $this->request->session()->read('Auth.User.id');
             
             // check that this week does not already have a weeklyreport.
             // but allow updating withouth changing the week number

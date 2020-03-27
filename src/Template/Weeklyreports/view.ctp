@@ -73,7 +73,20 @@
 				->where(['id =' => $weeklyreport->created_by])
                 ->toArray();
 
-        $created_by = $creatorQuery[0]->first_name ." ". $creatorQuery[0]->last_name;
+        $created_by = "";
+        if ($creatorQuery != null) {
+            $created_by = $creatorQuery[0]->first_name ." ". $creatorQuery[0]->last_name;
+        }
+        
+        $updaterQuery = Cake\ORM\TableRegistry::get('Users')->find()
+                ->select(['first_name', 'last_name'])
+                ->where(['id =' => $weeklyreport->updated_by])
+                ->toArray();
+
+        $updated_by = "";
+        if ($updaterQuery != null) {
+            $updated_by = $updaterQuery[0]->first_name ." ". $updaterQuery[0]->last_name;
+        }   
     
 	}
 ?>
@@ -121,6 +134,10 @@
         <tr>
             <th><?= __('Created on') ?></th>
             <td><?= h($weeklyreport->created_on->format('d.m.Y')) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Updated by') ?></th>
+            <td><?= h($updated_by) ?></td>
         </tr>
         <tr>
             <th><?= __('Updated on') ?></th>

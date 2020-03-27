@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Controller\WeeklyreportsController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
@@ -21,6 +22,7 @@ class WeeklyrisksController extends AppController {
             $risk['date'] = $time;
             if ($this->Weeklyrisks->save($risk)) {
                 $this->Flash->success(__('The risk has been saved.'));
+                (new WeeklyreportsController())->edit($wr_id);
                 return $this->redirect(['controller' => 'weeklyreports', 'action' => 'view', $wr_id]); 
             } else {
                 $this->Flash->error(__('The risk could not be saved. Please, try again.'));

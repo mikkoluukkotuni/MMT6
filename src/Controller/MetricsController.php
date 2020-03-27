@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Controller\WeeklyreportsController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
@@ -312,6 +313,8 @@ class MetricsController extends AppController
                 $metric['date'] = $time;
                 if ($this->Metrics->save($metric)) {
                     $this->Flash->success(__('The metric has been saved.'));
+                    (new WeeklyreportsController())->edit($wr_id);
+
                     // takes the user to the weeklyreport's page
                     return $this->redirect(['controller' => 'weeklyreports', 'action' => 'view', $wr_id]);                    
                     // place the user back where they presed the edit button
