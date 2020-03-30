@@ -258,8 +258,10 @@ class MetricsController extends AppController
             // data from the form
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
             
-            $errTooHigh = False;
-            $errTooSmall = False;
+            $errPhaseTooHigh = False;
+            $errPhaseTooSmall = False;
+            $errTestCaseTooHigh = False;
+            $errTestCaseTooSmall = False;
             
             // phase, totalPhases, passedTestCases, totalTestCases
             if ($metric_type == 1 || $metric_type == 2 || $metric_type == 8 || $metric_type == 9) { 
@@ -275,26 +277,26 @@ class MetricsController extends AppController
                         // total phases must be greater than phases
                         if(($metric['metrictype_id'] == 1) && ($item['metrictype_id'] == 2)) {
                             if($metric['value'] > $item['value']) {                           
-                                $errTooHigh = True;
+                                $errPhaseTooHigh = True;
                                 break;
                             }
                         }
                         if(($metric['metrictype_id'] == 2) && ($item['metrictype_id'] == 1)) {
                             if($metric['value'] < $item['value']) {                           
-                                $errTooSmall = True;
+                                $errPhaseTooSmall = True;
                                 break;
                             }
                         }
                         // total test cases must be greater than passed test cases
                         if (($metric['metrictype_id'] == 8) && ($item['metrictype_id'] == 9)) {
                             if($metric['value'] > $item['value']) {
-                                $errTooHigh = True;
+                                $errTestCaseTooHigh = True;
                                 break;
                             }
                         }
                         if(($metric['metrictype_id'] == 9) && ($item['metrictype_id'] == 8)) {
                             if($metric['value'] < $item['value']) {                           
-                                $errTooSmall = True;
+                                $errTestCaseTooSmall = True;
                                 break;
                             }
                         }
@@ -305,11 +307,14 @@ class MetricsController extends AppController
             // it is made sure that the metric stays in the same project
             $metric['project_id'] = $project_id;
            
-            if ($errTooHigh) {
-                $this->Flash->error(__('The number must be smaller. Please, try again.'));
-            }
-            elseif ($errTooSmall) {
-                $this->Flash->error(__('The number must be higher. Please, try again.'));
+            if ($errPhaseTooHigh) {
+                $this->Flash->error(__("Current phase can't be higher than total number of planned phases. Please, try again."));
+            } elseif ($errPhaseTooSmall) {
+                $this->Flash->error(__("Total number of planned phases can't be smaller than current phase. Please, try again."));
+            } elseif ($errTestCaseTooHigh) {
+                $this->Flash->error(__("Passed test cases can't be highes than total test cases. Please, try again."));
+            } elseif ($errTestCaseTooSmall) {
+                $this->Flash->error(__("Total test cases can't be smaller than passed test cases. Please, try again."));
             }
             // if no errors found
             else {
