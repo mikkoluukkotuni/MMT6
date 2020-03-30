@@ -1,7 +1,7 @@
 
 
 <div class="metrics form large-8 medium-16 columns content float: left">
-    <h3><?= __('Edit Metric') ?></h3>
+    <h3><?= __('Edit Metric: ' . $metric['description']) ?></h3>
     <button id="navbutton">
         <?= $this->Form->postLink(
                 __('Delete Metric'),

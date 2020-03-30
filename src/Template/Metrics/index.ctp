@@ -7,7 +7,7 @@
             
             /* Req33: Only administrator can add or change/delete metrics.
              * Updated view.ctp and index.ctp */   
-            if($admin){
+            if ($admin){
         ?>
             <button id="managing_button"><?= $this->Html->link(__('New Metric (admin)'), ['action' => 'addadmin']) ?></button>
         <?php

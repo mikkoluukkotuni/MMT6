@@ -180,22 +180,22 @@ class MetricsController extends AppController
 				}
             }
             else {
-                if($dataok){
+                if ($dataok) {
                     $this->request->session()->write('current_metrics', $metrics);
                     // based on the last form data we either move back or forward in the form
-                    if($this->request->data['submit'] == "next"){
+                    if ($this->request->data['submit'] == "next") {
                         return $this->redirect(
                             ['controller' => 'Risks', 'action' => 'addweekly']
                         );
                     }
-                    else{
+                    else {
                         return $this->redirect(
                             ['controller' => 'Weeklyreports', 'action' => 'add']
                         );
                     }
 
                 }
-                else{
+                else {
                     $this->Flash->success(__('Metrics failed validation'));
                 }
             }
@@ -240,6 +240,8 @@ class MetricsController extends AppController
     
     public function edit($id = null)
     {   
+        $metricNames = $this->getMetricNames();
+        
         // the metric can only be edited if its from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $metric = $this->Metrics->get($id, [
@@ -249,6 +251,8 @@ class MetricsController extends AppController
        // metrictype_id and weeklyreport_id for the metric in question
         $metric_type = $metric->metrictype_id;
         $wr_id = $metric->weeklyreport_id;
+        $metric['description'] = $metricNames[$metric_type];
+        // var_dump($metric_description);
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             // data from the form
@@ -258,7 +262,7 @@ class MetricsController extends AppController
             $errTooSmall = False;
             
             // phase, totalPhases, passedTestCases, totalTestCases
-            if($metric_type == 1 || $metric_type == 2 || $metric_type == 8 || $metric_type == 9) { 
+            if ($metric_type == 1 || $metric_type == 2 || $metric_type == 8 || $metric_type == 9) { 
                 $query = TableRegistry::get('Metrics')
                         ->find()
                         ->select(['metrictype_id', 'value']) 
