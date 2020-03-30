@@ -243,13 +243,7 @@ $cakeDescription = 'MMT';
  					<li id="weeklyreportsBtn" class="navbutton"><?= $this->Html->link(__('Reports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
  					<li id="workinghoursBtn" class="navbutton"><?= $this->Html->link(__('Log Time'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
  					<li id="risksBtn" class="navbutton"><?= $this->Html->link(__('Risks'), ['controller' => 'Risks', 'action' => 'index']) ?></li>
-				<?php } // end if not a member
-				
-				// only manager, supervisor and admin can see Slack and Trello links
-				if( in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
-					<li id="slackBtn" class="navbutton"><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></li>
- 					<li id="trelloBtn" class="navbutton"><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></li>
-				<?php endif; ?> <!-- end if manager/supervisor/admin -->
+				<?php } // end if not a member ?>
 
 					<li id="chartsBtn" class="navbutton"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
 				</ul>

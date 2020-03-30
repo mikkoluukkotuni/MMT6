@@ -50,7 +50,7 @@
                 echo $this->Form->input('reqRejected', 
                     array('value' => $current_metrics[5]['value'], 'label' => $metricNames[6],'type' => 'number', 'min' => 0, 'required' => true));
 
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of commits of all branches on your GitHub etc', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of commits in master branch on your GitHub etc', 'class' => 'infoicon']);
 
                 if ($commitCount != null) {
                     echo $this->Form->input('commits', 

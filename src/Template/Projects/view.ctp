@@ -36,12 +36,23 @@
 			?></tr>
         </tr>
         <tr>
-            <th><?= __('Github connection settings') ?></th>
-            <td><?= $this->Html->link(__('Click here'), ['controller' => 'Git', 'action' => 'index']) ?></td>
-         </tr>
-        <tr>
             <th><?= __('Is Public') ?></th>
             <td><?= $project->is_public ? __('Yes') : __('No'); ?></td>
          </tr>
     </table>
+    <!-- only manager, supervisor and admin can see Slack and Trello links -->
+	<?php if (in_array($this->request->session()->read('selected_project_role'),['manager','admin','supervisor'])): ?>
+        <h4><?= h("Project's connection settings:") ?></h3>
+        <table class="vertical-table">
+            <tr>
+                <th><?= $this->Html->link(__('Slack'), ['controller' => 'Slack', 'action' => 'index']) ?></th>
+            </tr>
+            <tr>
+                <th><?= $this->Html->link(__('Trello'), ['controller' => 'Trello', 'action' => 'index']) ?></th>
+            </tr>
+            <tr>
+                <th><?= $this->Html->link(__('GitHub'), ['controller' => 'Git', 'action' => 'index']) ?></th>
+            </tr>
+        </table>
+    <?php endif; ?> <!-- end if manager/supervisor/admin -->
 </div>

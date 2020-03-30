@@ -97,7 +97,7 @@ $(document).ready(function(){
             
             $('#trello-requirements').append(trelloReqData);
             
-            var messageText = 'You project has a valid trello connection. If you want, you can get the requirement numbers from trello lists.';
+            var messageText = 'You project has a valid Trello connection. If you want, you can get the requirement numbers from Trello lists.';
             
             var message = $('<div class="requirement-message">' + messageText + '</div>');
             
