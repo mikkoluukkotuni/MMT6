@@ -102,9 +102,9 @@ echo $this->Html->script('jquery-ui.min');
     $( "#autocomplete" ).autocomplete({
       source: function( request, response ) {
               var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-              response( $.grep( emails, function( item ){
+              response(($.grep( emails, function( item ){
                   return matcher.test( item );
-              }) );
+              }) ).slice(0, 10));
           }
     });
 </script>

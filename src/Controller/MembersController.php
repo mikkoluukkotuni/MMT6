@@ -150,7 +150,7 @@ class MembersController extends AppController
                 $this->Flash->error(__('The member is already part of the project.'));
             }
         }          
-        $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
+        $users = $this->Members->Users->find('list', ['limit' => 1000, 'conditions'=>array('Users.role !=' => 'inactive')]);
         $this->set(compact('member', 'users', 'projects'));
         $this->set('_serialize', ['member']);
     }

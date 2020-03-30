@@ -21,9 +21,9 @@ echo $this->Html->script('jquery-ui.min');
             ->toArray(); 
             
         if ($queryName != null) { ?>
-        <?= $rooli = ""; if($queryName[0]['role'] == 'inactive'){$rooli = "(inactive)";}?>
+        <?= $role = ""; if($queryName[0]['role'] == 'inactive'){$role = "(inactive)";}?>
             <h3><?= __('Edit member: ') . $queryName[0]['first_name'] . " " . $queryName[0]['last_name']
-            . " " . $rooli ?></h3>    
+            . " " . $role ?></h3>    
     <?php } ?>
     <button id="navbutton">
         <?= $this->Form->postLink(
