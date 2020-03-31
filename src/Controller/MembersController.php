@@ -58,7 +58,8 @@ class MembersController extends AppController
             foreach ($predictiveMemberData as $data) {
                 $predictiveMemberChart->series[] = array(
                     'name' => $data['name'],
-                    'data' => $data['hours']
+                    'data' => $data['hours'],
+                    'marker' => $data['radius']
                 );
             }
             
@@ -94,7 +95,7 @@ class MembersController extends AppController
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Working hours';
         
-        $myChart->colors = array('#fc0303', '#036ffc');
+        $myChart->colors = array('#fc0303', '#036ffc', '#fc08f8');
     	
 	    // tooltips etc
     	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
