@@ -51,17 +51,20 @@ class MembersController extends AppController
         $predictiveMemberChart = $this->predictiveMemberChart();
         $predictiveMemberData = $this->Members->predictiveMemberData($project_id, $member['id'], $projectStartDate, $endingDate);
 
-        // Define axis data for chart
-        $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
-        foreach ($predictiveMemberData as $data) {
-            $predictiveMemberChart->series[] = array(
-                'name' => $data['name'],
-                'data' => $data['hours']
-            );
+        // Set chart only if member has working hours
+        if (count($predictiveMemberData) > 0) {
+            // Define axis data for chart
+            $predictiveMemberChart->xAxis->categories = $predictiveMemberData[0]['weekList'];    
+            foreach ($predictiveMemberData as $data) {
+                $predictiveMemberChart->series[] = array(
+                    'name' => $data['name'],
+                    'data' => $data['hours']
+                );
+            }
+            
+            // This sets the chart visible in the actual page
+            $this->set(compact('predictiveMemberChart'));
         }
-
-        // This sets the chart visible in the actual page
-        $this->set(compact('predictiveMemberChart'));
     }
 
     // Predictive working hours chart for individual member

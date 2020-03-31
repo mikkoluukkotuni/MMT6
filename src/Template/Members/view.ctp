@@ -1,10 +1,12 @@
 
 <div class="members view large-8 medium-16 columns content float: left">
-    <?= $rooli = ""; if($member->user->role == 'inactive'){ $rooli = "(inactive)";}?>
+    <?= $role = ""; if($member->user->role == 'inactive'){ $role = "(inactive)";}?>
     <h3>
-        <?= h($member->user->first_name . " ". $member->user->last_name . " ". $rooli) ?>
+        <?= h($member->user->first_name . " ". $member->user->last_name . " ". $role) ?>
     </h3>
     <?php
+        // Initialize variable for total working hours
+        $sum = 0;
         // Edit link not visible to devs or managers
         $admin = $this->request->session()->read('is_admin');
         $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
@@ -173,7 +175,8 @@
         <?php endif; ?>          
     </div>  
 
-    <?php if (($member->project_role == 'developer') || ($member->project_role == 'manager')) { ?>
+    <!-- Only display chart if member is developer or manager and if member has working hours -->
+    <?php if ((($member->project_role == 'developer') || ($member->project_role == 'manager')) && $sum > 0) { ?>
     <div class="chart">
         <div id="predictiveMemberChartWrapper">
 		    <?php echo $this->Highcharts->render($predictiveMemberChart, 'predictiveMemberChart'); ?>
