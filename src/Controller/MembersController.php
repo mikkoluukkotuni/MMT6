@@ -59,7 +59,7 @@ class MembersController extends AppController
                 $predictiveMemberChart->series[] = array(
                     'name' => $data['name'],
                     'data' => $data['hours'],
-                    'marker' => $data['radius']
+                    'marker' => $data['marker']
                 );
             }
             

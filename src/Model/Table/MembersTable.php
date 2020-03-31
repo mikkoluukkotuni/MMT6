@@ -225,16 +225,16 @@ class MembersTable extends Table
             $data[0]['weekList'] = $weekList;
             $data[0]['hours'] = $hourSumPerWeek;
             $data[0]['name'] = 'Actual hours';
-            $data[0]['radius'] = array('radius' => 4);
+            $data[0]['marker'] = array('radius' => 4);
 
             // Store predicted working hour data at index 1
             $data[1]['hours'] = $predictedHours;
             $data[1]['name'] = 'Predicted hours';
-            $data[1]['radius'] = array('radius' => 4);
+            $data[1]['marker'] = array('radius' => 4);
 
             $data[2]['hours'] = $targerHoursArray;
             $data[2]['name'] = 'Target';
-            $data[2]['radius'] = array('radius' => 6);
+            $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
         }
 
         return $data;
