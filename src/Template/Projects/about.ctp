@@ -58,7 +58,7 @@
         <h5>Version 6.1 (4.4.2020)</h5>
         <ul>
             <li>GitHub connection that can fetch number of commits for weekly report</li>
-            <li>Information of the weekly report creator and updater</li>
+            <li>Information of the weekly report creator and updater displayed in weekly report</li>
             <li>Target hour marker for the member's personal working hours chart</li>
         </ul>
         <br>
