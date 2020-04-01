@@ -55,7 +55,16 @@
     </p>
     <h4>Release notes</h4>
     <p>
-        <h5>Version 6.0 (March 2020)</h5>
+        <h5>Version 6.1 (4.4.2020)</h5>
+        <ul>
+            <li>GitHub connection that can fetch number of commits for weekly report</li>
+            <li>Information of the weekly report creator and updater</li>
+            <li>Target hour marker for the member's personal working hours chart</li>
+        </ul>
+        <br>
+    </p>
+    <p>
+        <h5>Version 6.0 (16.3.2020)</h5>
         <ul>
             <li>Increase of the mobile usability</li>
             <li>Last activity of a project  member shown</li>
@@ -75,7 +84,7 @@
             HTTPS protocol, bug fixing and other smaller features.
 	</p>
         <p>
-            Version 4.0 were implemented by Murat Pojon as a TIETS16 programming project 
+            Version 4.0 was implemented by Murat Pojon as a TIETS16 programming project 
             during the spring term of 2017. 
         </p>
         <p>
