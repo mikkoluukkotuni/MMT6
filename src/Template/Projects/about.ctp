@@ -60,6 +60,7 @@
             <li>GitHub connection that can fetch number of commits for weekly report</li>
             <li>Information of the weekly report creator and updater displayed in weekly report</li>
             <li>Target hour marker for the member's personal working hours chart</li>
+            <li>Usability updates: display metric name when updating, better error messages for weekly report forms, group project's connection settings into project's info page</li>
         </ul>
         <br>
     </p>
