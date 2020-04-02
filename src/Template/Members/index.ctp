@@ -112,11 +112,14 @@
             <?php } ?>
         </tbody>
     </table>
+    <!-- Only display chart if project has working hours -->
+    <?php if ($total > 0) { ?>
     <div class="chart">
         <div id="predictiveProjectChartWrapper">
-		    <?php echo $this->Highcharts->render($predictiveProjectChart, 'predictiveProjectChart'); ?>
-	    </div>
+            <?php echo $this->Highcharts->render($predictiveProjectChart, 'predictiveProjectChart'); ?>
+        </div>
     </div> 
+    <?php } ?>
     <div class="paginator">
         <ul class="pagination">
             <?= $this->Paginator->prev('< ' . __('previous')) ?>
