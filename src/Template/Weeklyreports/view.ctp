@@ -20,8 +20,8 @@
 	}
         // let's also remove data about unread weeklyreports
         $supervisor = ($this->request->session()->read('selected_project_role') == 'supervisor') ? 1 : 0;
-	$super = $this->request->session()->read('is_supervisor');
-	//if ( $this->request->session()->read('selected_project_role') == 'supervisor' ) {
+        $super = $this->request->session()->read('is_supervisor');
+        //if ( $this->request->session()->read('selected_project_role') == 'supervisor' ) {
         if ($super || $supervisor) {
             $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
 		->select()
@@ -67,28 +67,29 @@
             $this->request->session()->delete('current_weeklyhours');
 			
         }
+    }
 
-        $creatorQuery = Cake\ORM\TableRegistry::get('Users')->find()
-     			->select(['first_name', 'last_name'])
-				->where(['id =' => $weeklyreport->created_by])
-                ->toArray();
+    $creatorQuery = Cake\ORM\TableRegistry::get('Users')->find()
+            ->select(['first_name', 'last_name'])
+            ->where(['id =' => $weeklyreport->created_by])
+            ->toArray();
 
-        $created_by = "";
-        if ($creatorQuery != null) {
-            $created_by = $creatorQuery[0]->first_name ." ". $creatorQuery[0]->last_name;
-        }
-        
-        $updaterQuery = Cake\ORM\TableRegistry::get('Users')->find()
-                ->select(['first_name', 'last_name'])
-                ->where(['id =' => $weeklyreport->updated_by])
-                ->toArray();
-
-        $updated_by = "";
-        if ($updaterQuery != null) {
-            $updated_by = $updaterQuery[0]->first_name ." ". $updaterQuery[0]->last_name;
-        }   
+    $created_by = "";
+    if ($creatorQuery != null) {
+        $created_by = $creatorQuery[0]->first_name ." ". $creatorQuery[0]->last_name;
+    }
     
-	}
+    $updaterQuery = Cake\ORM\TableRegistry::get('Users')->find()
+            ->select(['first_name', 'last_name'])
+            ->where(['id =' => $weeklyreport->updated_by])
+            ->toArray();
+
+    $updated_by = "";
+    if ($updaterQuery != null) {
+        $updated_by = $updaterQuery[0]->first_name ." ". $updaterQuery[0]->last_name;
+    }   
+    
+	
 ?>
 
 <div class="weeklyreports view large-8 medium-16 columns content float: left">
