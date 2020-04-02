@@ -124,7 +124,7 @@ class MembersController extends AppController
 	    // tooltips etc
     	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
         return 'Total hours: ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}");
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Line: ' + this.series.name;}");
     	$myChart->plotOptions->area->marker->enabled = false;
     
     	return $myChart;
@@ -162,7 +162,7 @@ class MembersController extends AppController
         // tooltips etc
         $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
         return 'Total hours: ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}");
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Line: ' + this.series.name;}");
         $myChart->plotOptions->area->marker->enabled = false;
     
         return $myChart;
