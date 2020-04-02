@@ -193,6 +193,7 @@ class MembersTable extends Table
                 array_push($predictedHours, $tempSum);
             }
 
+            // To get the correct week position for target hour marker, add nulls to array for other weeks except the target
             $targerHoursArray = array();
             for ($i = 1; $i < sizeof($weekList); $i++) {
                 array_push($targerHoursArray, NULL);
@@ -221,7 +222,7 @@ class MembersTable extends Table
 
 
     public function predictiveProjectData($project_id, $projectStartDate, $endingDate){
-        // Get list of project's members ids
+        // Get list of project's members
         $members = TableRegistry::get('Members');
         $query = $members
                     ->find()
@@ -249,12 +250,6 @@ class MembersTable extends Table
                         ->where(['member_id IN' => $memberlist])
                         ->order('date')
                         ->toArray();
-
-            // $queryTargetHours = $members
-            //             ->find()
-            //             ->select(['target_hours'])
-            //             ->where(['id IN' => $memberlist])
-            //             ->toArray();
     
             foreach($query as $member) {
                 if ($member->project_role == 'developer' || $member->project_role == 'manager') {
@@ -265,27 +260,20 @@ class MembersTable extends Table
                     }
                 }                
             }
-            // } else {
-            //     foreach($memberlist as $member) {
-            //         if ($member['role'] == 'developer' || $member['role'] == 'manager') {
-            //             $targetHours += 100;
-            //         }                    
-            //     }
-            // }
         }
-
-        $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
 
         $data = array();
 
-        $hoursPerWeek = array();
-        $hourSumPerWeek = array();
-        $totalSum = 0;
-        // Create array $weekList of weeknumbers for x-axis
-        $weekList = array();
-        $predictedHours = array();
-
         if(!empty($queryW)) {
+
+            $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+            $hoursPerWeek = array();
+            $hourSumPerWeek = array();
+            $totalSum = 0;
+            // Create array $weekList of weeknumbers for x-axis
+            $weekList = array();
+            $predictedHours = array();
+
             // Count the total sum of member's hours
             foreach($queryW as $result) {
                 $totalSum += $result['duration'];
@@ -335,7 +323,8 @@ class MembersTable extends Table
                 $tempSum += $average;
                 array_push($predictedHours, $tempSum);
             }
-                
+            
+            // To get the correct week position for target hour marker, add nulls to array for other weeks except the target
             $targerHoursArray = array();
             for ($i = 1; $i < sizeof($weekList); $i++) {
                 array_push($targerHoursArray, NULL);
