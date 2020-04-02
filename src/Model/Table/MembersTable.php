@@ -111,20 +111,6 @@ class MembersTable extends Table
     public function predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate){
         // Get list of project's members ids
         $members = TableRegistry::get('Members');
-        // $query = $members
-        //             ->find()
-        //             ->select(['id'])
-        //             ->where(['project_id' => $project_id])
-        //             ->toArray();
-
-        // $memberlist = array();
-        // if (!empty($query)) {
-        //     foreach ($query as $temp){
-        //         $memberlist[] = $temp->id;
-        //     }
-        // }
-        // var_dump($member_id);
-
         $targetHours = $members
                     ->find()
                     ->select(['target_hours'])
@@ -136,7 +122,7 @@ class MembersTable extends Table
         } else {
             $targetHours = $targetHours[0]['target_hours'];
         }
-        var_dump($targetHours);
+
         // Get all hours of the member and store in array in date order
         $workinghours = TableRegistry::get('Workinghours');
         $queryW = $workinghours
@@ -150,14 +136,6 @@ class MembersTable extends Table
         if (!empty($queryW)) {        
 
             $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
-
-            // $queryW = $workinghours
-            //             ->find()
-            //             ->select(['date', 'duration'])
-            //             ->where(['member_id =' => $member_id])
-            //             ->order('date')
-            //             ->toArray();
-
             $hoursPerWeek = array();
             $hourSumPerWeek = array();
             $totalSum = 0;
@@ -239,5 +217,147 @@ class MembersTable extends Table
 
         return $data;
         
+    }
+
+
+    public function predictiveProjectData($project_id, $projectStartDate, $endingDate){
+        // Get list of project's members ids
+        $members = TableRegistry::get('Members');
+        $query = $members
+                    ->find()
+                    ->select(['id', 'project_role', 'target_hours'])
+                    ->where(['project_id' => $project_id])
+                    ->toArray();
+        
+        $memberlist = array();
+        
+        if(!empty($query)) {
+            foreach($query as $temp){
+                $memberlist[] = $temp->id;
+            }
+        }
+
+        $targetHours = 0;
+
+        // Get all hours of the member and store in array in date order
+        // Also get each members target hours
+        $workinghours = TableRegistry::get('Workinghours');
+        if(!empty($memberlist)) {
+            $queryW = $workinghours
+                        ->find()
+                        ->select(['date', 'duration'])
+                        ->where(['member_id IN' => $memberlist])
+                        ->order('date')
+                        ->toArray();
+
+            // $queryTargetHours = $members
+            //             ->find()
+            //             ->select(['target_hours'])
+            //             ->where(['id IN' => $memberlist])
+            //             ->toArray();
+    
+            foreach($query as $member) {
+                if ($member->project_role == 'developer' || $member->project_role == 'manager') {
+                    if ($member->target_hours != NULL) {
+                        $targetHours += $member->target_hours;
+                    } else {
+                        $targetHours += 100;
+                    }
+                }                
+            }
+            // } else {
+            //     foreach($memberlist as $member) {
+            //         if ($member['role'] == 'developer' || $member['role'] == 'manager') {
+            //             $targetHours += 100;
+            //         }                    
+            //     }
+            // }
+        }
+
+        $weekOfFirstHour = date('W', strtotime($queryW[0]['date']));
+
+        $data = array();
+
+        $hoursPerWeek = array();
+        $hourSumPerWeek = array();
+        $totalSum = 0;
+        // Create array $weekList of weeknumbers for x-axis
+        $weekList = array();
+        $predictedHours = array();
+
+        if(!empty($queryW)) {
+            // Count the total sum of member's hours
+            foreach($queryW as $result) {
+                $totalSum += $result['duration'];
+            }     
+            
+            // If project has no estimated completion date then ending date is +20 weeks from project's start date
+            if($endingDate == NULL) {
+                $endingDate = $projectStartDate;
+                $endingDate->modify('+20 weeks');
+            }
+
+            $xLastWeek = date('W', strtotime($endingDate));            
+
+            // Populate array of week numbers to be used as x axis
+            if($weekOfFirstHour > $xLastWeek) {
+                for($i = $weekOfFirstHour; $i <= 52; $i++) {
+                    array_push($weekList, $i);
+                }
+                for($i = 1; $i <= $xLastWeek; $i++) {
+                    array_push($weekList, $i);
+                }
+            } else {
+                for($i = $weekOfFirstHour; $i <= $xLastWeek; $i++) {
+                    array_push($weekList, $i);
+                }
+            }
+
+            // Populate array of cumulative working hour sum for each week
+            $sum = 0;
+            foreach ($weekList as $weekNumber) {
+                $hoursLogged = False;
+                foreach ($queryW as $result) {
+                    if (date('W', strtotime($result['date'])) == $weekNumber) {
+                        $sum += $result['duration'];
+                        $hoursLogged = True;
+                    }
+                }
+                if ($hoursLogged == True || ($hoursLogged == False && $sum == 0)) {
+                    array_push($hourSumPerWeek, $sum);
+                }                
+            }
+
+            // Populate array of cumulative average hour sum for each week
+            $average = $totalSum / sizeof($hourSumPerWeek);            
+            $tempSum = 0;
+            for ($i = 1; $i <= sizeof($weekList); $i++) {
+                $tempSum += $average;
+                array_push($predictedHours, $tempSum);
+            }
+                
+            $targerHoursArray = array();
+            for ($i = 1; $i < sizeof($weekList); $i++) {
+                array_push($targerHoursArray, NULL);
+            }
+            array_push($targerHoursArray, $targetHours);
+
+            // Store actual working hour data at index 0
+            $data[0]['weekList'] = $weekList;
+            $data[0]['hours'] = $hourSumPerWeek;
+            $data[0]['name'] = 'Actual hours';
+            $data[0]['marker'] = array('radius' => 4);
+
+            // Store predicted working hour data at index 1
+            $data[1]['hours'] = $predictedHours;
+            $data[1]['name'] = 'Predicted hours';
+            $data[1]['marker'] = array('radius' => 4);
+
+            $data[2]['hours'] = $targerHoursArray;
+            $data[2]['name'] = 'Target';
+            $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        }
+
+        return $data;        
     }
 }
