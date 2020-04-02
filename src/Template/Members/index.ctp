@@ -112,6 +112,11 @@
             <?php } ?>
         </tbody>
     </table>
+    <div class="chart">
+        <div id="predictiveProjectChartWrapper">
+		    <?php echo $this->Highcharts->render($predictiveProjectChart, 'predictiveProjectChart'); ?>
+	    </div>
+    </div> 
     <div class="paginator">
         <ul class="pagination">
             <?= $this->Paginator->prev('< ' . __('previous')) ?>
