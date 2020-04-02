@@ -58,9 +58,9 @@
         <h5>Version 6.1 (4.4.2020)</h5>
         <ul>
             <li>GitHub connection that can fetch number of commits for weekly report</li>
+            <li>Predictive chart for project's total hours</li>
             <li>Information of the weekly report creator and updater displayed in weekly report</li>
-            <li>Target hour marker for the member's personal working hours chart</li>
-            <li>Usability updates: display metric name when updating, better error messages for weekly report forms, group project's connection settings into project's info page</li>
+            <li>Usability updates: target hour marker for the member's personal working hours chart, display metric name when updating, better error messages for weekly report forms, group project's connection settings into project's info page</li>
         </ul>
         <br>
     </p>
