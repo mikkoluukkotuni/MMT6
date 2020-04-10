@@ -12,12 +12,14 @@ class ChartsController extends AppController
     public $helpers = ['Highcharts.Highcharts'];
     public $uses = array();
     
-    public function initialize() {
+    public function initialize() 
+    {
         parent::initialize();
         $this->loadComponent('Highcharts.Highcharts');
     }
     
-    public function index() {
+    public function index() 
+    {
         // When the chart limits are updated this is where they are saved
         if ($this->request->is('post')) {
             $data = $this->request->data;
@@ -26,30 +28,35 @@ class ChartsController extends AppController
             if (($data['yearmin'] < $data['yearmax']) && (53 - $data['weekmin'] + $data['weekmax'] > 52)) {
                 $this->Flash->error(__('Can\'t display more than 52 weeks'));
             } else {
-                $chart_limits['weekmin'] = $data['weekmin'];
-                $chart_limits['weekmax'] = $data['weekmax'];
-                $chart_limits['yearmin'] = $data['yearmin'];
-                $chart_limits['yearmax'] = $data['yearmax'];
-                $this->request->session()->write('chart_limits', $chart_limits);
+                $chartLimits['weekmin'] = $data['weekmin'];
+                $chartLimits['weekmax'] = $data['weekmax'];
+                $chartLimits['yearmin'] = $data['yearmin'];
+                $chartLimits['yearmax'] = $data['yearmax'];
+                $this->request->session()->write('chartLimits', $chartLimits);
+                
                 // refreshin the page to apply the new limits
                 $page = $_SERVER['PHP_SELF'];
             }
 
         }
+        
         // Set the stock limits for the chart limits
-        // They are only set once, if the "chart_limits" cookie is not in the session
-        if(!$this->request->session()->check('chart_limits')){
+        // They are only set once, if the "chartLimits" cookie is not in the session
+        if (!$this->request->session()->check('chartLimits')) {
             $time = Time::now();
-            // show last year, current year and next year
-            $chart_limits['weekmin'] = 1;
-            $chart_limits['weekmax'] = date('W', strtotime($time));
-            $chart_limits['yearmin'] = $time->year;
-            $chart_limits['yearmax'] = $time->year;
             
-            $this->request->session()->write('chart_limits', $chart_limits);
+            // show last year, current year and next year
+            $chartLimits['weekmin'] = 1;
+            $chartLimits['weekmax'] = date('W', strtotime($time));
+            $chartLimits['yearmin'] = $time->year;
+            $chartLimits['yearmax'] = $time->year;
+            
+            $this->request->session()->write('chartLimits', $chartLimits);
         }
+        
         // Loadin the limits to a variable
-        $chart_limits = $this->request->session()->read('chart_limits');
+        $chartLimits = $this->request->session()->read('chartLimits');
+        
         // The ID of the currently selected project
         $project_id = $this->request->session()->read('selected_project')['id'];
         
@@ -71,20 +78,33 @@ class ChartsController extends AppController
         
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
-        $weeklyreports = $this->Charts->reports($project_id, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
-        $allTheWeeks = $this->Charts->weekList($chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $weeklyreports = $this->Charts->reports($project_id, $chartLimits['weekmin'], $chartLimits['weekmax'], 
+            $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
+        $allTheWeeks = $this->Charts->weekList($chartLimits['weekmin'], $chartLimits['weekmax'], 
+            $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
         $phaseData = $this->Charts->phaseAreaData($weeklyreports['id']);
         $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
+        
         // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);
+        
         // Line chart displaying the amount of hours done by the team per week 
-        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $hoursperweekData = $this->Charts->hoursPerWeekData($project_id, $allTheWeeks, $chartLimits['weekmin'], 
+            $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
+        
         // Line chart displaying the cumulative amount of hours done in the project
-        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks, $chartLimits['weekmin'], 
+            $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
-        $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks, $chartLimits['weekmin'], 
+            $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -123,6 +143,7 @@ class ChartsController extends AppController
             'name' => 'commits',
             'data' => $commitData['commits']
         );
+        
         // testcaseChart
         $testcaseChart->xAxis->categories = $weeklyreports['weeks'];
         $testcaseChart->series[] = array(
@@ -133,6 +154,7 @@ class ChartsController extends AppController
             'name' => 'Passed test cases',
             'data' => $testcaseData['testsPassed']
         );
+        
         // hoursChart
         $hoursChart->series[] = array(
             'name' => 'Management',
@@ -181,7 +203,7 @@ class ChartsController extends AppController
         // risksProbChart
         $risksProbChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){            
+        foreach ($riskData as $risk) {            
             $risksProbChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['probability']
@@ -192,7 +214,7 @@ class ChartsController extends AppController
         // risksImpactChart
         $risksImpactChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){            
+        foreach ($riskData as $risk) {            
             $risksImpactChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['impact']
@@ -203,7 +225,7 @@ class ChartsController extends AppController
         // risksCombinedChart
         $risksCombinedChart->xAxis->categories = $weeklyreports['weeks'];
         
-        foreach ($riskData as $risk){            
+        foreach ($riskData as $risk) {            
             $risksCombinedChart->series[] = array(
                 'name' => $risk['name'],
                 'data' => $risk['combined']
@@ -225,18 +247,20 @@ class ChartsController extends AppController
 
         // Total hours of each public project
         $hoursComparisonChart->xAxis->categories = $allTheWeeks;    
-        foreach($hoursComparisonData as $project_data) {
+        foreach ($hoursComparisonData as $projectData) {
             $hoursComparisonChart->series[] = array(
-                'name' => $project_data['name'],
-                'data' => $project_data['data']
+                'name' => $projectData['name'],
+                'data' => $projectData['data']
             );
         }
 
         // This sets the charts visible in the actual charts page "Charts/index.php"
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 
-            'risksImpactChart', 'risksCombinedChart', 'derivedChart', 'hoursComparisonChart'));
-
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 
+            'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 
+            'derivedChart', 'hoursComparisonChart')
+        );
     }
+    
     // All the following functions are similar
     // They create a custom chart object and return it
     // Unfortunately the functions have to be in the controller, 
@@ -253,7 +277,8 @@ class ChartsController extends AppController
      * Requirement ID: 7 (Andy)
      */
     
-    public function phaseChart() {
+    public function phaseChart() 
+    {
         $myChart = $this->Highcharts->createChart();
         $myChart->chart->renderTo = 'phasewrapper';
         $myChart->chart->type = 'area';
@@ -274,27 +299,32 @@ class ChartsController extends AppController
          $myChart->chart->spacingBottom = 15;
          $myChart->chart->spacingLeft = 0;
          */
-        // $myChart->chart->alignTicks = FALSE;
+        
+         // $myChart->chart->alignTicks = FALSE;
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+        
         // legend below the charts
         $myChart->legend->itemStyle = array('color' => '#222');
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+        
         // labels to describe the content of axes
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Total number of phases';
         
         // tooltips for the plotted graphs
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'+ Highcharts.numberFormat(this.y, 0) 
+            +'</b><br/>Week number '+ this.x;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;;
         
         return $myChart;
     }
     
-    public function reqChart() {
+    public function reqChart() 
+    {
         $myChart = $this->Highcharts->createChart();
         $myChart->chart->renderTo = 'reqwrapper';
         $myChart->chart->type = 'column';
@@ -320,19 +350,22 @@ class ChartsController extends AppController
         $myChart->legend->itemStyle = array('color' => '#222');
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+        
         // labels to describe the content of axes
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Total number of requirements';
         
         // tooltips etc
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-            return this.y;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.y;}"
+        );
         $myChart->plotOptions->column->pointPadding = 0.2;
         $myChart->plotOptions->column->borderWidth = 0;
         return $myChart;
     }
     
-    public function reqPercentChart() {
+    public function reqPercentChart() 
+    {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = "reqpercentwrapper";
     	$myChart->chart->type = "column";
@@ -350,23 +383,26 @@ class ChartsController extends AppController
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
     	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
-    	// legend below the charts
+        
+        // legend below the charts
     	$myChart->legend->itemStyle = array('color' => '#222');
     	$myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
     	$myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
-    	// labels to describe the content of axes
+        
+        // labels to describe the content of axes
     	$myChart->xAxis->title->text = 'Week number';
     	$myChart->yAxis->title->text = '%';
     	
     	// tooltips
     	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
-    			"function() {
-            return ''+ this.series.name +': '+ this.y +' ('+ Math.round(this.percentage) +'%)';}");
+            "function() {return ''+ this.series.name +': '+ this.y +' ('+ Math.round(this.percentage) +'%)';}"
+        );
     
     	return $myChart;
     }
     
-    public function commitChart(){
+    public function commitChart()
+    {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'commitwrapper';
     	$myChart->chart->type = 'column';
@@ -383,12 +419,15 @@ class ChartsController extends AppController
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
     	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
-    	// this chart doesn't need a legend
+        
+        // this chart doesn't need a legend
     	$myChart->legend->enabled = false;
-		// tooltips
-    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' produced <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        
+        // tooltips
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' produced <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
     	
     	// labels to describe the content of axes
     	$myChart->xAxis->title->text = 'Week number';
@@ -396,7 +435,9 @@ class ChartsController extends AppController
    
     	return $myChart;
     }
-    public function testcaseChart() {
+
+    public function testcaseChart() 
+    {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'testcasewrapper';
     	$myChart->chart->type = 'area';
@@ -412,16 +453,19 @@ class ChartsController extends AppController
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
     	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
-    	// legend below the charts
+        
+        // legend below the charts
     	$myChart->legend->itemStyle = array('color' => '#222');
     	$myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
     	$myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
     	 
     	// tooltips etc
-    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
-    	$myChart->plotOptions->area->marker->enabled = false;
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'+
+            Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
+        $myChart->plotOptions->area->marker->enabled = false;
+        
     	// labels to describe the content of axes
     	$myChart->xAxis->title->text = 'Week number';
     	$myChart->yAxis->title->text = 'Total number of test cases';
@@ -430,7 +474,8 @@ class ChartsController extends AppController
     }
     
     // Working hours categorized by type
-    public function hoursChart(){
+    public function hoursChart()
+    {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'hourswrapper';
     	$myChart->chart->type = 'column';
@@ -460,9 +505,10 @@ class ChartsController extends AppController
     	);
     	$myChart->yAxis->title->text = 'Working hours';
 		// tooltips etc
-    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return 'Total hours: ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Work type: '+ this.x;}");
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return 'Total hours: ' +' <b>' +Highcharts.numberFormat(this.y, 0) 
+            +'</b><br/>Work type: '+ this.x;}"
+        );
     	$myChart->plotOptions->column->dataLabels->enabled = true;
     	$myChart->plotOptions->column->dataLabels->style->textShadow = false;
     	$myChart->plotOptions->column->dataLabels->style->color = '#444';
@@ -471,7 +517,8 @@ class ChartsController extends AppController
     	return $myChart;
     }
     
-    public function hoursPerWeekChart(){
+    public function hoursPerWeekChart()
+    {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'hoursperweekwrapper';
     	$myChart->chart->type = 'line';
@@ -492,21 +539,22 @@ class ChartsController extends AppController
     	// this chart doesn't need a legend
     	$myChart->legend->enabled = false;
     	
-        // labels of axes
-    	
+        // labels of axis    	
         $myChart->xAxis->title->text = 'Week number';
-	$myChart->yAxis->title->text = 'Working hours';
+	    $myChart->yAxis->title->text = 'Working hours';
     	
-	// tooltips etc
-    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return 'Total hours: ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number: '+ this.x;}");
+	    // tooltips etc
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("
+            function() {return 'Total hours: ' +' <b>'+ Highcharts.numberFormat(this.y, 0) 
+            +'</b><br/>Week number: '+ this.x;}"
+        );
     	$myChart->plotOptions->area->marker->enabled = false;
     
     	return $myChart;
     }
     
-    public function totalhourChart(){
+    public function totalhourChart()
+    {
 		$myChart = $this->Highcharts->createChart();
 		$myChart->chart->renderTo = 'totalhourwrapper';
 		$myChart->chart->type = 'line';
@@ -531,15 +579,17 @@ class ChartsController extends AppController
 		$myChart->xAxis->title->text = 'Week number';
 		$myChart->yAxis->title->text = 'Total amount of hours';
 		
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return 'Total hours at this point ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return 'Total hours at this point ' +' <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;
         return $myChart;
     }
     
     
-    public function risksProbChart() {
+    public function risksProbChart() 
+    {
         $myChart = $this->Highcharts->createChart();
         $myChart->chart->renderTo = 'risksprobrapper';
         $myChart->chart->type = 'column';
@@ -553,24 +603,28 @@ class ChartsController extends AppController
       
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+        
         // legend below the charts
         $myChart->legend->itemStyle = array('color' => '#222');
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+        
         // labels to describe the content of axes
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Probability';
         
         // tooltips for the plotted graphs
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;
         
         return $myChart;
     }
     
-    public function risksImpactChart() {
+    public function risksImpactChart() 
+    {
         $myChart = $this->Highcharts->createChart();
         $myChart->chart->renderTo = 'risksimpactwrapper';
         $myChart->chart->type = 'column';
@@ -584,24 +638,28 @@ class ChartsController extends AppController
       
         $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+        
         // legend below the charts
         $myChart->legend->itemStyle = array('color' => '#222');
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+        
         // labels to describe the content of axes
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Impact';
         
         // tooltips for the plotted graphs
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;
         
         return $myChart;
     }
     
-    public function risksCombinedChart() {
+    public function risksCombinedChart() 
+    {
         $myChart = $this->Highcharts->createChart();
         $myChart->chart->renderTo = 'riskscombinedwrapper';
         $myChart->chart->type = 'column';
@@ -624,9 +682,10 @@ class ChartsController extends AppController
         $myChart->yAxis->title->text = 'Value';
         
         // tooltips for the plotted graphs
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;
         
         return $myChart;
@@ -634,9 +693,9 @@ class ChartsController extends AppController
     
     
 
-    public function derivedChart(){
-        
-   	$myChart = $this->Highcharts->createChart();
+    public function derivedChart()
+    {        
+   	    $myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'derivedwrapper';
     	$myChart->chart->type = 'area';
     
@@ -651,24 +710,28 @@ class ChartsController extends AppController
     	// $myChart->chart->alignTicks = FALSE;
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
     	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
-    	// legend below the charts
+        
+        // legend below the charts
     	$myChart->legend->itemStyle = array('color' => '#222');
     	$myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
     	$myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
     	 
     	// tooltips etc
-    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return this.series.name +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.name +' <b>'
+            + Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}"
+        );
     	$myChart->plotOptions->area->marker->enabled = false;
-    	// labels to describe the content of axes
+        
+        // labels to describe the content of axes
     	$myChart->xAxis->title->text = 'Week number';
     	$myChart->yAxis->title->text = 'Total number of test cases';
     
     	return $myChart;
     }    
 
-    public function hoursComparisonChart(){
+    public function hoursComparisonChart()
+    {
 		$myChart = $this->Highcharts->createChart();
 		$myChart->chart->renderTo = 'hourscomparisonwrapper';
 		$myChart->chart->type = 'line';
@@ -693,9 +756,10 @@ class ChartsController extends AppController
 		$myChart->xAxis->title->text = 'Week number';
 		$myChart->yAxis->title->text = 'Total amount of hours';
 		
-        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-        return 'Total hours at this point ' +' <b>'+
-        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return 'Total hours at this point ' +' <b>'+ Highcharts.numberFormat(this.y, 0) 
+            +'</b><br/>Week number '+ this.x +'<br/>Project: ' + this.series.name;}"
+        );
         $myChart->plotOptions->area->marker->enabled = false;
         return $myChart;
     }
