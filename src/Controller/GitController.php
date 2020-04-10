@@ -77,40 +77,4 @@ class GitController extends AppController
     //     return $this->redirect(['action' => 'index']);
         
     // }
-        
-    
-    public function isAuthorized($user)
-    {
-        // Admin can access every action
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
-        
-        $project_role = $this->request->session()->read('selected_project_role');        
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        
-        //Only admin and manager can access trello pages
-        $allowed = ($project_role == 'manager' || $project_role == 'admin');
-        
-        if ($allowed) {
-            //One can only access trello pages of current project
-            if(in_array ($this->request->action, ['links','edit','delete'])){
-                
-                //For CakePhP 3.4+
-                //$trelloId = $this->request->getParam('pass')[0];              
-                
-                //For older CakePHP
-                $trelloId = $this->request->param('pass')[0];                
-                $checkItem = $this->Git->find()->where(['id' => $trelloId])->first();
-                
-                if ($checkItem != null) {
-                    return $checkItem->project_id === $project_id;
-                } else {
-                    return false;
-                }                
-            } else {                
-                return true;                
-            }            
-        }
-    }
 }
