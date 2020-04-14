@@ -68,7 +68,8 @@ class ProjectsTable extends Table
     }
     
     // return a list of all the public projects
-    public function getPublicProjects(){  
+    public function getPublicProjects()
+    {  
         $projects = TableRegistry::get('Projects');
         $query = $projects
             ->find()
@@ -76,7 +77,7 @@ class ProjectsTable extends Table
             ->where(['is_public' => 1])
             ->toArray();
         $publicProjects = array();
-        foreach($query as $temp){
+        foreach ($query as $temp) {
             $project = array();
             $project['id'] = $temp->id;
             $project['project_name'] = $temp->project_name;
@@ -87,7 +88,8 @@ class ProjectsTable extends Table
     }
     
     // used for getting the number of project's users for public statistics
-    public function getUserMember($project_id) {
+    public function getUserMember($project_id)
+    {
         $members = TableRegistry::get('Members');
         $queryM = $members
                 ->find()
@@ -95,7 +97,7 @@ class ProjectsTable extends Table
                 ->where(['project_id' => $project_id, 'OR' => [['project_role' => 'developer'], ['project_role' => 'manager']], ])
                 ->toArray();
                 $ids = array();
-        foreach($queryM as $temp){
+        foreach ($queryM as $temp) {
             $ids[] = $temp->id;
         }
         return count($ids);
@@ -104,28 +106,30 @@ class ProjectsTable extends Table
 
 
     // get the total workinghours of a project
-    public function getHoursDuration($project_id) {
+    public function getHoursDuration($project_id)
+    {
         $members = TableRegistry::get('Members');
         $queryM = $members
                 ->find()
                 ->select(['id'])
                 ->where(['project_id' => $project_id])
                 ->toArray();
-                $ids = array();
+        
+        $ids = array();
         foreach($queryM as $temp){
             $ids[] = $temp->id;
         }
         
         $workinghours = TableRegistry::get('Workinghours');
         $sum = 0;
-        if(!empty($ids)) {
+        if (!empty($ids)) {
             $queryW = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['member_id IN' => $ids])
-                    ->toArray();       
-            if(!empty($queryW)) {
-                foreach($queryW as $result) {
+                ->find()
+                ->select(['duration'])
+                ->where(['member_id IN' => $ids])
+                ->toArray();       
+            if (!empty($queryW)) {
+                foreach ($queryW as $result) {
                     $sum += $result->duration;
                 }
             }
@@ -133,41 +137,12 @@ class ProjectsTable extends Table
         return $sum;
     }
     
-    // new version of the function
-    public function getWeeklyhoursDuration($project_id){
-        $weeklyreports = TableRegistry::get('Weeklyreports'); 
-        $query = $weeklyreports
-            ->find()
-            ->select(['id'])
-            ->where(['project_id' => $project_id])
-            ->toArray();
-        $ids = array();
-        foreach($query as $temp){
-            $ids[] = $temp->id;
-        }
-        
-        $weeklyhours = TableRegistry::get('Weeklyhours');
-        $duration = 0;
-        if (!empty($ids)) {
-            $query = $weeklyhours
-                ->find()
-                ->select(['duration'])
-                ->where(['weeklyreport_id IN' => $ids])
-                ->toArray();            
-            if (!empty($query)) {
-                foreach($query as $temp){
-                    $duration += $temp->duration;
-                }
-            }
-        }    
-        return $duration;
-    } 
-    
     // get a list with 'X', 'L' or ' ' for the weeks based on the limits
     // 'X' if that weeks report was returned
     // 'L' if that weeks report should have been returned but its not
     // ' ' if there is no report but its still not late
-    public function getWeeklyreportWeeks($project_id, $min, $max, $year){
+    public function getWeeklyreportWeeks($project_id, $min, $max, $year)
+    {
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         /* BUG FIX: editing weekly limits now works fine
          */
@@ -213,5 +188,38 @@ class ProjectsTable extends Table
             }
         }
         return $completeList;
+    }
+
+    public function getMetrics($project_id)
+    {
+        $metrics = TableRegistry::get('Metrics');
+        $queryM = $metrics
+                ->find()
+                ->select(['metrictype_id', 'weeklyreport_id'])
+                ->where(['project_id' => $project_id])
+                ->order('weeklyreport_id DESC')
+                ->toArray();
+        
+        $ids = array();
+
+        foreach($queryM as $temp){
+            $ids[] = $temp->id;
+        }
+        
+        $workinghours = TableRegistry::get('Workinghours');
+        $sum = 0;
+        if (!empty($ids)) {
+            $queryW = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['member_id IN' => $ids])
+                ->toArray();       
+            if (!empty($queryW)) {
+                foreach ($queryW as $result) {
+                    $sum += $result->duration;
+                }
+            }
+        } 
+        return $sum;
     }
 }

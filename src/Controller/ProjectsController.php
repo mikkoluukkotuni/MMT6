@@ -14,7 +14,7 @@ class ProjectsController extends AppController
     {
         // list of the projects that should be shown in the front page
         $project_list = $this->request->session()->read('project_list');
-        if ($project_list != NULL){
+        if ($project_list != NULL) {
             $this->paginate = [
                 'conditions' => array('id IN' => $project_list), 'limit' => 25,
                 'order' => ['created_on' => 'DESC']
@@ -180,16 +180,17 @@ class ProjectsController extends AppController
 
         // load the limits to a variable
         $statistics_limits = $this->request->session()->read('statistics_limits');
+        
         // function in the projects table "ProjectsTable.php"
         // return the list of public projects
         $publicProjects = $this->Projects->getPublicProjects();
         $projects = array();
+
         // the weeklyreport weeks and the total weeklyhours duration is loaded for all projects
         // functions in "ProjectsTable.php"
         foreach ($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
-            $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $project['sum'] = $this->Projects->getHoursDuration($project['id']);
             $project['user_members'] = $this->Projects->getUserMember($project['id']);
             $projects[] = $project;
@@ -370,7 +371,7 @@ class ProjectsController extends AppController
             
             $this->request->session()->write('is_supervisor', $is_supervisor);
             $this->request->session()->write('project_memberof_list', $project_list);        
-            foreach($query2 as $temp){
+            foreach ($query2 as $temp) {
                 $project_list[] = $temp->id;
             } 
             $this->request->session()->write('project_list', $project_list);
@@ -379,8 +380,7 @@ class ProjectsController extends AppController
         }  
         
         // authorization for the selected project
-        if ($this->request->action === 'view') 
-        {   
+        if ($this->request->action === 'view') {   
             $time = Time::now();
             $project_role = "";
             $project_memberid = -1;
@@ -397,31 +397,31 @@ class ProjectsController extends AppController
             // its most likely just 1, but since it has not been limited to that we must check for all possibilities
             // the idea is that the highest membership is saved, 
             // so if he or she is a developer and a supervisor, we save the latter
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 // if supervisor, overwrite all other memberships     
-                if($temp->project_role == "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
+                if ($temp->project_role == "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)) {
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
                 // if the user is a manager in the project 
                 // but we have not yet found out that he or she is a supervisor
                 // if dev or null then it gets overwritten
-                elseif($temp->project_role == "manager" && $project_role != "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
+                elseif ($temp->project_role == "manager" && $project_role != "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)) {
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
                 // if we have not found out that the user is a manager or a supervisor
-                elseif($project_role != "supervisor" && $project_role != "manager" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
+                elseif ($project_role != "supervisor" && $project_role != "manager" && ($temp->ending_date > $time || $temp->ending_date == NULL)) {
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }      
             }
             // if the user is a admin, he is automatically a admin of the project
-            if($this->Auth->user('role') == "admin"){
+            if ($this->Auth->user('role') == "admin") {
                 $project_role = "admin";
             }
             // if the user is not a admin and not a member
-            elseif($project_role == ""){
+            elseif ($project_role == "") {
                 $project_role = "notmember";
             }
 
@@ -430,20 +430,18 @@ class ProjectsController extends AppController
             $this->request->session()->write('selected_project_memberid', $project_memberid);
             // if the user is not a member of the project he can not access it
             // unless the project is public
-            if($project_role == "notmember"){  
+            if ($project_role == "notmember") {  
                 $query = $this->Projects
                     ->find()
                     ->select(['is_public'])
                     ->where(['id' => $this->request->pass[0]])
                     ->toArray();          
-                if($query[0]->is_public == 1){
+                if ($query[0]->is_public == 1) {
                     return True;
-                }
-                else{
+                } else {
                     return False;
                 }    
-            }
-            else{
+            } else{
                 return True;
             }
         }
@@ -454,9 +452,8 @@ class ProjectsController extends AppController
         // supervisors can add new projects
         // This has its own query because if the user is a member of multiple projects
         // his current role might not be his highest one 
-        if ($this->request->action === 'add') 
-        {
-            if($this->Auth->user('role') == "admin"){
+        if ($this->request->action === 'add') {
+            if ($this->Auth->user('role') == "admin") {
                return True; 
             }
             
@@ -468,22 +465,21 @@ class ProjectsController extends AppController
                 ->where(['user_id =' => $user['id']])
                 ->toArray();
 
-            foreach($query as $temp){
-                if($temp->project_role == "supervisor"){
+            foreach ($query as $temp) {
+                if ($temp->project_role == "supervisor") {
                     return True;
                 }
             }
         }
 
         // supervisors can edit their own projects
-        if ($this->request->action === 'edit' || $this->request->action === 'delete' ) 
-        {
+        if ($this->request->action === 'edit' || $this->request->action === 'delete') {
             //Managers can edit projects information, but not delete it		
-            if ($this->request->action === 'edit' && $project_role == "manager"){		
+            if ($this->request->action === 'edit' && $project_role == "manager") {		
                 return True;		
             }
             
-            if($project_role == "supervisor" || $project_role == "admin"){
+            if ($project_role == "supervisor" || $project_role == "admin") {
                 return True;
             }
         }
