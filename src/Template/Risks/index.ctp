@@ -40,9 +40,10 @@
                     $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
                     $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;
 
-                    if (($manager || $supervisor ||  $admin)
-                            && $editable[$risk->id]) { ?>
+                    if ($manager || $supervisor ||  $admin) { ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $risk->id]) ?><br/>
+                    <?php }
+                    if (($manager || $supervisor ||  $admin) && $deletable[$risk->id]) { ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $risk->id], ['confirm' => __('Are you sure you want to delete # {0}?', $risk->id)]) ?> 
                     <?php } ?>
                 </td>

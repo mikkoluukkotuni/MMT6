@@ -6,13 +6,13 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 
-class RisksController extends AppController {
-
-    public function index() {
-        
+class RisksController extends AppController 
+{
+    public function index() 
+    {        
         $project_id = $this->request->session()->read('selected_project')['id'];
         
-        $editable = array();
+        $deletable = array();
         
         $risks = $this->Risks->find()->where(['project_id' => $project_id]);
         
@@ -20,16 +20,14 @@ class RisksController extends AppController {
         
         foreach($risks as $risk){
             
-            $editable[$risk->id] = $this->checkEditable($risk->id);
-            
+            $deletable[$risk->id] = $this->checkDeletable($risk->id);       
         }
         
-        $this->set(compact('risks', 'types', 'editable'));
-        
+        $this->set(compact('risks', 'types', 'deletable'));        
     }
     
-    public function add() {
-        
+    public function add() 
+    {        
         $risk = $this->Risks->newEntity();
         
         if ($this->request->is('post')) {
@@ -53,25 +51,27 @@ class RisksController extends AppController {
         
     }
     
-    public function delete($id = null) {
+    public function delete($id = null) 
+    {
         
         $risk = $this->Risks->get($id);
         
-        if($this->checkEditable($id)){
+        if ($this->checkDeletable($id)) {
         
             if ($this->Risks->delete($risk)) {
                 $this->Flash->success(__('The risk has been deleted.'));
             } else {
                 $this->Flash->error(__('The risk could not be deleted. Please, try again.'));
             }
-        }else{
+        } else {
             $this->Flash->error(__('This risk is already contained in a weekly report, and thus can not be deleted.'));
         }
-        return $this->redirect(['action' => 'index']);
-        
+
+        return $this->redirect(['action' => 'index']);        
     }
     
-    public function edit($id = null) {
+    public function edit($id = null) 
+    {
         
         $risk = $this->Risks->get($id);
         
@@ -85,16 +85,16 @@ class RisksController extends AppController {
             }
         }
         
-        $types = $this->getImpactProbTypes();
+        $deletable = $this->checkDeletable($id);
+        $types = $this->getImpactProbTypes();    
         
-        $editable = $this->checkEditable($id);
-        
-        $this->set(compact('risk', 'types','editable'));
+        $this->set(compact('risk', 'types','deletable'));
         $this->set('_serialize', ['risk']);
         
     }
     
-    public function addweekly(){
+    public function addweekly()
+    {
         
         $project_id = $this->request->session()->read('selected_project')['id'];
         
@@ -170,7 +170,7 @@ class RisksController extends AppController {
         
     }
     
-    public function checkEditable($riskId){
+    public function checkDeletable($riskId){
         
         $weekly = TableRegistry::get('Weeklyrisks')->find()->where(['risk_id' => $riskId])->toArray();
         
