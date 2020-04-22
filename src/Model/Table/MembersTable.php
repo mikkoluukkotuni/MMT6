@@ -108,7 +108,11 @@ class MembersTable extends Table
     }
 
 
-    public function predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate){
+    public function predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate)
+    {
+        $time = Time::now();
+        $currentWeek = date('W');
+        
         // Get list of project's members ids
         $members = TableRegistry::get('Members');
         $targetHours = $members
@@ -117,7 +121,7 @@ class MembersTable extends Table
                     ->where(['id =' => $member_id])
                     ->toArray();
 
-        if (empty($targetHours)) {
+        if ($targetHours[0]['target_hours'] == NULL) {
             $targetHours = 100;
         } else {
             $targetHours = $targetHours[0]['target_hours'];
@@ -180,7 +184,8 @@ class MembersTable extends Table
                         $hoursLogged = True;
                     }
                 }
-                if ($hoursLogged == True || ($hoursLogged == False && $sum == 0)) {
+                // If project is not completed only draw data points up to current week
+                if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
                     array_push($hourSumPerWeek, $sum);
                 }                
             }
@@ -221,7 +226,11 @@ class MembersTable extends Table
     }
 
 
-    public function predictiveProjectData($project_id, $projectStartDate, $endingDate){
+    public function predictiveProjectData($project_id, $projectStartDate, $endingDate)
+    {
+        $time = Time::now();
+        $currentWeek = date('W');
+        
         // Get list of project's members
         $members = TableRegistry::get('Members');
         $query = $members
@@ -311,7 +320,9 @@ class MembersTable extends Table
                         $hoursLogged = True;
                     }
                 }
-                if ($hoursLogged == True || ($hoursLogged == False && $sum == 0)) {
+
+                // If project is not completed only draw data points up to current week
+                if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
                     array_push($hourSumPerWeek, $sum);
                 }                
             }
