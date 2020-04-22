@@ -222,12 +222,21 @@ class MetricsController extends AppController
         if ($git != null) {
             $http = new Client();
 
-            // Gets the number of commits in master branch from the last 52 weeks (excluding commits made today)
-            $response = $http->get('https://api.github.com/repos/' . $git->owner . '/' . $git->repository . '/stats/participation');
-            $commits = $response->json['all'];
-            $commitCount = 0;
-            foreach ($commits as $commit) {
-                $commitCount += $commit;
+            $headers = ['Authorization' => 'Bearer ' . $git->token];
+
+            $graphqlQuery = '{"query": "{ repository(owner: \"' . $git->owner . '\", name: \"' . $git->repository . '\") {object(expression: \"master\") {... on Commit {history {totalCount}}}}}"}';           
+
+            // Gets the number of commits in master branch 
+            $response = $http->post('https://api.github.com/graphql',
+                $graphqlQuery, ['headers' => $headers]);                
+
+            $responseJson = json_decode($response->body);
+            $commits = $responseJson->data->repository->object->history->totalCount;
+
+            if ($commits != null) {
+                $commitCount = $commits;
+            } else {
+                $commitCount = 0;
             }
         }
         

@@ -26,6 +26,17 @@
                     </div>
                 </div>
             </div>
+            <div class="form-item">
+                <div class="form-label">
+                    Token:
+                </div>
+                <div class="description">
+                    <input type="text" name="token">
+                    <div class="info-text">
+                        This is the repository owner's personal access token.
+                    </div>
+                </div>
+            </div>
             <div class="form-submit left-space">
                 <input type="submit" value="Submit" class="save" />
             </div>
