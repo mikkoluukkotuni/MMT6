@@ -99,7 +99,7 @@ class MetricsController extends AppController
             
             $entities = array();
             // these keys are the metric types that are added with this function
-            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases"];
+            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases", "degreeReadiness"];
             // the project in this session
             $selected_project = $this->request->session()->read('selected_project');
             // rolling counter for the metrictype
@@ -393,15 +393,16 @@ class MetricsController extends AppController
         
         $names = array();
         
-        $names[1] = 'Current phase';
-        $names[2] = 'Total number of planned phases';
+        $names[1] = 'Current phase'; //phase
+        $names[2] = 'Total number of planned phases'; //totalPhases
         $names[3] = 'Product backlog'; //reqNew
-        $names[4] = 'Sprint backlog'; //reqProgress
+        $names[4] = 'Sprint backlog'; //reqInProgress
         $names[5] = 'Done'; //reqClosed
         $names[6] = 'Rejected'; //reqRejected
-        $names[7] = 'Commits in total';
-        $names[8] = 'Passed test cases';
-        $names[9] = 'Total number of test cases';
+        $names[7] = 'Commits in total'; //commits
+        $names[8] = 'Passed test cases'; //passedTestCases
+        $names[9] = 'Total number of test cases'; //totalTestCases
+        $names[10] = 'Degree of readiness'; //degreeReadiness
         
         return $names;
     }

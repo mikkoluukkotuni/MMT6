@@ -1,0 +1,2 @@
+ALTER TABLE git 
+ADD token VARCHAR(100) NOT NULL;
