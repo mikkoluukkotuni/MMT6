@@ -12,5 +12,8 @@
     <a class="trello-link-box" href="<?= $this->Url->build(['controller' => 'Git', 'action' => 'edit', $git->id]) ?>">
         Edit GitHub Connection  
     </a>
+    <a class="trello-link-box" href="<?= $this->Url->build(['controller' => 'Git', 'action' => 'delete', $git->id]) ?>">
+        Delete GitHub Connection  
+    </a>
     <?php endif; ?>
 </div>

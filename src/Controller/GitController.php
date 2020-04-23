@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Client;
+// use Cake\Utility\Security;
 
 
 // This uses Github's API v3
@@ -29,7 +30,11 @@ class GitController extends AppController
         if ($this->request->is('post')) {
            
             // get data from the form
-            $git = $this->Git->patchEntity($git, $this->request->data);  
+            $git = $this->Git->patchEntity($git, $this->request->data);
+            // $key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
+            // $git->token = Security::encrypt($git->token, $key);
+
+            // var_dump($key);
             
             $git['project_id'] = $this->request->session()->read('selected_project')['id'];
             
@@ -62,19 +67,13 @@ class GitController extends AppController
         $this->set('git', $git);        
     }
     
-    // public function delete($id = null)
-    // {
+    public function delete($id = null)
+    {
+        $git = $this->Git->get($id);
+        $this->Git->delete($git);
+        $this->Flash->success(__('Git configuration has been deleted.'));
         
-    //     $git = $this->Git->get($id);
+        return $this->redirect(['action' => 'index']);
         
-//
-//            if ($this->Git->delete($git)) {
-//                $this->Flash->success(__('Git configuration has been deleted.'));
-//            } else {
-//                $this->Flash->error(__('Git configuration could not be deleted. Please, try again.'));
-//            }
-        
-    //     return $this->redirect(['action' => 'index']);
-        
-    // }
+    }
 }

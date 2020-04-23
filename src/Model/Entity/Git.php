@@ -9,8 +9,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $project_id
  * @property \App\Model\Entity\Project $project
- * @property string $board_id
- * @property string $app_key
+ * @property string $repository
+ * @property string $owner
  * @property string $token
  */
 class Git extends Entity
@@ -29,5 +29,6 @@ class Git extends Entity
         '*' => true,
         'id' => false,
     ];
+    
 }
 
