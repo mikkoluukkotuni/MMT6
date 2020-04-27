@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Client;
-// use Cake\Utility\Security;
+use Cake\Utility\Security;
 
 
-// This uses Github's API v3
+// This uses Github's API v4
 // Actual API call happens in MetricController's function addmultiple()
 
 class GitController extends AppController 
@@ -20,7 +20,7 @@ class GitController extends AppController
         
         $git = $this->Git->find('all', ['conditions' => ['project_id' => $project_id]])->first();
         
-        $this->set('git', $git);        
+        $this->set('git', $git);
     }
     
     public function add()
@@ -31,10 +31,10 @@ class GitController extends AppController
            
             // get data from the form
             $git = $this->Git->patchEntity($git, $this->request->data);
-            // $key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
-            // $git->token = Security::encrypt($git->token, $key);
-
-            // var_dump($key);
+            
+            // Use openssl encryption and base64 encoding to store the token in database
+            $key = 'Lk5Uz3slx3BrAghS1aaW5AYgWZRV0tIX5eI0yPchFz4=';
+            $git->token = base64_encode(Security::encrypt($git->token, $key));
             
             $git['project_id'] = $this->request->session()->read('selected_project')['id'];
             
@@ -53,6 +53,8 @@ class GitController extends AppController
     public function edit($id = null)
     {        
         $git = $this->Git->get($id);
+        $key = 'Lk5Uz3slx3BrAghS1aaW5AYgWZRV0tIX5eI0yPchFz4=';
+        $git->token = base64_encode(Security::encrypt($git->token, $key));
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             $git = $this->Git->patchEntity($git, $this->request->data);

@@ -7,6 +7,8 @@ use Cake\ORM\TableRegistry;
 use Cake\ORM\Entity;
 use Cake\I18n\Time;
 use Cake\Network\Http\Client;
+use Cake\Utility\Security;
+
 
 class MetricsController extends AppController
 {
@@ -219,12 +221,18 @@ class MetricsController extends AppController
 
         $commitCount = null;
 
+        // If Git connection settings are present, create a GraphQL query and use it to get the number of commits in master branch 
         if ($git != null) {
             $http = new Client();
 
-            $headers = ['Authorization' => 'Bearer ' . $git->token];
+            // Use openssl decryption and base64 decoding to retrieve the token from database
+            $key = 'Lk5Uz3slx3BrAghS1aaW5AYgWZRV0tIX5eI0yPchFz4=';
+            $token = Security::decrypt(base64_decode($git->token), $key);
 
-            $graphqlQuery = '{"query": "{ repository(owner: \"' . $git->owner . '\", name: \"' . $git->repository . '\") {object(expression: \"master\") {... on Commit {history {totalCount}}}}}"}';           
+            $headers = ['Authorization' => 'Bearer ' . $token];
+
+            $graphqlQuery = '{"query": "{ repository(owner: \"' . $git->owner . '\", name: \"' . $git->repository 
+                . '\") {object(expression: \"master\") {... on Commit {history {totalCount}}}}}"}';
 
             // Gets the number of commits in master branch 
             $response = $http->post('https://api.github.com/graphql',
