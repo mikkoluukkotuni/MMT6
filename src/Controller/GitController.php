@@ -54,10 +54,17 @@ class GitController extends AppController
     {        
         $git = $this->Git->get($id);
         $key = 'Lk5Uz3slx3BrAghS1aaW5AYgWZRV0tIX5eI0yPchFz4=';
-        $git->token = base64_encode(Security::encrypt($git->token, $key));
-        
+
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $git = $this->Git->patchEntity($git, $this->request->data);
+            $newGit = $this->request->data;
+
+            // Use old token value if the field is left empty in the edit form
+            if ($newGit['token'] == "") {                
+                $newGit['token'] = Security::decrypt(base64_decode($git->token), $key);
+            }
+
+            $git = $this->Git->patchEntity($git, $newGit);            
+            $git->token = base64_encode(Security::encrypt($git->token, $key));
             if ($this->Git->save($git)) {
                 $this->Flash->success(__('Git configuration has been saved.'));
                 

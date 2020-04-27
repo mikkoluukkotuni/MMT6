@@ -83,7 +83,8 @@ class MetricsController extends AppController
             }
         }
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 
+            'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
         $this->set('_serialize', ['metric']);
     }
@@ -101,7 +102,8 @@ class MetricsController extends AppController
             
             $entities = array();
             // these keys are the metric types that are added with this function
-            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases", "degreeReadiness"];
+            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", 
+                "passedTestCases", "totalTestCases", "degreeReadiness"];
             // the project in this session
             $selected_project = $this->request->session()->read('selected_project');
             // rolling counter for the metrictype
@@ -221,7 +223,8 @@ class MetricsController extends AppController
 
         $commitCount = null;
 
-        // If Git connection settings are present, create a GraphQL query and use it to get the number of commits in master branch 
+        // If Git connection settings are present, create a GraphQL query and use it to get the number of 
+        // commits in master branch 
         if ($git != null) {
             $http = new Client();
 
@@ -250,7 +253,8 @@ class MetricsController extends AppController
         
         $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 
+            'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports','metricNames','trello','commitCount'));
         $this->set('_serialize', ['metric']);
     }
@@ -353,7 +357,8 @@ class MetricsController extends AppController
             }    
         }
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 
+            'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
         $this->set('_serialize', ['metric']);
     }

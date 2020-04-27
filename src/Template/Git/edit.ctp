@@ -31,9 +31,10 @@
                     Token:
                 </div>
                 <div class="description">
-                    <input type="text" name="owner" value="<?= $git->token ?>">
+                    <input type="text" name="token">
                     <div class="info-text">
-                        This is the repository owner's personal access token.
+                        This is the repository owner's personal access token (no changes applied to token if this field
+                            is left empty).
                     </div>
                 </div>
             </div>
