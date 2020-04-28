@@ -10,16 +10,18 @@ use Cake\I18n\Time;
 class ChartsTable extends Table
 {
     
-    public function initialize(array $config) {
+    public function initialize(array $config) 
+    {
         parent::initialize($config);
     }
     
     // getting the weeklyreport numbers based on the project and limits
-    public function reports($project_id, $weekmin, $weekmax, $yearmin, $yearmax){
+    public function reports($project_id, $weekmin, $weekmax, $yearmin, $yearmax)
+    {
         $weeklyreports = TableRegistry::get('Weeklyreports');
         $organize = array(); 
         // when we are looking for reports from multiple years
-        if($yearmin != $yearmax){
+        if ($yearmin != $yearmax) {
             $query = $weeklyreports
                 ->find()
                 ->select(['id', 'week', 'year'])
@@ -38,7 +40,7 @@ class ChartsTable extends Table
                     'year >' => $yearmin, 'year <' => $yearmax]) // possible middle year, all weeks are good
                 ->toArray();
             // add the middle year reports
-            foreach($query2 as $temp){
+            foreach ($query2 as $temp) {
                 $temparray = array();
                 $temparray['id'] = $temp->id;
                 $temparray['week'] = $temp->week;
@@ -48,7 +50,7 @@ class ChartsTable extends Table
             }
         }
         // when looking for reports from a single year
-        else{
+        else {
             // if min and max years are same then we just look at week limits
             $query = $weeklyreports
                 ->find()
@@ -60,7 +62,7 @@ class ChartsTable extends Table
                 ->toArray();
         }
         // add all the reports 
-        foreach($query as $temp){
+        foreach ($query as $temp) {
             $temparray = array();
             $temparray['id'] = $temp->id;
             $temparray['week'] = $temp->week;
@@ -82,7 +84,7 @@ class ChartsTable extends Table
         $idlist = array();
         $weeklist = array();
         // seperate the id and weeknumber
-        foreach($organize as $temp){
+        foreach ($organize as $temp) {
             $idlist[] = $temp['id'];
             $weeklist[] = $temp['week'];
         }
@@ -97,24 +99,25 @@ class ChartsTable extends Table
 
     // Return a list of all the weeknumbers in the selected time period
     // This is used for line charts of workinghours
-    public function weekList($weekmin, $weekmax, $yearmin, $yearmax){
+    public function weekList($weekmin, $weekmax, $yearmin, $yearmax)
+    {
         $weeklist = array();
-        if($yearmin == $yearmax) {
-            for($i = $weekmin; $i <= $weekmax; $i++) {
+        if ($yearmin == $yearmax) {
+            for ($i = $weekmin; $i <= $weekmax; $i++) {
                 array_push($weeklist, $i);
             }
         } else {
-            for($i = $yearmin; $i <= $yearmax; $i++) {
+            for ($i = $yearmin; $i <= $yearmax; $i++) {
                 if($i == $yearmin) {
-                    for($j = $weekmin; $j <= 52; $j++) {
+                    for( $j = $weekmin; $j <= 52; $j++) {
                         array_push($weeklist, $j);
                     }
                 } else if ($i == $yearmax) {
-                    for($j = 1; $j <= $weekmax; $j++) {
+                    for ($j = 1; $j <= $weekmax; $j++) {
                         array_push($weeklist, $j);
                     }
                 } else {
-                    for($j = 1; $j <= 52; $j++) {
+                    for ($j = 1; $j <= 52; $j++) {
                         array_push($weeklist, $j);
                     }
                 }
@@ -124,17 +127,73 @@ class ChartsTable extends Table
         return $weeklist;
     }
 
+
+    // public function earnedValueData($idlist)
+    // {
+    //     $metrics = TableRegistry::get('Metrics');
+
+    //     $readiness = array();
+    //     // $inprogress = array();
+    //     // $closed = array();
+    //     // $rejected = array();
+        
+    //     foreach ($idlist as $temp) {
+            
+    //         $query2 = $metrics
+    //                 ->find()
+    //                 ->select(['value'])
+    //                 ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 10])
+    //                 ->toArray();
+            
+    //         $readiness[] = $query2[0]->value;
+            
+            // $query3 = $metrics
+            //         ->find()
+            //         ->select(['value'])
+            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 4])
+            //         ->toArray();
+            
+            // $inprogress[] = $query3[0]->value;
+            
+            // $query4 = $metrics
+            //         ->find()
+            //         ->select(['value'])
+            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 5])
+            //         ->toArray();
+            
+            // $closed[] = $query4[0]->value;            
+            
+            // $query5 = $metrics
+            //         ->find()
+            //         ->select(['value'])
+            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 6])
+            //         ->toArray();
+            
+            // $rejected[] = $query5[0]->value;
+            
+        // }
+
+    //     $data = array();
+    //     $data['readiness'] = $readiness;
+    //     // $data['inprogress'] = $inprogress;
+    //     // $data['closed'] = $closed;
+    //     // $data['rejected'] = $rejected;
+        
+    //     return $data;
+    // }
+
     
     // the rest of the functions are for getting the actual data for the charts
     // this is done with multiple querys, based on the project id and the weeklyreport id's
     
-    public function testcaseAreaData($idlist){
+    public function testcaseAreaData($idlist)
+    {
         $metrics = TableRegistry::get('Metrics');
         
         $testsPassed = array();
         $testsTotal = array();
         
-        foreach($idlist as $temp){
+        foreach ($idlist as $temp) {
             
             $query2 = $metrics
                     ->find()
@@ -162,7 +221,8 @@ class ChartsTable extends Table
     }
     
 
-    public function commitAreaData($idlist){
+    public function commitAreaData($idlist)
+    {
         $metrics = TableRegistry::get('Metrics');
 
         $commits = array();
@@ -186,7 +246,8 @@ class ChartsTable extends Table
     }
     
     
-    public function reqColumnData($idlist){
+    public function reqColumnData($idlist)
+    {
         $metrics = TableRegistry::get('Metrics');
 
         $new = array();
@@ -194,7 +255,7 @@ class ChartsTable extends Table
         $closed = array();
         $rejected = array();
         
-        foreach($idlist as $temp){
+        foreach ($idlist as $temp) {
             
             $query2 = $metrics
                     ->find()
@@ -218,8 +279,7 @@ class ChartsTable extends Table
                     ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 5])
                     ->toArray();
             
-            $closed[] = $query4[0]->value;
-            
+            $closed[] = $query4[0]->value;            
             
             $query5 = $metrics
                     ->find()
@@ -241,13 +301,14 @@ class ChartsTable extends Table
     }
     
 
-    public function phaseAreaData($idlist){
+    public function phaseAreaData($idlist)
+    {
         $metrics = TableRegistry::get('Metrics');
         
         $phase = array();
         $phaseTotal = array();
         
-        foreach($idlist as $temp){
+        foreach ($idlist as $temp) {
             
             $query2 = $metrics
                     ->find()
@@ -275,7 +336,8 @@ class ChartsTable extends Table
     }
     
 
-    public function hoursData($project_id){   
+    public function hoursData($project_id)
+    {   
         $members = TableRegistry::get('Members');
         
         // get a list of the members in the project
@@ -285,7 +347,7 @@ class ChartsTable extends Table
                 ->where(['project_id =' => $project_id])
                 ->toArray();
         $memberlist = array();
-        foreach($query as $temp){
+        foreach ($query as $temp) {
             $memberlist[] = $temp->id;
         }
         
@@ -300,7 +362,7 @@ class ChartsTable extends Table
                     ->toArray();
             $num = 0;
             // count the total ammount of the duration of the worktype
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 $num += $temp->duration;
             }
             $data['management'] = $num;
@@ -311,7 +373,7 @@ class ChartsTable extends Table
                     ->where(['worktype_id =' => 2, 'member_id IN' => $memberlist])
                     ->toArray();
             $num = 0;
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 $num += $temp->duration;
             }
             $data['code'] = $num;
@@ -322,7 +384,7 @@ class ChartsTable extends Table
                     ->where(['worktype_id =' => 3, 'member_id IN' => $memberlist])
                     ->toArray();
             $num = 0;
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 $num += $temp->duration;
             }
             $data['document'] = $num;
@@ -333,7 +395,7 @@ class ChartsTable extends Table
                     ->where(['worktype_id =' => 4, 'member_id IN' => $memberlist])
                     ->toArray();
             $num = 0;
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 $num += $temp->duration;
             }
             $data['study'] = $num;
@@ -344,7 +406,7 @@ class ChartsTable extends Table
                     ->where(['worktype_id =' => 5, 'member_id IN' => $memberlist])
                     ->toArray();
             $num = 0;
-            foreach($query as $temp){
+            foreach ($query as $temp) {
                 $num += $temp->duration;
             }
             $data['other'] = $num;
@@ -361,7 +423,8 @@ class ChartsTable extends Table
     }
     
 
-    public function hoursPerWeekData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
+    public function hoursPerWeekData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax)
+    {
         $datemin = new Time('midnight');
         $datemin->setISODate($yearmin, $weekmin);
         $datemax = new Time('midnight');
@@ -377,13 +440,13 @@ class ChartsTable extends Table
                 ->where(['project_id =' => $project_id])
                 ->toArray();
         $memberlist = array();
-        if(!empty($query)) {
-            foreach($query as $temp){
+        if (!empty($query)) {
+            foreach ($query as $temp){
                 $memberlist[] = $temp->id;
             }
         }
         $workinghours = TableRegistry::get('Workinghours');
-        if(!empty($memberlist)) {
+        if (!empty($memberlist)) {
             $queryW = $workinghours
                         ->find()
                         ->select(['date', 'duration'])
@@ -392,11 +455,11 @@ class ChartsTable extends Table
         }
 
         $data = array();
-        foreach($weeklist as $temp){
+        foreach ($weeklist as $temp) {
             
             $sum = 0;
-            if(!empty($queryW)) {
-                foreach($queryW as $result) {
+            if (!empty($queryW)) {
+                foreach ($queryW as $result) {
                     // date of workinghours need to be turned to week
                     $weekWH = date('W', strtotime($result['date']));
                     if ($temp == $weekWH) {
@@ -411,7 +474,8 @@ class ChartsTable extends Table
     }
 
 
-    public function totalhourLineData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
+    public function totalhourLineData($project_id, $weeklist, $weekmin, $weekmax, $yearmin, $yearmax)
+    {
         $datemin = new Time('midnight');
         $datemin->setISODate($yearmin, $weekmin);
         $datemax = new Time('midnight');
@@ -427,14 +491,14 @@ class ChartsTable extends Table
                 ->where(['project_id =' => $project_id])
                 ->toArray();
         $memberlist = array();
-        if(!empty($query)) {
-            foreach($query as $temp){
+        if (!empty($query)) {
+            foreach ($query as $temp) {
                 $memberlist[] = $temp->id;
             }
         }
 
         $workinghours = TableRegistry::get('Workinghours');
-        if(!empty($memberlist)) {
+        if (!empty($memberlist)) {
             $queryW = $workinghours
                         ->find()
                         ->select(['date', 'duration'])
@@ -448,8 +512,8 @@ class ChartsTable extends Table
         $hourSumPerWeek = array();
         $totalSum = 0;
 
-        if(!empty($queryW)) {
-            foreach($queryW as $result) {
+        if (!empty($queryW)) {
+            foreach ($queryW as $result) {
                 $totalSum += $result['duration'];
             }
 
@@ -461,12 +525,12 @@ class ChartsTable extends Table
             $dateOfLastHour = $queryW[(sizeof($queryW))-1]['date'];
 
             // get sums per week and store them to array where key is weeknumber         
-                for($i = 1; $i <= 52; $i++) {
+                for ($i = 1; $i <= 52; $i++) {
                     $sum = 0;
-                    foreach($queryW as $result) {
+                    foreach ($queryW as $result) {
                         // date of workinghours need to be turned to week
                         $weekWH = date('W', strtotime($result['date']));
-                        if($i == $weekWH) {
+                        if ($i == $weekWH) {
                             $sum += $result['duration'];
                         }
                     }
@@ -478,10 +542,10 @@ class ChartsTable extends Table
             // count cumulative sum per week and store it in array where key is weeknumber
             $sum = 0;
             
-            if($weekOfFirstHour > $weekOfLastHour) {            
-                for($i = $weekOfFirstHour; $i <= 52; $i++) {
+            if ($weekOfFirstHour > $weekOfLastHour) {            
+                for ($i = $weekOfFirstHour; $i <= 52; $i++) {
                     $sum += $hoursPerWeek[$i];
-                    if($dateOfLastHour > $datemin) {
+                    if ($dateOfLastHour > $datemin) {
                         $temp = [$i => $sum];
                         $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
                     } else {
@@ -491,8 +555,8 @@ class ChartsTable extends Table
                 }
                 for($i = 1; $i <= ($weekOfFirstHour - 1); $i++) {
                     $sum += $hoursPerWeek[$i];
-                    if($dateOfLastHour > $datemin) {
-                        if($i > $weekmax) {
+                    if ($dateOfLastHour > $datemin) {
+                        if ($i > $weekmax) {
                             $temp = [$i => 0];
                         } else {
                             $temp = [$i => $sum];
@@ -505,10 +569,10 @@ class ChartsTable extends Table
                     }
                 }
             } else {
-                for($i = 1; $i <= 52; $i++) {
+                for ($i = 1; $i <= 52; $i++) {
                     $sum += $hoursPerWeek[$i];
-                    if($dateOfLastHour > $datemin) {
-                        if($i > $weekmax) {
+                    if ($dateOfLastHour > $datemin) {
+                        if ($i > $weekmax) {
                             $temp = [$i => 0];
                         } else {
                             $temp = [$i => $sum];
@@ -522,8 +586,8 @@ class ChartsTable extends Table
             }    
             
 
-            if($dateOfFirstHour <= $datemax) {
-                foreach($weeklist as $week) {
+            if ($dateOfFirstHour <= $datemax) {
+                foreach ($weeklist as $week) {
                     $data[] = $hourSumPerWeek[$week];
                 }
             }
@@ -533,7 +597,8 @@ class ChartsTable extends Table
 
 
     // For admin to compare working hours of public projects
-    public function hoursComparisonData($weeklist, $weekmin, $weekmax, $yearmin, $yearmax) {
+    public function hoursComparisonData($weeklist, $weekmin, $weekmax, $yearmin, $yearmax) 
+    {
         $projects = TableRegistry::get('Projects');
         $query2 = $projects
             ->find()
@@ -544,7 +609,7 @@ class ChartsTable extends Table
         $public_projects = array();
         
         // get id and name of each public project
-        foreach($query2 as $temp) {
+        foreach ($query2 as $temp) {
             $temp2 = array();
             $temp2['id'] = $temp->id;
             $temp2['project_name'] = $temp->project_name;
@@ -553,7 +618,7 @@ class ChartsTable extends Table
 
         $combined_data = array();
 
-        foreach($public_projects as $public_project) {
+        foreach ($public_projects as $public_project) {
             $data = $this->totalhourLineData($public_project['id'], $weeklist,  $weekmin, $weekmax, $yearmin, $yearmax);
 
             // store name and a list of weekly workinghours sums for each project
@@ -566,7 +631,8 @@ class ChartsTable extends Table
     }   
     
 
-    public function riskData($idlist, $projectId){
+    public function riskData($idlist, $projectId)
+    {
         
         $risks = TableRegistry::get('Risks');
         $weeklyRisks = TableRegistry::get('Weeklyrisks');
@@ -576,8 +642,7 @@ class ChartsTable extends Table
         $projectRisks = $risks->find()->where(['project_id' => $projectId])->toArray();
 
         
-        foreach($projectRisks as $projectRisk){
-        
+        foreach ($projectRisks as $projectRisk) {        
             $item = array();
             
             $item['name'] = $projectRisk->description;
@@ -586,8 +651,7 @@ class ChartsTable extends Table
             $impact = array();
             $combined = array();
             
-            foreach($idlist as $temp){
-            
+            foreach ($idlist as $temp) {            
                 $query = $weeklyRisks
                         ->find()
                         ->where(['weeklyreport_id =' => $temp, 'risk_id' => $projectRisk->id])
@@ -596,10 +660,9 @@ class ChartsTable extends Table
                 $probTemp = 0;
                 $impactTemp = 0;
                 
-                if(!empty($query)){
+                if (!empty($query)) {
                     $probTemp = $query[0]->probability;
                     $impactTemp = $query[0]->impact;
-
                 }
                 
                 $probability[] = $probTemp;

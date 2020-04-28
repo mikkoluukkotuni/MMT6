@@ -37,7 +37,7 @@
                     if ( $max < 1 )  $max = 1;
                     if ( $max > 53 ) $max = 53;
                     if ( $max < $min ) { 
-                $temp = $max;
+                        $temp = $max;
                         $max = $min;
                         $min = $temp;
                     }
@@ -121,10 +121,35 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <h4>Metrics</h4>
+        <table class="stylized-table">
+        <tbody>
+            <tr class="header">
+                <td style="width:220px;">Project name</td>
+                <td>Commits</td>
+                <td>Test cases passed / total</td>
+                <td>Product backlog</td>
+                <td>Sprint backlog</td>
+                <td>Done</td>
+                <td>Rejected</td>
+            </tr>
+            <?php foreach ($projects as $project): ?>
+                <tr class="trow">
+                    <td><?= h($project['project_name']) ?></td>
+                    <td><?= h($project['metrics'][6]['value']) ?></td>
+                    <td><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
+                    <td><?= h($project['metrics'][2]['value']) ?></td>
+                    <td><?= h($project['metrics'][3]['value']) ?></td>
+                    <td><?= h($project['metrics'][4]['value']) ?></td>
+                    <td><?= h($project['metrics'][5]['value']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody> 
+    </table>
     <?php }?>
 
-    <table class="stylized-table" style="width:640px;">
-        <h4><?= h('Total numbers of working hours') ?></h4>
+    <h4><?= h('Total numbers of working hours') ?></h4>
+    <table class="stylized-table" style="width:640px;">        
         <tbody>
             <tr class="header">
                 <td style="width:280px;">Project name</td>

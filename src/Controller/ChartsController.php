@@ -75,6 +75,7 @@ class ChartsController extends AppController
         $risksCombinedChart = $this->risksCombinedChart();
         $derivedChart = $this->derivedChart();
         $hoursComparisonChart = $this->hoursComparisonChart();
+        // $earnedValueChart = $this->earnedValueChart();
         
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
@@ -88,6 +89,7 @@ class ChartsController extends AppController
         $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
+        // $earnedValueData = $this->Charts->earnedValueData($weeklyreports['id']);
         
         // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);
@@ -105,6 +107,8 @@ class ChartsController extends AppController
         $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks, $chartLimits['weekmin'], 
             $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
         );
+
+
         
         // Insert the data in to the charts, one by one
         // phaseChart
@@ -154,6 +158,16 @@ class ChartsController extends AppController
             'name' => 'Passed test cases',
             'data' => $testcaseData['testsPassed']
         );
+
+
+        // // earnedValueChart
+        // $earnedValueChart->xAxis->categories = $weeklyreports['weeks'];
+        // $earnedValueChart->series[] = array(
+        //     'name' => 'Degree of readiness',
+        //     'data' => $earnedValueData['readiness']            
+        // );
+        // var_dump($earnedValueData['readiness']);
+
         
         // hoursChart
         $hoursChart->series[] = array(
@@ -201,8 +215,7 @@ class ChartsController extends AppController
         );
         
         // risksProbChart
-        $risksProbChart->xAxis->categories = $weeklyreports['weeks'];
-        
+        $risksProbChart->xAxis->categories = $weeklyreports['weeks'];        
         foreach ($riskData as $risk) {            
             $risksProbChart->series[] = array(
                 'name' => $risk['name'],
@@ -212,8 +225,7 @@ class ChartsController extends AppController
         
         
         // risksImpactChart
-        $risksImpactChart->xAxis->categories = $weeklyreports['weeks'];
-        
+        $risksImpactChart->xAxis->categories = $weeklyreports['weeks'];        
         foreach ($riskData as $risk) {            
             $risksImpactChart->series[] = array(
                 'name' => $risk['name'],
@@ -223,8 +235,7 @@ class ChartsController extends AppController
         
         
         // risksCombinedChart
-        $risksCombinedChart->xAxis->categories = $weeklyreports['weeks'];
-        
+        $risksCombinedChart->xAxis->categories = $weeklyreports['weeks'];        
         foreach ($riskData as $risk) {            
             $risksCombinedChart->series[] = array(
                 'name' => $risk['name'],
@@ -276,6 +287,41 @@ class ChartsController extends AppController
      * - requirements charts under one header (with subheaders)
      * Requirement ID: 7 (Andy)
      */
+
+    // public function earnedValueChart() 
+    // {
+    // 	$myChart = $this->Highcharts->createChart();
+    // 	$myChart->chart->renderTo = 'valuewrapper';
+    // 	$myChart->chart->type = 'line';
+    
+    // 	$myChart->title = array(
+    //     	'text' => 'Working hours',
+    //     	'y' => 20,
+    //     	'align' => 'center',
+    //     	'styleFont' => '18px Metrophobic, Arial, sans-serif',
+    //     	'styleColor' => '#0099ff',
+    //     );
+    // 	$myChart->subtitle->text = "per week";
+
+    // 	// $myChart->chart->alignTicks = FALSE;
+    // 	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+    // 	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+    // 	// this chart doesn't need a legend
+    // 	$myChart->legend->enabled = false;
+    	
+    //     // labels of axis    	
+    //     $myChart->xAxis->title->text = 'Week number';
+	//     $myChart->yAxis->title->text = 'Working hours';
+    	
+	//     // tooltips etc
+    //     $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("
+    //         function() {return 'Total hours: ' +' <b>'+ Highcharts.numberFormat(this.y, 0) 
+    //         +'</b><br/>Week number: '+ this.x;}"
+    //     );
+    // 	$myChart->plotOptions->area->marker->enabled = false;
+    
+    // 	return $myChart;
+    // }
     
     public function phaseChart() 
     {

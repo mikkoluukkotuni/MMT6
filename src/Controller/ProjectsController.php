@@ -192,6 +192,8 @@ class ProjectsController extends AppController
             $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $project['sum'] = $this->Projects->getHoursDuration($project['id']);
             $project['user_members'] = $this->Projects->getUserMember($project['id']);
+            $project['metrics'] = $this->Projects->getMetrics($project['id']);
+            // var_dump($project['metrics']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

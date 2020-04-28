@@ -162,6 +162,29 @@ class ProjectsTable extends Table
         }    
         return $duration;
     } 
+
+
+    public function getMetrics($project_id)
+    {
+        $weeklyreports = TableRegistry::get('Weeklyreports'); 
+        $query = $weeklyreports
+            ->find()
+            ->select(['id'])
+            ->where(['project_id' => $project_id])
+            ->order(['year' => 'DESC', 'week' => 'DESC'])
+            ->toArray();
+        
+        $latestReport = $query[0]->id;
+        
+        $metricsTable = TableRegistry::get('Metrics');
+        $queryM = $metricsTable
+            ->find()
+            ->select(['metrictype_id', 'value'])
+            ->where(['weeklyreport_id' => $latestReport])
+            ->toArray();        
+
+        return $queryM;
+    } 
     
     // get a list with 'X', 'L' or ' ' for the weeks based on the limits
     // 'X' if that weeks report was returned
