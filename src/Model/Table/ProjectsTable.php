@@ -173,15 +173,24 @@ class ProjectsTable extends Table
             ->where(['project_id' => $project_id])
             ->order(['year' => 'DESC', 'week' => 'DESC'])
             ->toArray();
+
+        if (sizeof($query) > 0) {        
+            $latestReport = $query[0]->id;
+
+            $metricsTable = TableRegistry::get('Metrics');
+            $queryM = $metricsTable
+                ->find()
+                ->select(['metrictype_id', 'value'])
+                ->where(['weeklyreport_id' => $latestReport])
+                ->toArray();        
+        } else {
+            $queryM = [];
+            for ($i = 0; $i < 10; $i++) {
+                array_push($queryM, ['metrictype_id' => $i, 'value' => 0]);
+            }
+        }
         
-        $latestReport = $query[0]->id;
-        
-        $metricsTable = TableRegistry::get('Metrics');
-        $queryM = $metricsTable
-            ->find()
-            ->select(['metrictype_id', 'value'])
-            ->where(['weeklyreport_id' => $latestReport])
-            ->toArray();        
+       
 
         return $queryM;
     } 
