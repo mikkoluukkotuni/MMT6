@@ -189,11 +189,11 @@ class ProjectsController extends AppController
         foreach ($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
-            $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
+            // $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $project['sum'] = $this->Projects->getHoursDuration($project['id']);
             $project['user_members'] = $this->Projects->getUserMember($project['id']);
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
-            // var_dump($project['metrics']);
+            $project['risks'] = $this->Projects->getRisks($project['id']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

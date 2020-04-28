@@ -127,11 +127,11 @@
             <tr class="header">
                 <td style="width:220px;">Project name</td>
                 <td>Commits</td>
-                <td>Test cases passed / total</td>
+                <td>Test cases (passed / total)</td>
                 <td>Product backlog</td>
                 <td>Sprint backlog</td>
                 <td>Done</td>
-                <td>Rejected</td>
+                <td>Risks (high / total)</td>
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
@@ -141,7 +141,7 @@
                     <td><?= h($project['metrics'][2]['value']) ?></td>
                     <td><?= h($project['metrics'][3]['value']) ?></td>
                     <td><?= h($project['metrics'][4]['value']) ?></td>
-                    <td><?= h($project['metrics'][5]['value']) ?></td>
+                    <td><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody> 

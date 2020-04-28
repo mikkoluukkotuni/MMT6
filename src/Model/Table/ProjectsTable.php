@@ -142,7 +142,7 @@ class ProjectsTable extends Table
             ->where(['project_id' => $project_id])
             ->toArray();
         $ids = array();
-        foreach($query as $temp){
+        foreach ($query as $temp) {
             $ids[] = $temp->id;
         }
         
@@ -164,8 +164,10 @@ class ProjectsTable extends Table
     } 
 
 
+    // This only works with the default metrics (types and order)
     public function getMetrics($project_id)
     {
+        $metrics = [];
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         $query = $weeklyreports
             ->find()
@@ -182,18 +184,61 @@ class ProjectsTable extends Table
                 ->find()
                 ->select(['metrictype_id', 'value'])
                 ->where(['weeklyreport_id' => $latestReport])
-                ->toArray();        
-        } else {
-            $queryM = [];
+                ->toArray();
+
+            $metrics = $queryM;
+        } else {      
+            // If new metrics have been added to system then this also has to be updated      
             for ($i = 0; $i < 10; $i++) {
-                array_push($queryM, ['metrictype_id' => $i, 'value' => 0]);
+                array_push($metrics, ['metrictype_id' => $i, 'value' => 0]);
             }
         }
-        
-       
 
-        return $queryM;
+        return $metrics;
     } 
+
+
+    public function getRisks($project_id)
+    {
+        $risks = [];
+        $weeklyreports = TableRegistry::get('Weeklyreports'); 
+        $query = $weeklyreports
+            ->find()
+            ->select(['id'])
+            ->where(['project_id' => $project_id])
+            // This is to make sure that the latest weeks report is selected 
+            ->order(['year' => 'DESC', 'week' => 'DESC'])
+            ->toArray();
+
+        if (sizeof($query) > 0) {        
+            $latestReport = $query[0]->id;
+
+            $risksTable = TableRegistry::get('Weeklyrisks');
+            $queryR = $risksTable
+                ->find()
+                ->select(['probability', 'impact'])
+                ->where(['weeklyreport_id' => $latestReport])
+                ->toArray();
+
+            $highRisks = 0;
+            foreach ($queryR as $temp) {
+                if ($temp['probability'] * $temp['impact'] > 15) {
+                    $highRisks++;
+                }
+            }
+            $totalRisks = sizeof($queryR);
+
+            array_push($risks, $highRisks);
+            array_push($risks, $totalRisks);
+        } else {            
+            for ($i = 0; $i < 2; $i++) {
+                array_push($risks, 0);
+            }
+        }
+
+        return $risks;
+    } 
+
     
     // get a list with 'X', 'L' or ' ' for the weeks based on the limits
     // 'X' if that weeks report was returned
