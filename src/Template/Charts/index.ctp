@@ -24,6 +24,13 @@
 	     Requirement ID: 7 (Andy)
 	-->
     <div class="chart">
+        <h4>Earned Value Chart</h4>
+        <div id="valuewrapper">
+        	<?php echo $this->Highcharts->render($earnedValueChart, 'valuechart'); ?>
+        </div>
+    </div>
+
+    <div class="chart">
         <h4>Phase Chart</h4>
         <div id="phasewrapper">
         	<?php echo $this->Highcharts->render($phaseChart, 'phasechart'); ?>

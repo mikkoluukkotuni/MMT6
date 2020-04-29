@@ -199,11 +199,11 @@ class MembersTable extends Table
             }
 
             // To get the correct week position for target hour marker, add nulls to array for other weeks except the target
-            $targerHoursArray = array();
+            $targetHoursArray = array();
             for ($i = 1; $i < sizeof($weekList); $i++) {
-                array_push($targerHoursArray, NULL);
+                array_push($targetHoursArray, NULL);
             }
-            array_push($targerHoursArray, $targetHours);
+            array_push($targetHoursArray, $targetHours);
 
             // Store actual working hour data at index 0
             $data[0]['weekList'] = $weekList;
@@ -216,7 +216,7 @@ class MembersTable extends Table
             $data[1]['name'] = 'Predicted hours';
             $data[1]['marker'] = array('radius' => 4);
 
-            $data[2]['hours'] = $targerHoursArray;
+            $data[2]['hours'] = $targetHoursArray;
             $data[2]['name'] = 'Target';
             $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
         }
@@ -336,11 +336,11 @@ class MembersTable extends Table
             }
             
             // To get the correct week position for target hour marker, add nulls to array for other weeks except the target
-            $targerHoursArray = array();
+            $targetHoursArray = array();
             for ($i = 1; $i < sizeof($weekList); $i++) {
-                array_push($targerHoursArray, NULL);
+                array_push($targetHoursArray, NULL);
             }
-            array_push($targerHoursArray, $targetHours);
+            array_push($targetHoursArray, $targetHours);
 
             // Store actual working hour data at index 0
             $data[0]['weekList'] = $weekList;
@@ -353,7 +353,7 @@ class MembersTable extends Table
             $data[1]['name'] = 'Predicted hours';
             $data[1]['marker'] = array('radius' => 4);
 
-            $data[2]['hours'] = $targerHoursArray;
+            $data[2]['hours'] = $targetHoursArray;
             $data[2]['name'] = 'Target';
             $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
         }

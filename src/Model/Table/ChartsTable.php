@@ -128,59 +128,123 @@ class ChartsTable extends Table
     }
 
 
-    // public function earnedValueData($idlist)
-    // {
-    //     $metrics = TableRegistry::get('Metrics');
+    public function earnedValueData($project_id, $projectStartDate, $endingDate)
+    {
+        $time = Time::now();
+        $currentWeek = date('W');
+        $weekList = array();
 
-    //     $readiness = array();
-    //     // $inprogress = array();
-    //     // $closed = array();
-    //     // $rejected = array();
-        
-    //     foreach ($idlist as $temp) {
-            
-    //         $query2 = $metrics
-    //                 ->find()
-    //                 ->select(['value'])
-    //                 ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 10])
-    //                 ->toArray();
-            
-    //         $readiness[] = $query2[0]->value;
-            
-            // $query3 = $metrics
-            //         ->find()
-            //         ->select(['value'])
-            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 4])
-            //         ->toArray();
-            
-            // $inprogress[] = $query3[0]->value;
-            
-            // $query4 = $metrics
-            //         ->find()
-            //         ->select(['value'])
-            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 5])
-            //         ->toArray();
-            
-            // $closed[] = $query4[0]->value;            
-            
-            // $query5 = $metrics
-            //         ->find()
-            //         ->select(['value'])
-            //         ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 6])
-            //         ->toArray();
-            
-            // $rejected[] = $query5[0]->value;
-            
-        // }
+        // If project has no estimated completion date then ending date is +20 weeks from project's start date
+        if ($endingDate == NULL) {
+            // Have to use clone, otherwise $projectStartDate also changes
+            $endingDate = clone $projectStartDate;
+            $endingDate->modify('+20 weeks');
+        }
 
-    //     $data = array();
-    //     $data['readiness'] = $readiness;
-    //     // $data['inprogress'] = $inprogress;
-    //     // $data['closed'] = $closed;
-    //     // $data['rejected'] = $rejected;
+        $xFirstWeek = date('W', strtotime($projectStartDate));     
+        $xLastWeek = date('W', strtotime($endingDate));           
+
+        // Populate array of week numbers to be used as x axis
+        if ($xFirstWeek > $xLastWeek) {
+            for ($i = $xFirstWeek; $i <= 52; $i++) {
+                array_push($weekList, $i);
+            }
+            for ($i = 1; $i <= $xLastWeek; $i++) {
+                array_push($weekList, $i);
+            }
+        } else {
+            for ($i = $xFirstWeek; $i <= $xLastWeek; $i++) {
+                array_push($weekList, $i);
+            }
+        }
+
+        $data = array();
+        $readiness = array();
+        $estimate = array();
+        $target = array();
+
+        $metrics = TableRegistry::get('Metrics');
+        $reports = TableRegistry::get('Weeklyreports');
+
+        // Get week numbers of all the weeklyreports for this project
+        $reportWeeks = $reports
+            ->find()
+            ->select(['week'])
+            ->where(['project_id =' => $project_id])
+            // Order is needed in case weeklyreports have not been made in chronological order
+            ->order(['year' => 'ASC', 'week' => 'ASC'])
+            ->toArray();
+
+        if (!empty($reportWeeks)) {
+            $reportWeeks2 = array();
+            foreach ($reportWeeks as $temp) {
+                array_push($reportWeeks2, $temp['week']);                
+            }
+
+            foreach ($weekList as $weekNumber) {
+                // If there is a weeklyreport for this week, get readiness value from it and push it to data array
+                // to correct index of this week
+                
+                if (in_array($weekNumber, $reportWeeks2)) {
+                    $reportId = $reports
+                        ->find()
+                        ->select(['id'])
+                        ->where(['project_id =' => $project_id, 'week' => $weekNumber])
+                        ->toArray();
+
+                    $readinessValue = $metrics
+                        ->find()
+                        ->select(['value'])
+                        ->where(['weeklyreport_id =' => $reportId[0]['id'], 'metrictype_id =' => 10])
+                        ->toArray();
+
+                    // If there is a readiness value in this weeklyreport, push it to data array, else
+                    // push 0 (only applies to projects that started before implementation of this metric)
+                    if (!empty($readinessValue)) {
+                        array_push($readiness, $readinessValue[0]['value']);
+                    } else {
+                        array_push($readiness, 0);
+                    }
+                // If project is not completed only draw data points up to current week
+                // In case no weeklyreport, either push value of previous week or in case of first week a 0
+                } else if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                    if (sizeof($readiness) > 0) {                        
+                        array_push($readiness, $readiness[(sizeof($readiness) - 1)]);
+                    } else {
+                        array_push($readiness, 0);
+                    }
+                }
+            }
+        }
+
+        // Populate array of average percentage for each week
+        $average = 100 / sizeof($weekList);            
+        $tempSum = 0;
+        for ($i = 1; $i <= sizeof($weekList); $i++) {
+            $tempSum += $average;
+            array_push($estimate, $tempSum);
+        }
+
+        for ($i = 1; $i < sizeof($weekList); $i++) {
+            array_push($target, NULL);
+        }
+        array_push($target, 100);
+
+        $data[0]['weekList'] = $weekList;
+        $data[0]['name'] = 'Actual degree of readiness';
+        $data[0]['values'] = $readiness;
+        $data[0]['marker'] = array('radius' => 4);
+
+        $data[1]['name'] = 'Predicted degree of readiness';
+        $data[1]['values'] = $estimate;
+        $data[1]['marker'] = array('radius' => 4);
         
-    //     return $data;
-    // }
+        $data[2]['name'] = 'Target';
+        $data[2]['values'] = $target;
+        $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+
+        return $data;        
+    }
 
     
     // the rest of the functions are for getting the actual data for the charts
@@ -583,8 +647,7 @@ class ChartsTable extends Table
                         $hourSumPerWeek = array_replace($hourSumPerWeek, $temp);
                     }
                 }
-            }    
-            
+            }            
 
             if ($dateOfFirstHour <= $datemax) {
                 foreach ($weeklist as $week) {

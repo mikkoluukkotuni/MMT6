@@ -57,7 +57,7 @@
                 
                 <?php foreach ($projects as $project): ?>
                 <tr class="trow">
-                    <td class="primary-cell"><?= h($project['project_name']) ?></td>
+                    <td class="primary-cell"><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                         <?php                    
                 $admin = $this->request->session()->read('is_admin');
                 $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
@@ -121,6 +121,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        
         <h4>Metrics</h4>
         <table class="stylized-table">
         <tbody>
@@ -135,7 +136,7 @@
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
-                    <td><?= h($project['project_name']) ?></td>
+                    <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td><?= h($project['metrics'][6]['value']) ?></td>
                     <td><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
                     <td><?= h($project['metrics'][2]['value']) ?></td>
@@ -158,7 +159,7 @@
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
-                    <td><?= h($project['project_name']) ?></td>
+                    <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td><?= h($project['user_members']) ?></td>
                     <td><?= h($project['sum']) ?></td>
                 </tr>
