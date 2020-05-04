@@ -139,8 +139,8 @@ class ChartsTable extends Table
             // Have to use clone, otherwise $projectStartDate also changes
             $endingDate = clone $projectStartDate;
             $endingDate->modify('+20 weeks');
-        }
-
+        }      
+        
         $xFirstWeek = date('W', strtotime($projectStartDate));     
         $xLastWeek = date('W', strtotime($endingDate));           
 
@@ -158,10 +158,90 @@ class ChartsTable extends Table
             }
         }
 
+        // Get list of project's members
+        $members = TableRegistry::get('Members');
+        $query = $members
+                    ->find()
+                    ->select(['id', 'project_role', 'target_hours'])
+                    ->where(['project_id' => $project_id])
+                    ->toArray();
+
+        $memberlist = array();
+
+        if(!empty($query)) {
+            foreach($query as $temp){
+                $memberlist[] = $temp->id;
+            }
+        }
+
+        // BAC - Budget At Completion (same as target hours in some other charts)
+        $BAC = array();
+        $targetHoursTotal = 0;
+        
+        // AC - Actual Costs (same as total hours in some other charts)
+        $AC = array();
+        
+        // Get all hours of the member and store in array in date order
+        // Also get each members target hours
+        $workinghours = TableRegistry::get('Workinghours');
+        if(!empty($memberlist)) {
+            $queryW = $workinghours
+                        ->find()
+                        ->select(['date', 'duration'])
+                        ->where(['member_id IN' => $memberlist])
+                        ->order('date')
+                        ->toArray();
+
+            foreach($query as $member) {
+                if ($member->project_role == 'developer' || $member->project_role == 'manager') {
+                    if ($member->target_hours != NULL) {
+                        $targetHoursTotal += $member->target_hours;
+                    } else {
+                        $targetHoursTotal += 100;
+                    }
+                }                
+            }
+            for ($i = 1; $i < sizeof($weekList); $i++) {
+                array_push($BAC, NULL);
+            }
+            array_push($BAC, $targetHoursTotal);
+
+            if(!empty($queryW)) {
+                // Populate array of cumulative working hour sum for each week
+                $sum = 0;
+                foreach ($weekList as $weekNumber) {
+                    $hoursLogged = False;
+                    foreach ($queryW as $result) {
+                        if (date('W', strtotime($result['date'])) == $weekNumber) {
+                            $sum += $result['duration'];
+                            $hoursLogged = True;
+                        }
+                    }
+
+                    // If project is not completed only draw data points up to current week
+                    if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                        array_push($AC, $sum);
+                    }                
+                }
+            }
+
+            // if(!empty($queryW)) {
+            //     // Count the total sum of member's hours
+            //     foreach($queryW as $result) {
+            //         $AC += $result['duration'];
+            //     } 
+            // }   
+        } 
+
+
+
         $data = array();
         $readiness = array();
-        $estimate = array();
-        $target = array();
+
+        // PV - Planned Value
+        $PV = array();
+        // EAC - Estimated Actual Costs  -- array is used so the value can be placed at the end of x-axis in the chart
+        $EAC = array();
 
         $metrics = TableRegistry::get('Metrics');
         $reports = TableRegistry::get('Weeklyreports');
@@ -217,31 +297,56 @@ class ChartsTable extends Table
             }
         }
 
-        // Populate array of average percentage for each week
-        $average = 100 / sizeof($weekList);            
-        $tempSum = 0;
-        for ($i = 1; $i <= sizeof($weekList); $i++) {
-            $tempSum += $average;
-            array_push($estimate, $tempSum);
-        }
+        // SPI - Schedule Performance Index (degree of readiness / (weeks used / weeks budgeted))
+        $weeksBudgeted = sizeof($weekList);
+        $weeksUsed = array_search($currentWeek, $weekList);
+        $SPI = $readiness[(sizeof($readiness) - 1)]/100 / ($weeksUsed / $weeksBudgeted);
 
-        for ($i = 1; $i < sizeof($weekList); $i++) {
-            array_push($target, NULL);
+        // Populate array of average percentage for each week
+        $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
+        $tempSum = 0;
+        for ($i = 1; $i <= $weeksBudgeted; $i++) {
+            $tempSum += $average;
+            array_push($PV, $tempSum);
         }
-        array_push($target, 100);
+        
+        $DR = $readiness[(sizeof($readiness) - 1)]/100;
+        $CPI = $DR / ($AC[(sizeof($AC) - 1)] / $BAC[(sizeof($BAC) - 1)]);
+
+        for ($i = 1; $i < $weeksBudgeted; $i++) {
+            array_push($EAC, NULL);
+        }
+        array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
 
         $data[0]['weekList'] = $weekList;
-        $data[0]['name'] = 'Actual degree of readiness';
+        $data[0]['name'] = 'Degree of readiness';
         $data[0]['values'] = $readiness;
         $data[0]['marker'] = array('radius' => 4);
 
-        $data[1]['name'] = 'Predicted degree of readiness';
-        $data[1]['values'] = $estimate;
+        $data[1]['name'] = 'PV (Planned Value)';
+        $data[1]['values'] = $PV;
         $data[1]['marker'] = array('radius' => 4);
+
+        $data[2]['name'] = 'AC (Actual Costs)';
+        $data[2]['values'] = $AC;
+        $data[2]['marker'] = array('radius' => 4);
         
-        $data[2]['name'] = 'Target';
-        $data[2]['values'] = $target;
-        $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        $data[3]['name'] = 'EAC (Estimated Actual Costs)';
+        $data[3]['values'] = $EAC;
+        $data[3]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+
+        $data[4]['name'] = 'BAC (Budget At Completion)';
+        $data[4]['values'] = $BAC;
+        $data[4]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+
+        $data[4]['AC'] = $AC[(sizeof($AC) - 1)];
+        $data[4]['BAC'] = $BAC[(sizeof($AC) - 1)];
+        $data[4]['DR'] = $DR;
+        $data[4]['CPI'] = $CPI;
+        $data[4]['SPI'] = $SPI;
+        $data[4]['currentWeek'] = $currentWeek;
+        $data[4]['weeksUsed'] = $weeksUsed;
+        $data[4]['weeksBudgeted'] = $weeksBudgeted;
 
         return $data;        
     }

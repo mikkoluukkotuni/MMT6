@@ -60,22 +60,6 @@ class ChartsController extends AppController
         // The ID of the currently selected project
         $project_id = $this->request->session()->read('selected_project')['id'];
         
-        // Get the chart objects for the charts
-        // these objects come from functions in this controller
-        $phaseChart = $this->phaseChart();
-        $reqChart = $this->reqChart();
-        $commitChart = $this->commitChart();
-        $testcaseChart = $this->testcaseChart();
-        $hoursChart = $this->hoursChart();
-        $totalhourChart = $this->totalhourChart();
-        $hoursPerWeekChart = $this->hoursPerWeekChart();
-        $reqPercentChart = $this->reqPercentChart();
-        $risksProbChart = $this->risksProbChart();
-        $risksImpactChart = $this->risksImpactChart();
-        $risksCombinedChart = $this->risksCombinedChart();
-        $derivedChart = $this->derivedChart();
-        $hoursComparisonChart = $this->hoursComparisonChart();
-        $earnedValueChart = $this->earnedValueChart();
         
         // Get all the data for the charts, based on the chartlimits
         // Fuctions in "ChartsTable.php"
@@ -112,6 +96,23 @@ class ChartsController extends AppController
             $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
         );
 
+
+        // Get the chart objects for the charts
+        // these objects come from functions in this controller
+        $phaseChart = $this->phaseChart();
+        $reqChart = $this->reqChart();
+        $commitChart = $this->commitChart();
+        $testcaseChart = $this->testcaseChart();
+        $hoursChart = $this->hoursChart();
+        $totalhourChart = $this->totalhourChart();
+        $hoursPerWeekChart = $this->hoursPerWeekChart();
+        $reqPercentChart = $this->reqPercentChart();
+        $risksProbChart = $this->risksProbChart();
+        $risksImpactChart = $this->risksImpactChart();
+        $risksCombinedChart = $this->risksCombinedChart();
+        $derivedChart = $this->derivedChart();
+        $hoursComparisonChart = $this->hoursComparisonChart();
+        $earnedValueChart = $this->earnedValueChart($earnedValueData);
 
         
         // Insert the data in to the charts, one by one
@@ -298,36 +299,46 @@ class ChartsController extends AppController
      * Requirement ID: 7 (Andy)
      */
 
-    public function earnedValueChart() 
+    public function earnedValueChart($earnedValueData) 
     {
     	$myChart = $this->Highcharts->createChart();
     	$myChart->chart->renderTo = 'valuewrapper';
     	$myChart->chart->type = 'line';
     
     	$myChart->title = array(
-        	'text' => 'Earned value',
+        	'text' => 'Earned value chart',
         	'y' => 20,
         	'align' => 'center',
         	'styleFont' => '18px Metrophobic, Arial, sans-serif',
         	'styleColor' => '#0099ff',
         );
-    	$myChart->subtitle->text = "per week";
+    	// $myChart->subtitle->text = "per week";
 
     	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
         $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
         $myChart->legend->itemStyle = array('color' => '#222');
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+
+        $text = "Current week: " . $earnedValueData[4]['currentWeek'] .
+            ", Weeks used: " . $earnedValueData[4]['weeksUsed'] . 
+            ", Weeks budgeted: " . $earnedValueData[4]['weeksBudgeted'] .
+            "<br/>DR (Degree of Readiness: " . $earnedValueData[4]['DR'] .
+            ", AC (Actual Costs): " . $earnedValueData[4]['AC'] . " hours" .
+            ", BAC (Budget At Completion): " . $earnedValueData[4]['BAC'] . " hours" .
+            "<br/>CPI (Cost Performance Index): " . round($earnedValueData[4]['CPI'], 2) .  
+            ", SPI (Schedule Performance Index): " . $earnedValueData[4]['SPI'];
+        $myChart->caption->text = $text;
         
         // labels of axes    	
         $myChart->xAxis->title->text = 'Week number';
-        $myChart->yAxis->title->text = 'Percentage complete';
+        $myChart->yAxis->title->text = 'Cost (hours)';
         
-        $myChart->colors = array('#fc0303', '#036ffc', '#fc08f8');
+        // $myChart->colors = array('#fc0303', '#036ffc', '#068a19', '#fc08f8');
         
         // tooltips etc
         $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
-            return 'Percentage complete: ' +' <b>'+
+            return 'Cost: ' +' <b>'+
             Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x +'<br/>Line: ' + this.series.name;}");
         $myChart->plotOptions->area->marker->enabled = false;
     
