@@ -340,8 +340,9 @@ class ChartsTable extends Table
         $data[4]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
 
         $data[4]['AC'] = $AC[(sizeof($AC) - 1)];
-        $data[4]['BAC'] = $BAC[(sizeof($AC) - 1)];
+        $data[4]['BAC'] = $BAC[(sizeof($BAC) - 1)];
         $data[4]['DR'] = $DR;
+        $data[4]['EAC'] = $EAC[(sizeof($EAC) - 1)];
         $data[4]['CPI'] = $CPI;
         $data[4]['SPI'] = $SPI;
         $data[4]['currentWeek'] = $currentWeek;

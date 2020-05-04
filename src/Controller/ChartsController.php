@@ -326,7 +326,8 @@ class ChartsController extends AppController
             "<br/>DR (Degree of Readiness: " . $earnedValueData[4]['DR'] .
             ", AC (Actual Costs): " . $earnedValueData[4]['AC'] . " hours" .
             ", BAC (Budget At Completion): " . $earnedValueData[4]['BAC'] . " hours" .
-            "<br/>CPI (Cost Performance Index): " . round($earnedValueData[4]['CPI'], 2) .  
+            "<br/>EAC (Estimated Actual Costs): " . $earnedValueData[4]['EAC'] .  
+            ", CPI (Cost Performance Index): " . round($earnedValueData[4]['CPI'], 2) .  
             ", SPI (Schedule Performance Index): " . round($earnedValueData[4]['SPI'], 2);
         $myChart->caption->text = $text;
         
