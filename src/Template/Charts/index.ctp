@@ -20,15 +20,16 @@
 
 <div class="metrics index large-9 medium-8 columns content float: left">
 
-	<!-- 12.3.2016: code cleanup for displaying the charts properly
-	     Requirement ID: 7 (Andy)
-	-->
-    <div class="chart">
-        <h4>Earned Value Chart</h4>
-        <div id="valuewrapper">
-        	<?php echo $this->Highcharts->render($earnedValueChart, 'valuechart'); ?>
+    <?php 
+    // Earned value chart is visible only to admins and supervisor at the moment
+    if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>  
+        <div class="chart">
+            <h4>Earned Value Chart</h4>
+            <div id="valuewrapper">
+                <?php echo $this->Highcharts->render($earnedValueChart, 'valuechart'); ?>
+            </div>
         </div>
-    </div>
+    <?php } ?>
 
     <div class="chart">
         <h4>Phase Chart</h4>

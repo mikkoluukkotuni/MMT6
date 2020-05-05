@@ -323,12 +323,15 @@ class ChartsController extends AppController
         $text = "Current week: " . $earnedValueData[4]['currentWeek'] .
             ", Weeks used: " . $earnedValueData[4]['weeksUsed'] . 
             ", Weeks budgeted: " . $earnedValueData[4]['weeksBudgeted'] .
+            ", Weeks estimated: " . $earnedValueData[4]['weeksEstimated'] .
             "<br/>DR (Degree of Readiness: " . $earnedValueData[4]['DR'] .
             ", AC (Actual Costs): " . $earnedValueData[4]['AC'] . " hours" .
             ", BAC (Budget At Completion): " . $earnedValueData[4]['BAC'] . " hours" .
-            "<br/>EAC (Estimated Actual Costs): " . round($earnedValueData[4]['EAC'], 2) .  
+            "<br/>EAC (Estimated Actual Costs): " . round($earnedValueData[4]['EAC'], 1) . " h" .  
             ", CPI (Cost Performance Index): " . round($earnedValueData[4]['CPI'], 2) .  
-            ", SPI (Schedule Performance Index): " . round($earnedValueData[4]['SPI'], 2);
+            ", SPI (Schedule Performance Index): " . round($earnedValueData[4]['SPI'], 2) .
+            ", VAC (Variance At Completion): " . round($earnedValueData[4]['VAC'], 1) . " h" .
+            ", Schedule variance at completion: " . round($earnedValueData[4]['SVAC'], 0) . " weeks";
         $myChart->caption->text = $text;
         
         // labels of axes    	

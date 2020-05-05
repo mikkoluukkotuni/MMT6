@@ -236,6 +236,7 @@ class ChartsTable extends Table
 
 
         $data = array();
+        
         $readiness = array();
 
         // PV - Planned Value
@@ -302,6 +303,26 @@ class ChartsTable extends Table
         $weeksUsed = array_search($currentWeek, $weekList);
         $SPI = $readiness[(sizeof($readiness) - 1)]/100 / ($weeksUsed / $weeksBudgeted);
 
+        $avgProgress = 100 / sizeof($weekList);
+        $currentProgress = $readiness[(sizeof($readiness) - 1)];
+        $weeksLeft = $weeksBudgeted - $weeksUsed;
+        $progressLeft = 100 - $currentProgress;
+        $weeksEstimated = round(($weeksUsed + ($progressLeft / $avgProgress)), 0);
+        // $estimatedCompletionWeek = $weekList[(sizeof($weekList) - 1)];
+        $estimatedCompletionWeek = $weekList[0] + $weeksEstimated;
+        // $estimatedCompletionWeek = 0;
+        $SVAC = 0;
+
+        var_dump($estimatedCompletionWeek);
+
+        if ($weeksEstimated < $weeksBudgeted) {
+            // $estimatedCompletionWeek = $weekList[0] + $weeksEstimated);
+            $SVAC = $weeksBudgeted - $weeksEstimated;
+        } else if ($weeksEstimated > $weeksBudgeted) {
+            // $estimatedCompletionWeek = $currentWeek + ($weeksEstimated - $weeksBudgeted);
+            $SVAC = $weeksEstimated - $weeksBudgeted;
+        }
+
         // Populate array of average percentage for each week
         $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
         $tempSum = 0;
@@ -310,24 +331,44 @@ class ChartsTable extends Table
             array_push($PV, $tempSum);
         }
         
+        // BCWP - Budgeted Cost for Work Performed (degree of readiness * actual cost)
+        $BCWP = array();
         $DR = $readiness[(sizeof($readiness) - 1)]/100;
         $CPI = $DR / ($AC[(sizeof($AC) - 1)] / $BAC[(sizeof($BAC) - 1)]);
 
-        for ($i = 1; $i < $weeksBudgeted; $i++) {
-            array_push($EAC, NULL);
+        for ($i = 0; $i <= $weeksUsed; $i++) {
+            array_push($BCWP, (($readiness[$i]/100) * $BAC[(sizeof($BAC) - 1)]));
         }
-        array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+
+        var_dump($estimatedCompletionWeek);
+        
+        if ($weeksEstimated > $weeksBudgeted) {
+            while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {
+                array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+            }
+
+            for ($i = 1; $i < sizeof($weekList) - 1; $i++) {
+                array_push($EAC, NULL);        
+            }
+            array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+        } else {
+            for ($i = 1; $i < $weeksEstimated; $i++) {
+                array_push($EAC, NULL);        
+            }
+            array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+        }
+        
 
         $data[0]['weekList'] = $weekList;
-        $data[0]['name'] = 'Degree of readiness';
-        $data[0]['values'] = $readiness;
+        $data[0]['name'] = 'BCWP (Budgeted Cost for Work Performed)';
+        $data[0]['values'] = $BCWP;
         $data[0]['marker'] = array('radius' => 4);
 
-        $data[1]['name'] = 'PV (Planned Value)';
+        $data[1]['name'] = 'PV (Planned Value) / BCWS';
         $data[1]['values'] = $PV;
         $data[1]['marker'] = array('radius' => 4);
 
-        $data[2]['name'] = 'AC (Actual Costs)';
+        $data[2]['name'] = 'AC (Actual Costs) / ACWP';
         $data[2]['values'] = $AC;
         $data[2]['marker'] = array('radius' => 4);
         
@@ -345,9 +386,13 @@ class ChartsTable extends Table
         $data[4]['EAC'] = $EAC[(sizeof($EAC) - 1)];
         $data[4]['CPI'] = $CPI;
         $data[4]['SPI'] = $SPI;
+        $data[4]['VAC'] = $EAC[(sizeof($EAC) - 1)] - $BAC[(sizeof($BAC) - 1)];
+        $data[4]['SVAC'] = $SVAC;
         $data[4]['currentWeek'] = $currentWeek;
         $data[4]['weeksUsed'] = $weeksUsed;
         $data[4]['weeksBudgeted'] = $weeksBudgeted;
+        $data[4]['weeksEstimated'] = $weeksEstimated;
+        $data[4]['estimatedCompletionWeek'] = $estimatedCompletionWeek;
 
         return $data;        
     }
