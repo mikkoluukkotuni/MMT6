@@ -360,4 +360,30 @@ class MembersTable extends Table
 
         return $data;        
     }
+
+
+    public function anonymizeAllMembers($project_id)
+    {
+        $anonIds = [10001, 10002, 10003, 10004, 10005, 10006, 10007, 10009];
+
+        // Get list of project's members
+        $members = TableRegistry::get('Members');
+        $queryM = $members
+            ->find()
+            ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
+            // ->where(['project_id' => $project_id, 'project_role' => 'manager'])
+            // ->orWhere(['project_id' => $project_id, 'project_role' => 'developer'])
+            // ->orWhere(['project_id' => $project_id, 'project_role' => 'client'])
+            ->toArray();
+
+        $modifiedMemberlist = array();
+        
+        for ($i = 0; $i < sizeof($queryM); $i++) {
+            $queryM[$i]['user_id'] = (10001 + $i);
+            array_push($modifiedMemberlist, $queryM[$i]);
+        }
+
+        return $modifiedMemberlist;
+
+    }
 }

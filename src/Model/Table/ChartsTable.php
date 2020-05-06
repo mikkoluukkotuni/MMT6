@@ -311,17 +311,19 @@ class ChartsTable extends Table
         // $estimatedCompletionWeek = $weekList[(sizeof($weekList) - 1)];
         $estimatedCompletionWeek = $weekList[0] + $weeksEstimated;
         // $estimatedCompletionWeek = 0;
-        $SVAC = 0;
+        // $SVAC = 0;
 
-        var_dump($estimatedCompletionWeek);
+        // var_dump($estimatedCompletionWeek);
 
-        if ($weeksEstimated < $weeksBudgeted) {
-            // $estimatedCompletionWeek = $weekList[0] + $weeksEstimated);
-            $SVAC = $weeksBudgeted - $weeksEstimated;
-        } else if ($weeksEstimated > $weeksBudgeted) {
-            // $estimatedCompletionWeek = $currentWeek + ($weeksEstimated - $weeksBudgeted);
-            $SVAC = $weeksEstimated - $weeksBudgeted;
-        }
+        $SVAC = $weeksEstimated - $weeksBudgeted;
+
+        // if ($weeksEstimated < $weeksBudgeted) {
+        //     // $estimatedCompletionWeek = $weekList[0] + $weeksEstimated);
+        //     $SVAC = $weeksBudgeted - $weeksEstimated;
+        // } else if ($weeksEstimated > $weeksBudgeted) {
+        //     // $estimatedCompletionWeek = $currentWeek + ($weeksEstimated - $weeksBudgeted);
+        //     $SVAC = $weeksEstimated - $weeksBudgeted;
+        // }
 
         // Populate array of average percentage for each week
         $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
@@ -340,7 +342,6 @@ class ChartsTable extends Table
             array_push($BCWP, (($readiness[$i]/100) * $BAC[(sizeof($BAC) - 1)]));
         }
 
-        var_dump($estimatedCompletionWeek);
         
         if ($weeksEstimated > $weeksBudgeted) {
             while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {

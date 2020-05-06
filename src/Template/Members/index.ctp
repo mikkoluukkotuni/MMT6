@@ -11,7 +11,7 @@
             $manager = ( $this->request->session()->read('selected_project_role') == 'manager' ) ? 1 : 0;
             
             if ($admin || $supervisor || $manager ) {
-        ?>
+        ?>            
             <button id="navbutton"><?= $this->Html->link(__('+ New Member'), ['action' => 'add']) ?></button>
         <?php } ?>
     <table cellpadding="0" cellspacing="0">
@@ -128,4 +128,8 @@
         </ul>
         <p><?= $this->Paginator->counter() ?></p>
     </div>
+    <?php if ($admin) { ?>
+    <a href="<?= $this->Url->build(['controller' => 'Members', 'action' => 'anonymizeAll']) ?>" 
+        onclick="return confirm('Are you sure you want to anonymize all members of the project (this cannot be reversed)?');">Anonymize members</a>
+    <?php } ?>
 </div>  
