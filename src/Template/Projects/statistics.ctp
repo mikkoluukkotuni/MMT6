@@ -65,56 +65,49 @@
                 // query iterator, resets after finishing one row
                 $i = 0;
 
-                            foreach ($project['reports'] as $report):                          
-                                ?>
-                            <td>
-                            <?php
-                            // missing ones print normally
-                            if ( $report == '-' ) { ?>
-                                <?= h($report) ?>
-                            <?php
+                        foreach ($project['reports'] as $report):                          
+                            ?>
+                        <td>
+                        <?php
+                        // missing ones print normally
+                        if ( $report == '-' ) { ?>
+                            <?= h($report) ?>
+                        <?php
+                        } else { 
+                            // fetching the ID for current weeklyreport's view-page
+                            $query = Cake\ORM\TableRegistry::get('Weeklyreports')
+                                    ->find()
+                                    ->select(['id'])
+                                    ->where(['project_id =' => $project['id'], 
+                                            'week >=' => $min, 'year >=' => $year])
+                                    ->toArray();
+                            // transforming returned query item to integer
+                            $reportId = $query[$i++]->id;
+                                
+                            // X's have normal link color so they echo normally
+                            if ($report == 'X') {
+                                echo $this->Html->link(__($report.' (view)'), [
+                                    'controller' => 'Weeklyreports',
+                                    'action' => 'view',
+                                    $reportId ]);
+                                    // unread weeklyreports have some mark indicating it
+                                    $userid = $this->request->session()->read('Auth.User.id');
+                                    $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
+                                            ->select()
+                                            ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
+                                            ->toArray();
+                                    if ( sizeof($newreps) > 0 ) {
+                                            echo "<div class='unread'>unread</div>";
                                     }
-                            // adding link to X's if admin or supervisor
-                            // BUG FIX 31.3.: links to weeklyreports now actually link to correct reports
-                                    elseif ( ($report == 'X' || $report == 'L') && ($admin || $supervisor) ) { 
-                                        // fetching the ID for current weeklyreport's view-page
-                                        $query = Cake\ORM\TableRegistry::get('Weeklyreports')
-                                                ->find()
-                                                ->select(['id'])
-                                                ->where(['project_id =' => $project['id'], 
-                                                        'week >=' => $min, 'year >=' => $year])
-                                                ->toArray();
-                                        // transforming returned query item to integer
-                                        $reportId = $query[$i++]->id;
-                                            
-                                        // X's have normal link color so they echo normally
-                                        if ($report == 'X') {
-                                            echo $this->Html->link(__($report.' (view)'), [
-                                                'controller' => 'Weeklyreports',
-                                                'action' => 'view',
-                                                $reportId ]);
-                                                // unread weeklyreports have some mark indicating it
-                                                $userid = $this->request->session()->read('Auth.User.id');
-                                                $newreps = Cake\ORM\TableRegistry::get('Newreports')->find()
-                                                        ->select()
-                                                        ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
-                                                        ->toArray();
-                                                if ( sizeof($newreps) > 0 ) {
-                                                        echo "<div class='unread'>unread</div>";
-                                                }
-                                                
-                                        } else {
-                                            echo $this->Html->link(__($report.' (view)'), [
-                                                'controller' => 'Weeklyreports',
-                                                'action' => 'view',
-                                                $reportId ], ['style'=>'color: orange;']);
-                                        } ?>
-                            <?php
-                            // displays X without a link to other users
-                            } else { ?>
-                                    <?= h($report) ?>
-                            <?php } ?>
-                                        </td>
+                                    
+                            } else {
+                                echo $this->Html->link(__($report.' (view)'), [
+                                    'controller' => 'Weeklyreports',
+                                    'action' => 'view',
+                                    $reportId ], ['style'=>'color: orange;']);
+                            }
+                        } ?>
+                        </td>
       
                         <?php endforeach; ?>
                     </tr>
@@ -126,16 +119,26 @@
         <table class="stylized-table">
         <tbody>
             <tr class="header">
+                <td style="width:10px;"></td>
                 <td style="width:220px;">Project name</td>
                 <td>Commits</td>
                 <td>Test cases (passed / total)</td>
                 <td>Product backlog</td>
                 <td>Sprint backlog</td>
                 <td>Done</td>
-                <td>Risks (high / total)</td>
+                <td>Risks (high / total)</td>                
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
+                    <td
+                    <?php if ($project['status'] == 3) {
+                            echo(' style="background-color:#ff1100"');
+                        } else if ($project['status'] == 2) {
+                            echo(' style="background-color:yellow"');                               
+                        } else {
+                            echo(' style="background-color:#51e064"');
+                    } ?> >
+                    </td>
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td><?= h($project['metrics'][6]['value']) ?></td>
                     <td><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>

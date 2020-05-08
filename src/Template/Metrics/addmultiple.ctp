@@ -70,7 +70,10 @@
             <?php
                 echo $this->Form->input('degreeReadiness', 
                     array('value' => $current_metrics[9]['value'], 'label' => $metricNames[10],'type' => 'number', 'min' => 0, 'max' => 100, 'required' => true));
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Estimate of how complete the project is (from 0 to 100 percent).', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Degree of readiness tells how complete the project is (from 0 to 100 percent).', 'class' => 'infoicon']);
+                echo $this->Form->input('overallStatus', 
+                    array('value' => $current_metrics[10]['value'], 'label' => $metricNames[11],'type' => 'number', 'min' => 1, 'max' => 3, 'required' => true));
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Overall status of the project (1 = OK, 2 = caution, 3 = critical).', 'class' => 'infoicon']);
             ?>
             <div class="report-nav">
                 <?= $this->Form->button('Next page', ['name' => 'submit', 'value' => 'next']);?>

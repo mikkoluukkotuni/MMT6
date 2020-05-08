@@ -291,4 +291,19 @@ class ProjectsTable extends Table
         }
         return $completeList;
     }
+
+    // The logic that determines the status of project goes here
+    public function getStatus($project_id, $metrics)
+    {
+        $status = 1;
+        if (sizeof($metrics) >= 11) {
+            if ($metrics[10]['value'] == 3) {
+                $status = 3;
+            } else if ($metrics[10]['value'] == 2) {
+                $status = 2;
+            }    
+        }
+        
+        return $status;
+    } 
 }
