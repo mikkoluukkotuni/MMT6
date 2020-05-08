@@ -128,6 +128,46 @@ class ChartsTable extends Table
     }
 
 
+    public function getTotalHours($project_id)
+    {
+        $members = TableRegistry::get('Members');
+
+        // get a list of the members in the project
+        $query = $members
+            ->find()
+            ->select(['id'])
+            ->where(['project_id =' => $project_id])
+            ->toArray();
+        $memberlist = array();
+        
+        if (!empty($query)) {
+            foreach ($query as $temp) {
+                $memberlist[] = $temp->id;
+            }
+        }
+
+        $workinghours = TableRegistry::get('Workinghours');
+        if (!empty($memberlist)) {
+            $queryW = $workinghours
+                ->find()
+                ->select(['date', 'duration'])
+                ->where(['member_id IN' => $memberlist])
+                ->order('date')
+                ->toArray();
+        }
+
+        $totalHours = 0;
+
+        if (!empty($queryW)) {
+            foreach ($queryW as $result) {
+                $totalHours += $result['duration'];
+            }
+        }
+
+        return $totalHours;
+    }
+
+
     public function earnedValueData($project_id, $projectStartDate, $endingDate)
     {
         $time = Time::now();

@@ -69,6 +69,33 @@ class ChartsController extends AppController
         $allTheWeeks = $this->Charts->weekList($chartLimits['weekmin'], $chartLimits['weekmax'], 
             $chartLimits['yearmin'], $chartLimits['yearmax']
         );
+
+        // Line chart displaying the cumulative amount of hours done in the project
+        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks, $chartLimits['weekmin'], 
+            $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
+        );
+
+        // For some charts data is only created (and chart displayed) if project has reports and hours
+        if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0) {
+            $this->request->session()->write('displayCharts', true);
+
+            $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
+            
+            // earnedValueChart
+            $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
+            foreach ($earnedValueData as $data) {
+                $earnedValueChart->series[] = array(
+                    'name' => $data['name'],
+                    'data' => $data['values'],
+                    'marker' => $data['marker']
+                );
+            }
+            
+            $earnedValueChart = $this->earnedValueChart($earnedValueData);
+        } else {
+            $this->request->session()->write('displayCharts', false);
+        }
+
         $phaseData = $this->Charts->phaseAreaData($weeklyreports['id']);
         $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
@@ -76,8 +103,7 @@ class ChartsController extends AppController
 
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $endingDate = $this->request->session()->read('selected_project')['finished_date'];
-        // var_dump($projectStartDate);
-        $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
+        // $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
         
         // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);
@@ -87,10 +113,7 @@ class ChartsController extends AppController
             $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
         );
         
-        // Line chart displaying the cumulative amount of hours done in the project
-        $totalhourData = $this->Charts->totalhourLineData($project_id, $allTheWeeks, $chartLimits['weekmin'], 
-            $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
-        );
+
         $riskData = $this->Charts->riskData($weeklyreports['id'], $project_id);
         $hoursComparisonData = $this->Charts->hoursComparisonData($allTheWeeks, $chartLimits['weekmin'], 
             $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
@@ -112,7 +135,7 @@ class ChartsController extends AppController
         $risksCombinedChart = $this->risksCombinedChart();
         $derivedChart = $this->derivedChart();
         $hoursComparisonChart = $this->hoursComparisonChart();
-        $earnedValueChart = $this->earnedValueChart($earnedValueData);
+        // $earnedValueChart = $this->earnedValueChart($earnedValueData);
 
         
         // Insert the data in to the charts, one by one
@@ -165,15 +188,15 @@ class ChartsController extends AppController
         );
 
 
-        // earnedValueChart
-        $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
-        foreach ($earnedValueData as $data) {
-            $earnedValueChart->series[] = array(
-                'name' => $data['name'],
-                'data' => $data['values'],
-                'marker' => $data['marker']
-            );
-        }
+        // // earnedValueChart
+        // $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
+        // foreach ($earnedValueData as $data) {
+        //     $earnedValueChart->series[] = array(
+        //         'name' => $data['name'],
+        //         'data' => $data['values'],
+        //         'marker' => $data['marker']
+        //     );
+        // }
         // $earnedValueChart->series[] = array(
         //     'name' => 'Degree of readiness',
         //     'data' => $earnedValueData[0]['values']        

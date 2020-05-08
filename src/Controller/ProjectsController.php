@@ -75,10 +75,6 @@ class ProjectsController extends AppController
             $this->request->session()->delete('current_metrics');
             $this->request->session()->delete('current_weeklyhours');
         }
-
-
-        
-       
     }
     
      public function statistics()

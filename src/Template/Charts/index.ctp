@@ -22,7 +22,7 @@
 
     <?php 
     // Earned value chart is visible only to admins and supervisor at the moment
-    if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>  
+    if (($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) && $this->request->session()->read('displayCharts')) { ?>  
         <div class="chart">
             <h4>Earned Value Chart</h4>
             <div id="valuewrapper">
