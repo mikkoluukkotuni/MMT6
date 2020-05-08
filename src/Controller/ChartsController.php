@@ -75,11 +75,16 @@ class ChartsController extends AppController
             $chartLimits['weekmax'], $chartLimits['yearmin'], $chartLimits['yearmax']
         );
 
+        $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
+        $endingDate = $this->request->session()->read('selected_project')['finished_date'];
+
+        
         // For some charts data is only created (and chart displayed) if project has reports and hours
         if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0) {
             $this->request->session()->write('displayCharts', true);
 
             $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
+            $earnedValueChart = $this->earnedValueChart($earnedValueData);
             
             // earnedValueChart
             $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
@@ -89,20 +94,17 @@ class ChartsController extends AppController
                     'data' => $data['values'],
                     'marker' => $data['marker']
                 );
-            }
-            
-            $earnedValueChart = $this->earnedValueChart($earnedValueData);
+            }           
         } else {
             $this->request->session()->write('displayCharts', false);
         }
+        
 
         $phaseData = $this->Charts->phaseAreaData($weeklyreports['id']);
         $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
 
-        $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
-        $endingDate = $this->request->session()->read('selected_project')['finished_date'];
         // $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
         
         // Bar chart displaying the amount of hours in each category

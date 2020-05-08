@@ -264,19 +264,9 @@ class ChartsTable extends Table
                     }                
                 }
             }
+        }
 
-            // if(!empty($queryW)) {
-            //     // Count the total sum of member's hours
-            //     foreach($queryW as $result) {
-            //         $AC += $result['duration'];
-            //     } 
-            // }   
-        } 
-
-
-
-        $data = array();
-        
+        $data = array();        
         $readiness = array();
 
         // PV - Planned Value
@@ -348,22 +338,8 @@ class ChartsTable extends Table
         $weeksLeft = $weeksBudgeted - $weeksUsed;
         $progressLeft = 100 - $currentProgress;
         $weeksEstimated = round(($weeksUsed + ($progressLeft / $avgProgress)), 0);
-        // $estimatedCompletionWeek = $weekList[(sizeof($weekList) - 1)];
         $estimatedCompletionWeek = $weekList[0] + $weeksEstimated;
-        // $estimatedCompletionWeek = 0;
-        // $SVAC = 0;
-
-        // var_dump($estimatedCompletionWeek);
-
         $SVAC = $weeksEstimated - $weeksBudgeted;
-
-        // if ($weeksEstimated < $weeksBudgeted) {
-        //     // $estimatedCompletionWeek = $weekList[0] + $weeksEstimated);
-        //     $SVAC = $weeksBudgeted - $weeksEstimated;
-        // } else if ($weeksEstimated > $weeksBudgeted) {
-        //     // $estimatedCompletionWeek = $currentWeek + ($weeksEstimated - $weeksBudgeted);
-        //     $SVAC = $weeksEstimated - $weeksBudgeted;
-        // }
 
         // Populate array of average percentage for each week
         $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
