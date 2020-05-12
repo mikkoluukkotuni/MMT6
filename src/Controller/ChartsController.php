@@ -92,7 +92,11 @@ class ChartsController extends AppController
                 $earnedValueChart->series[] = array(
                     'name' => $data['name'],
                     'data' => $data['values'],
-                    'marker' => $data['marker']
+                    'marker' => $data['marker'],
+                    'type' => $data['type'],
+                    'dashStyle' => $data['dashStyle'],
+                    'lineWidth' => $data['lineWidth'],
+                    'color' => $data['color']
                 );
             }           
         } else {
@@ -345,18 +349,18 @@ class ChartsController extends AppController
         $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
 
-        $text = "Current week: " . $earnedValueData[4]['currentWeek'] .
-            ", Weeks used: " . $earnedValueData[4]['weeksUsed'] . 
-            ", Weeks budgeted: " . $earnedValueData[4]['weeksBudgeted'] .
-            ", Weeks estimated: " . $earnedValueData[4]['weeksEstimated'] .
-            "<br/>DR (Degree of Readiness: " . $earnedValueData[4]['DR'] .
-            ", AC (Actual Costs): " . $earnedValueData[4]['AC'] . " hours" .
-            ", BAC (Budget At Completion): " . $earnedValueData[4]['BAC'] . " hours" .
-            "<br/>EAC (Estimated Actual Costs): " . round($earnedValueData[4]['EAC'], 1) . " h" .  
-            ", CPI (Cost Performance Index): " . round($earnedValueData[4]['CPI'], 2) .  
-            ", SPI (Schedule Performance Index): " . round($earnedValueData[4]['SPI'], 2) .
-            ", VAC (Variance At Completion): " . round($earnedValueData[4]['VAC'], 1) . " h" .
-            ", Schedule variance at completion: " . round($earnedValueData[4]['SVAC'], 0) . " weeks";
+        $text = "Current week: " . $earnedValueData[6]['currentWeek'] .
+            ", Weeks used: " . $earnedValueData[6]['weeksUsed'] . 
+            ", Weeks budgeted: " . $earnedValueData[6]['weeksBudgeted'] .
+            ", Weeks estimated: " . $earnedValueData[6]['weeksEstimated'] .
+            "<br/>DR (Degree of Readiness: " . $earnedValueData[6]['DR'] .
+            ", AC (Actual Costs): " . $earnedValueData[6]['AC'] . " hours" .
+            ", BAC (Budget At Completion): " . $earnedValueData[6]['BAC'] . " hours" .
+            "<br/>EAC (Estimated Actual Costs): " . round($earnedValueData[6]['EAC'], 1) . " h" .  
+            ", CPI (Cost Performance Index): " . round($earnedValueData[6]['CPI'], 2) .  
+            ", SPI (Schedule Performance Index): " . round($earnedValueData[6]['SPI'], 2) .
+            ", VAC (Variance At Completion): " . round($earnedValueData[6]['VAC'], 1) . " h" .
+            ", Schedule variance at completion: " . round($earnedValueData[6]['SVAC'], 0) . " weeks";
         $myChart->caption->text = $text;
         
         // labels of axes    	

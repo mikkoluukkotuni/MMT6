@@ -220,6 +220,9 @@ class ChartsTable extends Table
         
         // AC - Actual Costs (same as total hours in some other charts)
         $AC = array();
+
+        // Prediction part of actual costs
+        $AC2 = array();
         
         // Get all hours of the member and store in array in date order
         // Also get each members target hours
@@ -271,6 +274,7 @@ class ChartsTable extends Table
 
         // PV - Planned Value
         $PV = array();
+        $PV2 = array();
         // EAC - Estimated Actual Costs  -- array is used so the value can be placed at the end of x-axis in the chart
         $EAC = array();
 
@@ -341,12 +345,22 @@ class ChartsTable extends Table
         $estimatedCompletionWeek = $weekList[0] + $weeksEstimated;
         $SVAC = $weeksEstimated - $weeksBudgeted;
 
-        // Populate array of average percentage for each week
+        // Add values up to this week to PV and after that to PV2
         $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
         $tempSum = 0;
         for ($i = 1; $i <= $weeksBudgeted; $i++) {
             $tempSum += $average;
-            array_push($PV, $tempSum);
+
+            // TÄÄ JOTENKIN PIELESSÄ. VIIKKOJEN MÄÄRÄ PIELESSÄ? NÄKYY PV JA PV2-LIITOSKOHDASSA
+
+            if ($i <= sizeof($AC)) {
+                array_push($PV, $tempSum);
+            }
+            if ($i < sizeof($AC)) {
+                array_push($PV2, NULL);
+            } else {
+                array_push($PV2, $tempSum);
+            }
         }
         
         // BCWP - Budgeted Cost for Work Performed (degree of readiness * actual cost)
@@ -374,42 +388,90 @@ class ChartsTable extends Table
             }
             array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
         }
+
+        $averagePredicted = $EAC[(sizeof($EAC) - 1)] / $weeksEstimated;   
+        $tempSum = 0;
+        for ($i = 1; $i <= $weeksEstimated; $i++) {
+            $tempSum += $averagePredicted;
+            if ($i < sizeof($AC)) {
+                array_push($AC2, NULL);
+            } else {
+                array_push($AC2, $tempSum);
+            }
+        }
         
 
         $data[0]['weekList'] = $weekList;
         $data[0]['name'] = 'BCWP (Budgeted Cost for Work Performed)';
         $data[0]['values'] = $BCWP;
         $data[0]['marker'] = array('radius' => 4);
+        $data[0]['type'] = 'line';
+        $data[0]['dashStyle'] = 'Solid';
+        $data[0]['lineWidth'] = 2;
+        $data[0]['color'] = '#fc0303';
 
         $data[1]['name'] = 'PV (Planned Value) / BCWS';
         $data[1]['values'] = $PV;
         $data[1]['marker'] = array('radius' => 4);
+        $data[1]['type'] = 'line';
+        $data[1]['dashStyle'] = 'Solid';
+        $data[1]['lineWidth'] = 2;
+        $data[1]['color'] = '#1c1c1c';
 
-        $data[2]['name'] = 'AC (Actual Costs) / ACWP';
-        $data[2]['values'] = $AC;
-        $data[2]['marker'] = array('radius' => 4);
+        $data[2]['name'] = 'PV (Planned Value) / BCWS';
+        $data[2]['values'] = $PV2;
+        $data[2]['marker'] = array('radius' => 1);
+        $data[2]['type'] = 'scatter';
+        $data[2]['dashStyle'] = 'Dash';
+        $data[2]['lineWidth'] = 2;
+        $data[2]['color'] = '#1c1c1c';
+
+        $data[3]['name'] = 'AC (Actual Costs) / ACWP';
+        $data[3]['values'] = $AC;
+        $data[3]['marker'] = array('radius' => 4);
+        $data[3]['type'] = 'line';
+        $data[3]['dashStyle'] = 'Solid';
+        $data[3]['lineWidth'] = 2;
+        $data[3]['color'] = '#036ffc';
+
+        $data[4]['name'] = 'Actual costs prediction';
+        $data[4]['values'] = $AC2;
+        $data[4]['marker'] = array('radius' => 1);
+        $data[4]['type'] = 'scatter';
+        $data[4]['dashStyle'] = 'Dash';
+        $data[4]['lineWidth'] = 2;
+        $data[4]['color'] = '#036ffc';
         
-        $data[3]['name'] = 'EAC (Estimated Actual Costs)';
-        $data[3]['values'] = $EAC;
-        $data[3]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[5]['name'] = 'EAC (Estimated Actual Costs)';
+        $data[5]['values'] = $EAC;
+        $data[5]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[5]['type'] = 'line';
+        $data[5]['dashStyle'] = 'Solid';
+        $data[5]['lineWidth'] = 2;
+        $data[5]['color'] = '#036ffc';
 
-        $data[4]['name'] = 'BAC (Budget At Completion)';
-        $data[4]['values'] = $BAC;
-        $data[4]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[6]['name'] = 'BAC (Budget At Completion)';
+        $data[6]['values'] = $BAC;
+        $data[6]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[6]['type'] = 'line';
+        $data[6]['dashStyle'] = 'Solid';
+        $data[6]['lineWidth'] = 2;
+        $data[6]['color'] = '#1c1c1c';
 
-        $data[4]['AC'] = $AC[(sizeof($AC) - 1)];
-        $data[4]['BAC'] = $BAC[(sizeof($BAC) - 1)];
-        $data[4]['DR'] = $DR;
-        $data[4]['EAC'] = $EAC[(sizeof($EAC) - 1)];
-        $data[4]['CPI'] = $CPI;
-        $data[4]['SPI'] = $SPI;
-        $data[4]['VAC'] = $EAC[(sizeof($EAC) - 1)] - $BAC[(sizeof($BAC) - 1)];
-        $data[4]['SVAC'] = $SVAC;
-        $data[4]['currentWeek'] = $currentWeek;
-        $data[4]['weeksUsed'] = $weeksUsed;
-        $data[4]['weeksBudgeted'] = $weeksBudgeted;
-        $data[4]['weeksEstimated'] = $weeksEstimated;
-        $data[4]['estimatedCompletionWeek'] = $estimatedCompletionWeek;
+        $data[6]['AC'] = $AC[(sizeof($AC) - 1)];
+        $data[6]['BAC'] = $BAC[(sizeof($BAC) - 1)];
+        $data[6]['DR'] = $DR;
+        $data[6]['EAC'] = $EAC[(sizeof($EAC) - 1)];
+        $data[6]['CPI'] = $CPI;
+        $data[6]['SPI'] = $SPI;
+        $data[6]['VAC'] = $EAC[(sizeof($EAC) - 1)] - $BAC[(sizeof($BAC) - 1)];
+        $data[6]['SVAC'] = $SVAC;
+        $data[6]['currentWeek'] = $currentWeek;
+        $data[6]['weeksUsed'] = $weeksUsed;
+        $data[6]['weeksBudgeted'] = $weeksBudgeted;
+        $data[6]['weeksEstimated'] = $weeksEstimated;
+        $data[6]['estimatedCompletionWeek'] = $estimatedCompletionWeek;
+
 
         return $data;        
     }
