@@ -274,7 +274,7 @@ class ChartsTable extends Table
 
         // PV - Planned Value
         $PV = array();
-        $PV2 = array();
+        // $PV2 = array();
         // EAC - Estimated Actual Costs  -- array is used so the value can be placed at the end of x-axis in the chart
         $EAC = array();
 
@@ -341,35 +341,43 @@ class ChartsTable extends Table
         $currentProgress = $readiness[(sizeof($readiness) - 1)];
         $weeksLeft = $weeksBudgeted - $weeksUsed;
         $progressLeft = 100 - $currentProgress;
-        $weeksEstimated = round(($weeksUsed + ($progressLeft / $avgProgress)), 0);
-        $estimatedCompletionWeek = $weekList[0] + $weeksEstimated;
+        $weeksEstimated = round(($weeksUsed + ($progressLeft / $avgProgress)), 0, PHP_ROUND_HALF_UP);
+        $estimatedCompletionWeek = $weekList[0] + $weeksEstimated - 1;
         $SVAC = $weeksEstimated - $weeksBudgeted;
 
-        // Add values up to this week to PV and after that to PV2
+        // Add values up to this week to PV and NULL values to PV2 so that it's actual values start at correct week
         $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
         $tempSum = 0;
         for ($i = 1; $i <= $weeksBudgeted; $i++) {
             $tempSum += $average;
-
-            // TÄÄ JOTENKIN PIELESSÄ. VIIKKOJEN MÄÄRÄ PIELESSÄ? NÄKYY PV JA PV2-LIITOSKOHDASSA
-
-            if ($i <= sizeof($AC)) {
-                array_push($PV, $tempSum);
-            }
-            if ($i < sizeof($AC)) {
-                array_push($PV2, NULL);
-            } else {
-                array_push($PV2, $tempSum);
-            }
+            array_push($PV, $tempSum);
         }
         
         // BCWP - Budgeted Cost for Work Performed (degree of readiness * actual cost)
         $BCWP = array();
+        // BCWP2 for the estimated part
+        $BCWP2 = array();
         $DR = $readiness[(sizeof($readiness) - 1)]/100;
+        if ($DR == 0) {
+            $DR = 1;
+        }
         $CPI = $DR / ($AC[(sizeof($AC) - 1)] / $BAC[(sizeof($BAC) - 1)]);
 
         for ($i = 0; $i <= $weeksUsed; $i++) {
             array_push($BCWP, (($readiness[$i]/100) * $BAC[(sizeof($BAC) - 1)]));
+            if ($i < $weeksUsed) {
+                array_push($BCWP2, NULL);
+            }            
+        }
+
+        // For the weeks after current week, add predicted values to BCWP2
+        $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        $tempSum = $BCWP[(sizeof($BCWP) - 1)];
+        // First point of this line has to be same as the last point of BCWP
+        array_push($BCWP2, $tempSum);
+        for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
+            $tempSum += $averagePredicted;
+            array_push($BCWP2, $tempSum);
         }
 
         
@@ -377,8 +385,7 @@ class ChartsTable extends Table
             while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {
                 array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
             }
-
-            for ($i = 1; $i < sizeof($weekList) - 1; $i++) {
+            for ($i = 1; $i < sizeof($weekList); $i++) {
                 array_push($EAC, NULL);        
             }
             array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
@@ -389,74 +396,102 @@ class ChartsTable extends Table
             array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
         }
 
-        $averagePredicted = $EAC[(sizeof($EAC) - 1)] / $weeksEstimated;   
-        $tempSum = 0;
-        for ($i = 1; $i <= $weeksEstimated; $i++) {
-            $tempSum += $averagePredicted;
-            if ($i < sizeof($AC)) {
-                array_push($AC2, NULL);
-            } else {
-                array_push($AC2, $tempSum);
-            }
+        for ($i = 1; $i < sizeof($AC); $i++) {
+            array_push($AC2, NULL);
         }
-        
+
+        // For the weeks after current week, add predicted values to AC2
+        $averagePredicted = ($EAC[(sizeof($EAC) - 1)] - $AC[(sizeof($AC) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        $tempSum = $AC[(sizeof($AC) - 1)];
+        // First point of this line has to be same as the last point of PV
+        array_push($AC2, $tempSum);
+        for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
+            $tempSum += $averagePredicted;
+            array_push($AC2, $tempSum);
+        }
+
+        $hoursFull = array();
+        $averageWeeklyHours = $AC[(sizeof($AC) - 1)] / sizeof($AC);
+        $weeksToFullHours = round(($BAC[(sizeof($BAC) - 1)] / $averageWeeklyHours), 0, PHP_ROUND_HALF_UP);
+
+        while ($weeksToFullHours > sizeof($weekList)) {
+            array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+        }
+
+        for ($i = 1; $i < ($weeksToFullHours); $i++) {
+            array_push($hoursFull, NULL);
+        }
+        array_push($hoursFull, ($BAC[(sizeof($BAC) - 1)]));
+
+        $estimatedWeekFullHours = $weekList[(sizeof($hoursFull) - 1)];
 
         $data[0]['weekList'] = $weekList;
-        $data[0]['name'] = 'BCWP (Budgeted Cost for Work Performed)';
+        // $data[0]['name'] = 'BCWP (Budgeted Cost for Work Performed)';
+        $data[0]['name'] = 'BCWP';
         $data[0]['values'] = $BCWP;
-        $data[0]['marker'] = array('radius' => 4);
+        $data[0]['marker'] = array('symbol' => 'triangle', 'radius' => 4);
         $data[0]['type'] = 'line';
         $data[0]['dashStyle'] = 'Solid';
         $data[0]['lineWidth'] = 2;
-        $data[0]['color'] = '#fc0303';
+        $data[0]['color'] = '#ff7b00';
+        $data[0]['pointWidth'] = 1;
 
-        $data[1]['name'] = 'PV (Planned Value) / BCWS';
-        $data[1]['values'] = $PV;
-        $data[1]['marker'] = array('radius' => 4);
-        $data[1]['type'] = 'line';
-        $data[1]['dashStyle'] = 'Solid';
+                // $data[2]['name'] = 'PV (Planned Value) / BCWS';
+        $data[1]['name'] = 'BCWP estimate';
+        $data[1]['values'] = $BCWP2;
+        $data[1]['marker'] = array('symbol' => 'triangle', 'radius' => 1);
+        $data[1]['type'] = 'scatter';
+        $data[1]['dashStyle'] = 'Dash';
         $data[1]['lineWidth'] = 2;
-        $data[1]['color'] = '#1c1c1c';
+        $data[1]['color'] = '#ff7b00';
+        $data[1]['pointWidth'] = 1;
 
-        $data[2]['name'] = 'PV (Planned Value) / BCWS';
-        $data[2]['values'] = $PV2;
-        $data[2]['marker'] = array('radius' => 1);
-        $data[2]['type'] = 'scatter';
-        $data[2]['dashStyle'] = 'Dash';
+        // $data[1]['name'] = 'PV (Planned Value) / BCWS';
+        $data[2]['name'] = 'BCWS';
+        $data[2]['values'] = $PV;
+        $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 4);
+        $data[2]['type'] = 'line';
+        $data[2]['dashStyle'] = 'Solid';
         $data[2]['lineWidth'] = 2;
-        $data[2]['color'] = '#1c1c1c';
+        $data[2]['color'] = '#0073ed';
+        $data[2]['pointWidth'] = 1;
 
-        $data[3]['name'] = 'AC (Actual Costs) / ACWP';
+        // $data[3]['name'] = 'AC (Actual Costs) / ACWP';
+        $data[3]['name'] = 'ACWP';
         $data[3]['values'] = $AC;
-        $data[3]['marker'] = array('radius' => 4);
+        $data[3]['marker'] = array('symbol' => 'square', 'radius' => 4);
         $data[3]['type'] = 'line';
         $data[3]['dashStyle'] = 'Solid';
         $data[3]['lineWidth'] = 2;
-        $data[3]['color'] = '#036ffc';
+        $data[3]['color'] = '#00c94d';
+        $data[3]['pointWidth'] = 1;
 
-        $data[4]['name'] = 'Actual costs prediction';
+        $data[4]['name'] = 'ACWP estimate';
         $data[4]['values'] = $AC2;
-        $data[4]['marker'] = array('radius' => 1);
+        $data[4]['marker'] = array('symbol' => 'square', 'radius' => 1);
         $data[4]['type'] = 'scatter';
         $data[4]['dashStyle'] = 'Dash';
         $data[4]['lineWidth'] = 2;
-        $data[4]['color'] = '#036ffc';
+        $data[4]['color'] = '#00c94d';
+        $data[4]['pointWidth'] = 1;
         
         $data[5]['name'] = 'EAC (Estimated Actual Costs)';
         $data[5]['values'] = $EAC;
-        $data[5]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[5]['marker'] = array('symbol' => 'circle', 'radius' => 6);
         $data[5]['type'] = 'line';
         $data[5]['dashStyle'] = 'Solid';
         $data[5]['lineWidth'] = 2;
-        $data[5]['color'] = '#036ffc';
+        $data[5]['color'] = '#fc08f8';
+        $data[5]['pointWidth'] = 1;
 
         $data[6]['name'] = 'BAC (Budget At Completion)';
         $data[6]['values'] = $BAC;
-        $data[6]['marker'] = array('symbol' => 'triangle', 'radius' => 7);
+        $data[6]['marker'] = array('symbol' => 'circle', 'radius' => 6);
         $data[6]['type'] = 'line';
         $data[6]['dashStyle'] = 'Solid';
         $data[6]['lineWidth'] = 2;
-        $data[6]['color'] = '#1c1c1c';
+        $data[6]['color'] = '#0073ed';
+        $data[6]['pointWidth'] = 1;
 
         $data[6]['AC'] = $AC[(sizeof($AC) - 1)];
         $data[6]['BAC'] = $BAC[(sizeof($BAC) - 1)];
@@ -471,6 +506,26 @@ class ChartsTable extends Table
         $data[6]['weeksBudgeted'] = $weeksBudgeted;
         $data[6]['weeksEstimated'] = $weeksEstimated;
         $data[6]['estimatedCompletionWeek'] = $estimatedCompletionWeek;
+        $data[6]['estimatedWeekFullHours'] = $estimatedWeekFullHours;
+        $data[6]['plannedCompletionWeek'] = $xLastWeek;
+
+        $data[7]['name'] = 'Estimated 100% hours';
+        $data[7]['values'] = $hoursFull;
+        $data[7]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        $data[7]['type'] = 'line';
+        $data[7]['dashStyle'] = 'Solid';
+        $data[7]['lineWidth'] = 2;
+        $data[7]['color'] = '#303030';
+        $data[7]['pointWidth'] = 1;
+
+        // $data[8]['name'] = 'Estimated 100% hours';
+        // $data[8]['values'] = array(NULL, NULL, [0, 400], NULL, [0, 400]);
+        // $data[8]['marker'] = array('radius' => 1);
+        // $data[8]['type'] = 'columnrange';
+        // $data[8]['dashStyle'] = 'Solid';
+        // $data[8]['lineWidth'] = 1;
+        // $data[8]['color'] = '#a6a6a6';
+        // $data[8]['pointWidth'] = 1;
 
 
         return $data;        

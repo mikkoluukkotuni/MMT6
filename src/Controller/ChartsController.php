@@ -88,6 +88,7 @@ class ChartsController extends AppController
             
             // earnedValueChart
             $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
+            // $earnedValueChart->xAxis->plotLines = array('color' => '#FF0000', 'width' => 2, 'value' => 10);
             foreach ($earnedValueData as $data) {
                 $earnedValueChart->series[] = array(
                     'name' => $data['name'],
@@ -350,9 +351,10 @@ class ChartsController extends AppController
         $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
 
         $text = "Current week: " . $earnedValueData[6]['currentWeek'] .
-            ", Weeks used: " . $earnedValueData[6]['weeksUsed'] . 
-            ", Weeks budgeted: " . $earnedValueData[6]['weeksBudgeted'] .
-            ", Weeks estimated: " . $earnedValueData[6]['weeksEstimated'] .
+            
+            ", Estimated 100% hours: week " . $earnedValueData[6]['estimatedWeekFullHours'] . 
+            ", Estimated 100% readiness: week " . $earnedValueData[6]['estimatedCompletionWeek'] . 
+            ", Planned 100% readiness: week " . $earnedValueData[6]['plannedCompletionWeek'] . 
             "<br/>DR (Degree of Readiness: " . $earnedValueData[6]['DR'] .
             ", AC (Actual Costs): " . $earnedValueData[6]['AC'] . " hours" .
             ", BAC (Budget At Completion): " . $earnedValueData[6]['BAC'] . " hours" .
@@ -360,12 +362,17 @@ class ChartsController extends AppController
             ", CPI (Cost Performance Index): " . round($earnedValueData[6]['CPI'], 2) .  
             ", SPI (Schedule Performance Index): " . round($earnedValueData[6]['SPI'], 2) .
             ", VAC (Variance At Completion): " . round($earnedValueData[6]['VAC'], 1) . " h" .
-            ", Schedule variance at completion: " . round($earnedValueData[6]['SVAC'], 0) . " weeks";
+            ", Schedule variance at completion: " . round($earnedValueData[6]['SVAC'], 0) . " weeks" . 
+            "<br/>Weeks used: " . $earnedValueData[6]['weeksUsed'] . 
+            ", Weeks budgeted: " . $earnedValueData[6]['weeksBudgeted'] .
+            ", Weeks estimated: " . $earnedValueData[6]['weeksEstimated'] ;
         $myChart->caption->text = $text;
         
         // labels of axes    	
         $myChart->xAxis->title->text = 'Week number';
         $myChart->yAxis->title->text = 'Cost (hours)';
+
+
         
         // $myChart->colors = array('#fc0303', '#036ffc', '#068a19', '#fc08f8');
         
