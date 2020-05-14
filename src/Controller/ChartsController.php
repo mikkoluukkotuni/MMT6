@@ -77,7 +77,6 @@ class ChartsController extends AppController
 
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $endingDate = $this->request->session()->read('selected_project')['finished_date'];
-
         
         // For some charts data is only created (and chart displayed) if project has reports and hours
         if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0) {

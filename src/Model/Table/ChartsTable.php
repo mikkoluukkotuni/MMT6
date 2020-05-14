@@ -173,7 +173,7 @@ class ChartsTable extends Table
         $time = Time::now();
         $currentWeek = date('W');
         $weekList = array();
-
+        var_dump($endingDate);
         // If project has no estimated completion date then ending date is +20 weeks from project's start date
         if ($endingDate == NULL) {
             // Have to use clone, otherwise $projectStartDate also changes
@@ -334,7 +334,8 @@ class ChartsTable extends Table
 
         // SPI - Schedule Performance Index (degree of readiness / (weeks used / weeks budgeted))
         $weeksBudgeted = sizeof($weekList);
-        $weeksUsed = array_search($currentWeek, $weekList);
+        // if ($currentWeek > $)
+        $weeksUsed = array_search($currentWeek, $weekList) + 1;        
         $SPI = $readiness[(sizeof($readiness) - 1)]/100 / ($weeksUsed / $weeksBudgeted);
 
         $avgProgress = 100 / sizeof($weekList);
@@ -363,12 +364,13 @@ class ChartsTable extends Table
         }
         $CPI = $DR / ($AC[(sizeof($AC) - 1)] / $BAC[(sizeof($BAC) - 1)]);
 
-        for ($i = 0; $i <= $weeksUsed; $i++) {
+        for ($i = 0; $i < $weeksUsed; $i++) {
             array_push($BCWP, (($readiness[$i]/100) * $BAC[(sizeof($BAC) - 1)]));
-            if ($i < $weeksUsed) {
+            if ($i < $weeksUsed - 1) {
                 array_push($BCWP2, NULL);
             }            
         }
+        // array_push($BCWP2, NULL);
 
         // For the weeks after current week, add predicted values to BCWP2
         $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   
