@@ -444,14 +444,13 @@ class ChartsTable extends Table
         }
 
         $hoursFull = array();
-        $averageWeeklyHours = $AC[(sizeof($AC) - 1)] / sizeof($AC);
-        $weeksToFullHours = round(($BAC[(sizeof($BAC) - 1)] / $averageWeeklyHours), 0, PHP_ROUND_HALF_UP);
+        $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageHoursBudgeted) + $weeksUsed;
 
         while ($weeksToFullHours > sizeof($weekList)) {
             array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
         }
 
-        for ($i = 1; $i <= ($weeksToFullHours); $i++) {
+        for ($i = 1; $i <= $weeksToFullHours; $i++) {
             if ($i < $weeksToFullHours) {
                 array_push($hoursFull, NULL);
             } else {
@@ -840,7 +839,7 @@ class ChartsTable extends Table
 
         $hoursFull = array();
         $averageWeeklyHours = $AC[(sizeof($AC) - 1)] / sizeof($AC);
-        $weeksToFullHours = round(($BAC[(sizeof($BAC) - 1)] / $averageWeeklyHours), 0, PHP_ROUND_HALF_UP);
+        $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageWeeklyHours) + $weeksUsed;
 
         while ($weeksToFullHours > sizeof($weekList)) {
             array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
