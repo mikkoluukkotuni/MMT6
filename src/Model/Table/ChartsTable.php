@@ -838,8 +838,7 @@ class ChartsTable extends Table
         }
 
         $hoursFull = array();
-        $averageWeeklyHours = $AC[(sizeof($AC) - 1)] / sizeof($AC);
-        $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageWeeklyHours) + $weeksUsed;
+        $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageHoursPredicted) + $weeksUsed;
 
         while ($weeksToFullHours > sizeof($weekList)) {
             array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
