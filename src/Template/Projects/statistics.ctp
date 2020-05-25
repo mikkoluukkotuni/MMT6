@@ -67,11 +67,13 @@
 
                         foreach ($project['reports'] as $report):                          
                             ?>
-                        <td>
+                        
                         <?php
                         // missing ones print normally
                         if ( $report == '-' ) { ?>
+                        <td>
                             <?= h($report) ?>
+                        </td>
                         <?php
                         } else { 
                             // fetching the ID for current weeklyreport's view-page
@@ -83,7 +85,32 @@
                                     ->toArray();
                             // transforming returned query item to integer
                             $reportId = $query[$i++]->id;
-                                
+
+                            $metricsTable = Cake\ORM\TableRegistry::get('Metrics');
+                            $queryM = $metricsTable
+                                ->find()
+                                ->select(['value'])
+                                ->where(['weeklyreport_id' => $reportId, 'metrictype_id =' => 11])
+                                ->toArray();
+
+                            
+                            $status = 1;
+                            if (sizeof($queryM) == 1) {
+                                $status = $queryM[0]['value'];
+                            }
+
+                            ?>
+
+                            <td
+                            <?php if ($status == 3) {
+                                    echo(' style="background-color:#ff5757"');
+                                } else if ($status == 2) {
+                                    echo(' style="background-color:#ffef85"');                               
+                                } else {
+                                    echo(' style="background-color:#ccffd7"');
+                            } ?> >
+
+                            <?php  
                             // X's have normal link color so they echo normally
                             if ($report == 'X') {
                                 echo $this->Html->link(__($report.' (view)'), [
@@ -104,7 +131,7 @@
                                 echo $this->Html->link(__($report.' (view)'), [
                                     'controller' => 'Weeklyreports',
                                     'action' => 'view',
-                                    $reportId ], ['style'=>'color: orange;']);
+                                    $reportId ], ['style'=>'color: black;']);
                             }
                         } ?>
                         </td>

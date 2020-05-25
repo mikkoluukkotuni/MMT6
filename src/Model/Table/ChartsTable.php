@@ -167,13 +167,13 @@ class ChartsTable extends Table
         return $totalHours;
     }
 
-
+    // In this data set the predicted values stay in the budget
     public function earnedValueData($project_id, $projectStartDate, $endingDate)
     {
         $time = Time::now();
         $currentWeek = date('W');
         $weekList = array();
-        var_dump($endingDate);
+
         // If project has no estimated completion date then ending date is +20 weeks from project's start date
         if ($endingDate == NULL) {
             // Have to use clone, otherwise $projectStartDate also changes
@@ -372,44 +372,75 @@ class ChartsTable extends Table
         }
         // array_push($BCWP2, NULL);
 
+        // TÄSSÄ JOTAIN VIKAA - ONKO AINA SAMA KUIN $average?
         // For the weeks after current week, add predicted values to BCWP2
         $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        
+        
+        
         $tempSum = $BCWP[(sizeof($BCWP) - 1)];
         // First point of this line has to be same as the last point of BCWP
         array_push($BCWP2, $tempSum);
         for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
-            $tempSum += $averagePredicted;
+            $tempSum += $average;
             array_push($BCWP2, $tempSum);
         }
 
         
-        if ($weeksEstimated > $weeksBudgeted) {
-            while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {
-                array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
-            }
-            for ($i = 1; $i < sizeof($weekList); $i++) {
-                array_push($EAC, NULL);        
-            }
-            array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
-        } else {
-            for ($i = 1; $i < $weeksEstimated; $i++) {
-                array_push($EAC, NULL);        
-            }
-            array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
-        }
+
 
         for ($i = 1; $i < sizeof($AC); $i++) {
             array_push($AC2, NULL);
         }
 
-        // For the weeks after current week, add predicted values to AC2
-        $averagePredicted = ($EAC[(sizeof($EAC) - 1)] - $AC[(sizeof($AC) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        // For the weeks after current week, add budgeted values to AC2
+        $averageHoursBudgeted = ($BAC[(sizeof($BAC) - 1)] / $weeksBudgeted);
         $tempSum = $AC[(sizeof($AC) - 1)];
         // First point of this line has to be same as the last point of PV
         array_push($AC2, $tempSum);
         for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
-            $tempSum += $averagePredicted;
+            $tempSum += $averageHoursBudgeted;
             array_push($AC2, $tempSum);
+        }
+
+        // Add required week numbers to weekList if weeksEstimated is more than weeksBudgeted
+        // We also have to consider the possibility of estimate completion week being next year
+        if ($estimatedCompletionWeek > 52) {            
+            if ($weeksEstimated > $weeksBudgeted) {
+                $i = $weekList[(sizeof($weekList) - 1)] + 1;
+                while (sizeof($weekList) < $weeksEstimated) {
+                    if ($i > 52) {
+                        $i = 1;
+                    }
+                    array_push($weekList, $i);
+                    $i++;
+                }
+                for ($i = 1; $i < sizeof($weekList); $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            } else {
+                for ($i = 1; $i < $weeksEstimated; $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            }
+            $estimatedCompletionWeek = $estimatedCompletionWeek - 52;
+        } else {
+            if ($weeksEstimated > $weeksBudgeted) {
+                while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {
+                    array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+                }
+                for ($i = 1; $i < sizeof($weekList); $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, $AC2[(sizeof($AC2) - 1)]);
+            } else {
+                for ($i = 1; $i < $weeksEstimated; $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, $AC2[(sizeof($AC2) - 1)]);
+            }
         }
 
         $hoursFull = array();
@@ -420,10 +451,13 @@ class ChartsTable extends Table
             array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
         }
 
-        for ($i = 1; $i < ($weeksToFullHours); $i++) {
-            array_push($hoursFull, NULL);
+        for ($i = 1; $i <= ($weeksToFullHours); $i++) {
+            if ($i < $weeksToFullHours) {
+                array_push($hoursFull, NULL);
+            } else {
+                array_push($hoursFull, $BCWP2[($i - 1)]);
+            }
         }
-        array_push($hoursFull, ($BAC[(sizeof($BAC) - 1)]));
 
         $estimatedWeekFullHours = $weekList[(sizeof($hoursFull) - 1)];
 
@@ -439,6 +473,401 @@ class ChartsTable extends Table
         $data[0]['pointWidth'] = 1;
 
                 // $data[2]['name'] = 'PV (Planned Value) / BCWS';
+        $data[1]['name'] = 'BCWP estimate';
+        $data[1]['values'] = $BCWP2;
+        $data[1]['marker'] = array('symbol' => 'triangle', 'radius' => 1);
+        $data[1]['type'] = 'scatter';
+        $data[1]['dashStyle'] = 'Dash';
+        $data[1]['lineWidth'] = 2;
+        $data[1]['color'] = '#ff7b00';
+        $data[1]['pointWidth'] = 1;
+
+        // $data[1]['name'] = 'PV (Planned Value) / BCWS';
+        $data[2]['name'] = 'BCWS';
+        $data[2]['values'] = $PV;
+        $data[2]['marker'] = array('symbol' => 'circle', 'radius' => 4);
+        $data[2]['type'] = 'line';
+        $data[2]['dashStyle'] = 'Solid';
+        $data[2]['lineWidth'] = 2;
+        $data[2]['color'] = '#0073ed';
+        $data[2]['pointWidth'] = 1;
+
+        // $data[3]['name'] = 'AC (Actual Costs) / ACWP';
+        $data[3]['name'] = 'ACWP';
+        $data[3]['values'] = $AC;
+        $data[3]['marker'] = array('symbol' => 'square', 'radius' => 4);
+        $data[3]['type'] = 'line';
+        $data[3]['dashStyle'] = 'Solid';
+        $data[3]['lineWidth'] = 2;
+        $data[3]['color'] = '#00c94d';
+        $data[3]['pointWidth'] = 1;
+
+        $data[4]['name'] = 'ACWP estimate';
+        $data[4]['values'] = $AC2;
+        $data[4]['marker'] = array('symbol' => 'square', 'radius' => 1);
+        $data[4]['type'] = 'scatter';
+        $data[4]['dashStyle'] = 'Dash';
+        $data[4]['lineWidth'] = 2;
+        $data[4]['color'] = '#00c94d';
+        $data[4]['pointWidth'] = 1;
+        
+        $data[5]['name'] = 'EAC (Estimated Actual Costs)';
+        $data[5]['values'] = $EAC;
+        $data[5]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        $data[5]['type'] = 'line';
+        $data[5]['dashStyle'] = 'Solid';
+        $data[5]['lineWidth'] = 2;
+        $data[5]['color'] = '#fc08f8';
+        $data[5]['pointWidth'] = 1;
+
+        $data[6]['name'] = 'BAC (Budget At Completion)';
+        $data[6]['values'] = $BAC;
+        $data[6]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        $data[6]['type'] = 'line';
+        $data[6]['dashStyle'] = 'Solid';
+        $data[6]['lineWidth'] = 2;
+        $data[6]['color'] = '#0073ed';
+        $data[6]['pointWidth'] = 1;
+
+        $data[6]['AC'] = $AC[(sizeof($AC) - 1)];
+        $data[6]['BAC'] = $BAC[(sizeof($BAC) - 1)];
+        $data[6]['DR'] = $DR;
+        $data[6]['EAC'] = $EAC[(sizeof($EAC) - 1)];
+        $data[6]['CPI'] = $CPI;
+        $data[6]['SPI'] = $SPI;
+        $data[6]['VAC'] = $EAC[(sizeof($EAC) - 1)] - $BAC[(sizeof($BAC) - 1)];
+        $data[6]['SVAC'] = $SVAC;
+        $data[6]['currentWeek'] = $currentWeek;
+        $data[6]['weeksUsed'] = $weeksUsed;
+        $data[6]['weeksBudgeted'] = $weeksBudgeted;
+        $data[6]['weeksEstimated'] = $weeksEstimated;
+        $data[6]['estimatedCompletionWeek'] = $estimatedCompletionWeek;
+        $data[6]['estimatedWeekFullHours'] = $estimatedWeekFullHours;
+        $data[6]['plannedCompletionWeek'] = $xLastWeek;
+
+        $data[7]['name'] = 'Estimated 100% hours';
+        $data[7]['values'] = $hoursFull;
+        $data[7]['marker'] = array('symbol' => 'circle', 'radius' => 6);
+        $data[7]['type'] = 'line';
+        $data[7]['dashStyle'] = 'Solid';
+        $data[7]['lineWidth'] = 2;
+        $data[7]['color'] = '#303030';
+        $data[7]['pointWidth'] = 1;
+
+        // $data[8]['name'] = 'Estimated 100% hours';
+        // $data[8]['values'] = array(NULL, NULL, [0, 400], NULL, [0, 400]);
+        // $data[8]['marker'] = array('radius' => 1);
+        // $data[8]['type'] = 'columnrange';
+        // $data[8]['dashStyle'] = 'Solid';
+        // $data[8]['lineWidth'] = 1;
+        // $data[8]['color'] = '#a6a6a6';
+        // $data[8]['pointWidth'] = 1;
+
+
+        return $data;        
+    }
+
+
+    // In this data set the predicted values are based on actual averages
+    public function earnedValueData2($project_id, $projectStartDate, $endingDate)
+    {
+        $time = Time::now();
+        $currentWeek = date('W');
+        $weekList = array();
+
+        // If project has no estimated completion date then ending date is +20 weeks from project's start date
+        if ($endingDate == NULL) {
+            // Have to use clone, otherwise $projectStartDate also changes
+            $endingDate = clone $projectStartDate;
+            $endingDate->modify('+20 weeks');
+        }      
+        
+        $xFirstWeek = date('W', strtotime($projectStartDate));     
+        $xLastWeek = date('W', strtotime($endingDate));           
+
+        // Populate array of week numbers to be used as x axis
+        if ($xFirstWeek > $xLastWeek) {
+            for ($i = $xFirstWeek; $i <= 52; $i++) {
+                array_push($weekList, $i);
+            }
+            for ($i = 1; $i <= $xLastWeek; $i++) {
+                array_push($weekList, $i);
+            }
+        } else {
+            for ($i = $xFirstWeek; $i <= $xLastWeek; $i++) {
+                array_push($weekList, $i);
+            }
+        }
+
+        // Get list of project's members
+        $members = TableRegistry::get('Members');
+        $query = $members
+                    ->find()
+                    ->select(['id', 'project_role', 'target_hours'])
+                    ->where(['project_id' => $project_id])
+                    ->toArray();
+
+        $memberlist = array();
+
+        if(!empty($query)) {
+            foreach($query as $temp){
+                $memberlist[] = $temp->id;
+            }
+        }
+
+        // BAC - Budget At Completion (same as target hours in some other charts)
+        $BAC = array();
+        $targetHoursTotal = 0;
+        
+        // AC - Actual Costs (same as total hours in some other charts)
+        $AC = array();
+
+        // Prediction part of actual costs
+        $AC2 = array();
+        
+        // Get all hours of the member and store in array in date order
+        // Also get each members target hours
+        $workinghours = TableRegistry::get('Workinghours');
+        if(!empty($memberlist)) {
+            $queryW = $workinghours
+                        ->find()
+                        ->select(['date', 'duration'])
+                        ->where(['member_id IN' => $memberlist])
+                        ->order('date')
+                        ->toArray();
+
+            foreach($query as $member) {
+                if ($member->project_role == 'developer' || $member->project_role == 'manager') {
+                    if ($member->target_hours != NULL) {
+                        $targetHoursTotal += $member->target_hours;
+                    } else {
+                        $targetHoursTotal += 100;
+                    }
+                }                
+            }
+            for ($i = 1; $i < sizeof($weekList); $i++) {
+                array_push($BAC, NULL);
+            }
+            array_push($BAC, $targetHoursTotal);
+
+            if(!empty($queryW)) {
+                // Populate array of cumulative working hour sum for each week
+                $sum = 0;
+                foreach ($weekList as $weekNumber) {
+                    $hoursLogged = False;
+                    foreach ($queryW as $result) {
+                        if (date('W', strtotime($result['date'])) == $weekNumber) {
+                            $sum += $result['duration'];
+                            $hoursLogged = True;
+                        }
+                    }
+
+                    // If project is not completed only draw data points up to current week
+                    if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                        array_push($AC, $sum);
+                    }                
+                }
+            }
+        }
+
+        $data = array();        
+        $readiness = array();
+
+        // PV - Planned Value
+        $PV = array();
+        // $PV2 = array();
+        // EAC - Estimated Actual Costs  -- array is used so the value can be placed at the end of x-axis in the chart
+        $EAC = array();
+
+        $metrics = TableRegistry::get('Metrics');
+        $reports = TableRegistry::get('Weeklyreports');
+
+        // Get week numbers of all the weeklyreports for this project
+        $reportWeeks = $reports
+            ->find()
+            ->select(['week'])
+            ->where(['project_id =' => $project_id])
+            // Order is needed in case weeklyreports have not been made in chronological order
+            ->order(['year' => 'ASC', 'week' => 'ASC'])
+            ->toArray();
+
+        if (!empty($reportWeeks)) {
+            $reportWeeks2 = array();
+            foreach ($reportWeeks as $temp) {
+                array_push($reportWeeks2, $temp['week']);                
+            }
+
+            foreach ($weekList as $weekNumber) {
+                // If there is a weeklyreport for this week, get readiness value from it and push it to data array
+                // to correct index of this week
+                
+                if (in_array($weekNumber, $reportWeeks2)) {
+                    $reportId = $reports
+                        ->find()
+                        ->select(['id'])
+                        ->where(['project_id =' => $project_id, 'week' => $weekNumber])
+                        ->toArray();
+
+                    $readinessValue = $metrics
+                        ->find()
+                        ->select(['value'])
+                        ->where(['weeklyreport_id =' => $reportId[0]['id'], 'metrictype_id =' => 10])
+                        ->toArray();
+
+                    // If there is a readiness value in this weeklyreport, push it to data array, else
+                    // push 0 (only applies to projects that started before implementation of this metric)
+                    if (!empty($readinessValue)) {
+                        array_push($readiness, $readinessValue[0]['value']);
+                    } else {
+                        array_push($readiness, 0);
+                    }
+                // If project is not completed only draw data points up to current week
+                // In case no weeklyreport, either push value of previous week or in case of first week a 0
+                } else if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                    if (sizeof($readiness) > 0) {                        
+                        array_push($readiness, $readiness[(sizeof($readiness) - 1)]);
+                    } else {
+                        array_push($readiness, 0);
+                    }
+                }
+            }
+        }
+
+        // SPI - Schedule Performance Index (degree of readiness / (weeks used / weeks budgeted))
+        $weeksBudgeted = sizeof($weekList);
+        // if ($currentWeek > $)
+        $weeksUsed = array_search($currentWeek, $weekList) + 1;        
+        $SPI = $readiness[(sizeof($readiness) - 1)]/100 / ($weeksUsed / $weeksBudgeted);
+
+        $avgProgressBudgeted = 100 / sizeof($weekList);
+        $currentProgress = $readiness[(sizeof($readiness) - 1)];
+        $weeksLeft = $weeksBudgeted - $weeksUsed;
+        $progressLeft = 100 - $currentProgress;
+        // $weeksEstimated = round(($weeksUsed + ($progressLeft / $avgProgressBudgeted)), 0, PHP_ROUND_HALF_UP);
+        $weeksEstimated = round(($weeksBudgeted / $SPI), 0, PHP_ROUND_HALF_UP);
+        $estimatedCompletionWeek = $weekList[0] + $weeksEstimated - 1;
+        $SVAC = $weeksEstimated - $weeksBudgeted;
+
+        // Add values up to this week to PV and NULL values to PV2 so that it's actual values start at correct week
+        $average = $BAC[(sizeof($BAC) - 1)] / $weeksBudgeted;            
+        $tempSum = 0;
+        for ($i = 1; $i <= $weeksBudgeted; $i++) {
+            $tempSum += $average;
+            array_push($PV, $tempSum);
+        }
+        
+        // BCWP - Budgeted Cost for Work Performed (degree of readiness * actual cost)
+        $BCWP = array();
+        // BCWP2 for the estimated part
+        $BCWP2 = array();
+        $DR = $readiness[(sizeof($readiness) - 1)]/100;
+        if ($DR == 0) {
+            $DR = 1;
+        }
+        $CPI = $DR / ($AC[(sizeof($AC) - 1)] / $BAC[(sizeof($BAC) - 1)]);
+
+        for ($i = 0; $i < $weeksUsed; $i++) {
+            array_push($BCWP, (($readiness[$i]/100) * $BAC[(sizeof($BAC) - 1)]));
+            if ($i < $weeksUsed - 1) {
+                array_push($BCWP2, NULL);
+            }            
+        }
+        // array_push($BCWP2, NULL);
+
+        // For the weeks after current week, add predicted values to BCWP2
+        $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        $tempSum = $BCWP[(sizeof($BCWP) - 1)];
+        // First point of this line has to be same as the last point of BCWP
+        array_push($BCWP2, $tempSum);
+        for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
+            $tempSum += $averagePredicted;
+            array_push($BCWP2, $tempSum);
+        }
+
+        // Add required week numbers to weekList if weeksEstimated is more than weeksBudgeted
+        // We also have to consider the possibility of estimate completion week being next year
+        if ($estimatedCompletionWeek > 52) {            
+            if ($weeksEstimated > $weeksBudgeted) {
+                $i = $weekList[(sizeof($weekList) - 1)] + 1;
+                while (sizeof($weekList) < $weeksEstimated) {
+                    if ($i > 52) {
+                        $i = 1;
+                    }
+                    array_push($weekList, $i);
+                    $i++;
+                }
+                for ($i = 1; $i < sizeof($weekList); $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            } else {
+                for ($i = 1; $i < $weeksEstimated; $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            }
+            $estimatedCompletionWeek = $estimatedCompletionWeek - 52;
+        } else {
+            if ($weeksEstimated > $weeksBudgeted) {
+                while ($weekList[(sizeof($weekList) - 1)] < $estimatedCompletionWeek) {
+                    array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+                }
+                for ($i = 1; $i < sizeof($weekList); $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            } else {
+                for ($i = 1; $i < $weeksEstimated; $i++) {
+                    array_push($EAC, NULL);        
+                }
+                array_push($EAC, ($BAC[(sizeof($BAC) - 1)] / $CPI));
+            }
+        }
+
+        for ($i = 1; $i < sizeof($AC); $i++) {
+            array_push($AC2, NULL);
+        }
+
+        // For the weeks after current week, add predicted values to AC2
+        $averageHoursPredicted = ($EAC[(sizeof($EAC) - 1)] - $AC[(sizeof($AC) - 1)]) / ($weeksEstimated - sizeof($AC));   
+        $tempSum = $AC[(sizeof($AC) - 1)];
+        // First point of this line has to be same as the last point of PV
+        array_push($AC2, $tempSum);
+        for ($i = 1; $i <= ($weeksEstimated - sizeof($AC)); $i++) {
+            $tempSum += $averageHoursPredicted;
+            array_push($AC2, $tempSum);
+        }
+
+        $hoursFull = array();
+        $averageWeeklyHours = $AC[(sizeof($AC) - 1)] / sizeof($AC);
+        $weeksToFullHours = round(($BAC[(sizeof($BAC) - 1)] / $averageWeeklyHours), 0, PHP_ROUND_HALF_UP);
+
+        while ($weeksToFullHours > sizeof($weekList)) {
+            array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+        }
+
+        for ($i = 1; $i <= ($weeksToFullHours); $i++) {
+            if ($i < $weeksToFullHours) {
+                array_push($hoursFull, NULL);
+            } else {
+                array_push($hoursFull, $BCWP2[($i - 1)]);
+            }
+        }        
+
+        $estimatedWeekFullHours = $weekList[(sizeof($hoursFull) - 1)];
+
+        $data[0]['weekList'] = $weekList;
+        // $data[0]['name'] = 'BCWP (Budgeted Cost for Work Performed)';
+        $data[0]['name'] = 'BCWP';
+        $data[0]['values'] = $BCWP;
+        $data[0]['marker'] = array('symbol' => 'triangle', 'radius' => 4);
+        $data[0]['type'] = 'line';
+        $data[0]['dashStyle'] = 'Solid';
+        $data[0]['lineWidth'] = 2;
+        $data[0]['color'] = '#ff7b00';
+        $data[0]['pointWidth'] = 1;
+
+        // $data[2]['name'] = 'PV (Planned Value) / BCWS';
         $data[1]['name'] = 'BCWP estimate';
         $data[1]['values'] = $BCWP2;
         $data[1]['marker'] = array('symbol' => 'triangle', 'radius' => 1);

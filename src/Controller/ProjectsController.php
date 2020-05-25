@@ -190,7 +190,7 @@ class ProjectsController extends AppController
             $project['user_members'] = $this->Projects->getUserMember($project['id']);
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
             $project['risks'] = $this->Projects->getRisks($project['id']);
-            $project['status'] = $this->Projects->getStatus($project['id'], $project['metrics']);
+            $project['status'] = $this->Projects->getLatestStatus($project['id'], $project['metrics']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

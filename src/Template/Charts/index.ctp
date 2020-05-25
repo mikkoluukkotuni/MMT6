@@ -29,6 +29,13 @@
                 <?php echo $this->Highcharts->render($earnedValueChart, 'valuechart'); ?>
             </div>
         </div>
+
+        <div class="chart">
+            <h4>Earned Value Chart 2</h4>
+            <div id="valuewrapper2">
+                <?php echo $this->Highcharts->render($earnedValueChart2, 'valuechart'); ?>
+            </div>
+        </div>
     <?php } ?>
 
     <div class="chart">

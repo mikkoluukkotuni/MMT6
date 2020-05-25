@@ -293,7 +293,7 @@ class ProjectsTable extends Table
     }
 
     // The logic that determines the status of project goes here
-    public function getStatus($project_id, $metrics)
+    public function getLatestStatus($project_id, $metrics)
     {
         $status = 1;
         if (sizeof($metrics) >= 11) {
