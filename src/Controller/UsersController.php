@@ -12,6 +12,10 @@ class UsersController extends AppController
 
     public function index()
     {
+        $this->paginate = [
+            'limit' => 100,
+            'order' => ['last_name' => 'ASC']
+        ];   
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
     }

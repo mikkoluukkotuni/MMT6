@@ -76,36 +76,36 @@ class MembersTable extends Table
         return $rules;
     }
     
-    public function getMembers($project_id){
-        // returns an array with project members
-        // the info is the members id, project role and email from user
-        $memberinfo = array();
-        //$now = Time::now();
-        $members = TableRegistry::get('Members');   
-        $query = $members
-            ->find()
-            ->select(['id', 'project_role', 'user_id', 'target_hours'])    
-            ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
-            ->andWhere(['project_id' => $project_id, 'project_role !=' => 'client'])
-            //->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
-            //->orWhere(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date IS' => NULL])
-            ->toArray();
+    // public function getMembers($project_id){
+    //     // returns an array with project members
+    //     // the info is the members id, project role and email from user
+    //     $memberinfo = array();
+    //     //$now = Time::now();
+    //     $members = TableRegistry::get('Members');   
+    //     $query = $members
+    //         ->find()
+    //         ->select(['id', 'project_role', 'user_id', 'target_hours'])    
+    //         ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
+    //         ->andWhere(['project_id' => $project_id, 'project_role !=' => 'client'])
+    //         //->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
+    //         //->orWhere(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date IS' => NULL])
+    //         ->toArray();
         
-        $users = TableRegistry::get('Users'); 
-        foreach ($query as $temp){         
-            $query2 = $users
-                ->find()
-                ->select(['role', 'first_name', 'last_name'])
-                ->where(['id =' => $temp->user_id])
-                ->toArray();
+    //     $users = TableRegistry::get('Users'); 
+    //     foreach ($query as $temp){         
+    //         $query2 = $users
+    //             ->find()
+    //             ->select(['role', 'first_name', 'last_name'])
+    //             ->where(['id =' => $temp->user_id])
+    //             ->toArray();
             
-            $temp_memberinfo['id'] = $temp->id;
-            $temp_memberinfo['member_name'] = $query2[0]->first_name." ".$query2[0]->last_name." - ".$temp->project_role; 
+    //         $temp_memberinfo['id'] = $temp->id;
+    //         $temp_memberinfo['member_name'] = $query2[0]->first_name." ".$query2[0]->last_name." - ".$temp->project_role; 
             
-            $memberinfo[] = $temp_memberinfo; 
-        }
-        return $memberinfo;
-    }
+    //         $memberinfo[] = $temp_memberinfo; 
+    //     }
+    //     return $memberinfo;
+    // }
 
 
     public function predictiveMemberData($project_id, $member_id, $projectStartDate, $endingDate)
@@ -364,22 +364,32 @@ class MembersTable extends Table
 
     public function anonymizeAllMembers($project_id)
     {
-        $anonIds = [10001, 10002, 10003, 10004, 10005, 10006, 10007, 10009];
+        // Because ids of anon users might differ from db to db, we need to find the id of anon 1 first
+        $users = TableRegistry::get('Users');
+        $queryU = $users
+            ->find()
+            ->where(['email' => 'anon1@a.com'])
+            ->toArray();
+
+        $anon1Id = $queryU[0]['id'];
+        $anonIds = array();
+
+        // Populate a list of 20 anon user's ids
+        for ($i = 0; $i < 20; $i++) {
+            array_push($anonIds, ($anon1Id + $i));
+        }
 
         // Get list of project's members
         $members = TableRegistry::get('Members');
         $queryM = $members
             ->find()
             ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor'])
-            // ->where(['project_id' => $project_id, 'project_role' => 'manager'])
-            // ->orWhere(['project_id' => $project_id, 'project_role' => 'developer'])
-            // ->orWhere(['project_id' => $project_id, 'project_role' => 'client'])
             ->toArray();
 
         $modifiedMemberlist = array();
         
         for ($i = 0; $i < sizeof($queryM); $i++) {
-            $queryM[$i]['user_id'] = (10001 + $i);
+            $queryM[$i]['user_id'] = $anonIds[$i];
             array_push($modifiedMemberlist, $queryM[$i]);
         }
 

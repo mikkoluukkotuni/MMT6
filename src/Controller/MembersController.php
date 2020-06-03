@@ -28,7 +28,7 @@ class MembersController extends AppController
         ];
         $this->set('members', $this->paginate($this->Members));
         $this->set('_serialize', ['members']);
-        $temp = $this->Members->getMembers($project_id);
+        // $temp = $this->Members->getMembers($project_id);
 
         // Chart for project's workinghour prediction
         // Find and store info that will be needed by chart data function in MembersTable
@@ -264,62 +264,11 @@ class MembersController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
 
         $modifiedMemberlist = $this->Members->anonymizeAllMembers($project_id);
-        // var_dump($modifiedMemberlist);
 
         foreach ($modifiedMemberlist as $anonymizedMember) {
-            // $member = $this->Members->newEntity();
-            // $member = $this->Members->patchEntity($member, $anonymizedMember);
-            // $this->Members->save($member);
             $this->Members->save($anonymizedMember);
         }
 
-        // $member = $this->Members->newEntity();
-        
-        // if ($this->request->is('post')) {
-        //     // data from the form is loaded in to the new member object
-        //     $member = $this->Members->patchEntity($member, $this->request->data);
-        //     // the member is made a part of the currently selected project
-        //     $member['project_id'] = $project_id;
-        //     $email = $this->request->data['email'];
-        //     $query = TableRegistry::get('Users')
-        //         ->find()
-        //    	 ->select(['id']) 
-        //     	->where(['email =' => $email])
-        //         ->toArray(); 
-        //     foreach ($query as $temp) {
-        //         $id = $temp['id'];
-        //     }
-        //     //Get matching user id's from current project
-        //     $memberQuery = TableRegistry::get('Members')
-        //         ->find()
-        //         ->select('user_id')
-        //         ->where(['user_id =' => $id, 'project_id =' => $project_id])
-        //         ->toArray();
-        //     //If ID doesn't exist in project, proceed
-        //     if(sizeof($memberQuery) == 0) {
-        //         $member['user_id'] = $id;
-                
-        //         // Managers are not allowed to add members that are supervisors
-        //         if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
-                    
-                    
-        //             if ($this->Members->save($member)) {
-        //                 $this->Flash->success(__('The member has been saved.'));
-        //                 return $this->redirect(['action' => 'index']);
-        //             } else {
-        //                 $this->Flash->error(__('The member could not be saved. Please, try again.'));
-        //             }
-        //         }
-        //         else{
-        //             $this->Flash->error(__('Managers cannot add supervisors'));
-        //         }
-        //     } else {
-        //         $this->Flash->error(__('The member is already part of the project.'));
-        //     }
-        // }          
-        // $users = $this->Members->Users->find('list', ['limit' => 1000, 'conditions'=>array('Users.role !=' => 'inactive')]);
-        // $this->set(compact('member', 'users', 'projects'));
-        // $this->set('_serialize', ['member']);
         return $this->redirect(['action' => 'index']);
     }
     
