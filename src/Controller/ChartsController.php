@@ -76,13 +76,13 @@ class ChartsController extends AppController
         );
 
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
-        $endingDate = $this->request->session()->read('selected_project')['finished_date'];
+        $projectEndDate = $this->request->session()->read('selected_project')['finished_date'];
         
         // For some charts data is only created (and chart displayed) if project has reports and hours
         if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0) {
             $this->request->session()->write('displayCharts', true);
 
-            $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
+            $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $projectEndDate);
             $earnedValueChart = $this->earnedValueChart($earnedValueData);
             
             // earnedValueChart
@@ -100,7 +100,7 @@ class ChartsController extends AppController
                 );
             }    
             
-            $earnedValueData2 = $this->Charts->earnedValueData2($project_id, $projectStartDate, $endingDate);
+            $earnedValueData2 = $this->Charts->earnedValueData2($project_id, $projectStartDate, $projectEndDate);
             $earnedValueChart2 = $this->earnedValueChart2($earnedValueData2);
             
             // earnedValueChart
@@ -127,7 +127,7 @@ class ChartsController extends AppController
         $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
 
-        // $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $endingDate);
+        // $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $projectEndDate);
         
         // Bar chart displaying the amount of hours in each category
         $hoursData = $this->Charts->hoursData($project_id);

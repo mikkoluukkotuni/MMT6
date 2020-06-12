@@ -168,21 +168,21 @@ class ChartsTable extends Table
     }
 
     // In this data set the predicted values stay in the budget
-    public function earnedValueData($project_id, $projectStartDate, $endingDate)
+    public function earnedValueData($project_id, $projectStartDate, $projectEndDate)
     {
         $time = Time::now();
         $currentWeek = date('W');
         $weekList = array();
 
         // If project has no estimated completion date then ending date is +20 weeks from project's start date
-        if ($endingDate == NULL) {
+        if ($projectEndDate == NULL) {
             // Have to use clone, otherwise $projectStartDate also changes
-            $endingDate = clone $projectStartDate;
-            $endingDate->modify('+20 weeks');
+            $projectEndDate = clone $projectStartDate;
+            $projectEndDate->modify('+20 weeks');
         }      
         
         $xFirstWeek = date('W', strtotime($projectStartDate));     
-        $xLastWeek = date('W', strtotime($endingDate));           
+        $xLastWeek = date('W', strtotime($projectEndDate));           
 
         // Populate array of week numbers to be used as x axis
         if ($xFirstWeek > $xLastWeek) {
@@ -262,7 +262,7 @@ class ChartsTable extends Table
                     }
 
                     // If project is not completed only draw data points up to current week
-                    if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                    if (($time < $projectEndDate && $weekNumber <= $currentWeek) || $time >= $projectEndDate) {
                         array_push($AC, $sum);
                     }                
                 }
@@ -322,7 +322,7 @@ class ChartsTable extends Table
                     }
                 // If project is not completed only draw data points up to current week
                 // In case no weeklyreport, either push value of previous week or in case of first week a 0
-                } else if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                } else if (($time < $projectEndDate && $weekNumber <= $currentWeek) || $time >= $projectEndDate) {
                     if (sizeof($readiness) > 0) {                        
                         array_push($readiness, $readiness[(sizeof($readiness) - 1)]);
                     } else {
@@ -568,21 +568,21 @@ class ChartsTable extends Table
 
 
     // In this data set the predicted values are based on actual averages
-    public function earnedValueData2($project_id, $projectStartDate, $endingDate)
+    public function earnedValueData2($project_id, $projectStartDate, $projectEndDate)
     {
         $time = Time::now();
         $currentWeek = date('W');
         $weekList = array();
 
         // If project has no estimated completion date then ending date is +20 weeks from project's start date
-        if ($endingDate == NULL) {
+        if ($projectEndDate == NULL) {
             // Have to use clone, otherwise $projectStartDate also changes
-            $endingDate = clone $projectStartDate;
-            $endingDate->modify('+20 weeks');
+            $projectEndDate = clone $projectStartDate;
+            $projectEndDate->modify('+20 weeks');
         }      
         
         $xFirstWeek = date('W', strtotime($projectStartDate));     
-        $xLastWeek = date('W', strtotime($endingDate));           
+        $xLastWeek = date('W', strtotime($projectEndDate));           
 
         // Populate array of week numbers to be used as x axis
         if ($xFirstWeek > $xLastWeek) {
@@ -662,7 +662,7 @@ class ChartsTable extends Table
                     }
 
                     // If project is not completed only draw data points up to current week
-                    if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                    if (($time < $projectEndDate && $weekNumber <= $currentWeek) || $time >= $projectEndDate) {
                         array_push($AC, $sum);
                     }                
                 }
@@ -722,7 +722,7 @@ class ChartsTable extends Table
                     }
                 // If project is not completed only draw data points up to current week
                 // In case no weeklyreport, either push value of previous week or in case of first week a 0
-                } else if (($time < $endingDate && $weekNumber <= $currentWeek) || $time >= $endingDate) {
+                } else if (($time < $projectEndDate && $weekNumber <= $currentWeek) || $time >= $projectEndDate) {
                     if (sizeof($readiness) > 0) {                        
                         array_push($readiness, $readiness[(sizeof($readiness) - 1)]);
                     } else {

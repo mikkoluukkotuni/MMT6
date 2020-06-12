@@ -191,7 +191,7 @@
                 <tr class="trow">
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td><?= h($project['user_members']) ?></td>
-                    <td><?= h($project['sum']) ?></td>
+                    <td><?= h($project['totalHours']) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody> 

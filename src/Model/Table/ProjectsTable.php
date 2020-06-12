@@ -67,8 +67,10 @@ class ProjectsTable extends Table
         return $validator;
     }
     
+
     // return a list of all the public projects
-    public function getPublicProjects(){  
+    public function getPublicProjects()
+    {  
         $projects = TableRegistry::get('Projects');
         $query = $projects
             ->find()
@@ -86,8 +88,10 @@ class ProjectsTable extends Table
         return $publicProjects;
     }
     
+
     // used for getting the number of project's users for public statistics
-    public function getUserMember($project_id) {
+    public function getUserMember($project_id) 
+    {
         $members = TableRegistry::get('Members');
         $queryM = $members
                 ->find()
@@ -102,9 +106,41 @@ class ProjectsTable extends Table
     }
 
 
+    public function getStartDate($project_id)
+    {
+        $projects = TableRegistry::get('Projects');
+        $query = $projects
+            ->find()
+            ->select(['created_on'])
+            ->where(['id' => $project_id])
+            ->toArray();
+
+        return $query[0]['created_on'];
+    }
+
+
+    public function getEndDate($project_id)
+    {
+        $projects = TableRegistry::get('Projects');
+        $query = $projects
+            ->find()
+            ->select(['created_on', 'finished_date'])
+            ->where(['id' => $project_id])
+            ->toArray();
+
+        if ($query[0]['finished_date'] == NULL) {
+            $projectEndDate = clone $query[0]['created_on'];
+            $projectEndDate->modify('+20 weeks');
+            return $projectEndDate;
+        } else {
+            return $query[0]['finished_date'];
+        }        
+    }
+
 
     // get the total workinghours of a project
-    public function getHoursDuration($project_id) {
+    public function getTotalHours($project_id) 
+    {
         $members = TableRegistry::get('Members');
         $queryM = $members
                 ->find()
@@ -133,8 +169,10 @@ class ProjectsTable extends Table
         return $sum;
     }
     
+    
     // new version of the function
-    public function getWeeklyhoursDuration($project_id){
+    public function getWeeklyhoursDuration($project_id)
+    {
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         $query = $weeklyreports
             ->find()
@@ -162,6 +200,37 @@ class ProjectsTable extends Table
         }    
         return $duration;
     } 
+
+
+    // get total target hours of a project
+    public function getTargetHours($project_id) 
+    {
+        // Get list of project's members
+        $members = TableRegistry::get('Members');
+        $query = $members
+                    ->find()
+                    ->select(['id', 'project_role', 'target_hours'])
+                    ->where(['project_id' => $project_id])
+                    ->toArray();
+
+        $targetHours = 0;
+
+        // Get all hours of the member and store in array in date order
+        // Also get each members target hours
+        $workinghours = TableRegistry::get('Workinghours');
+        if(!empty($query)) {
+            foreach($query as $member) {
+                if ($member->project_role == 'developer' || $member->project_role == 'manager') {
+                    if ($member->target_hours != NULL) {
+                        $targetHours += $member->target_hours;
+                    } else {
+                        $targetHours += 100;
+                    }
+                }                
+            }
+        }
+        return $targetHours;
+    }
 
 
     // This only works with the default metrics (types and order)
@@ -244,7 +313,8 @@ class ProjectsTable extends Table
     // 'X' if that weeks report was returned
     // 'L' if that weeks report should have been returned but its not
     // ' ' if there is no report but its still not late
-    public function getWeeklyreportWeeks($project_id, $min, $max, $year){
+    public function getWeeklyreportWeeks($project_id, $min, $max, $year)
+    {
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         /* BUG FIX: editing weekly limits now works fine
          */
@@ -292,18 +362,88 @@ class ProjectsTable extends Table
         return $completeList;
     }
 
+    
     // The logic that determines the status of project goes here
+    // Check multiple info of the project to determine if project's predicted status is 1, 2 or 3 (green, yellow, red)
     public function getLatestStatus($project_id, $metrics)
     {
+        // This status will be calculated based on substatus values of project (weekly report's overall status, 
+        // hour status, risk status...)
+        // To adjust importance of a substatus increase or decrease it's values
         $status = 1;
-        if (sizeof($metrics) >= 11) {
-            if ($metrics[10]['value'] == 3) {
-                $status = 3;
-            } else if ($metrics[10]['value'] == 2) {
+
+        $currentWeek = date('W');
+        $startWeek = date('W', strtotime($this->getStartDate($project_id)));
+        $endWeek = date('W', strtotime($this->getEndDate($project_id)));
+        $projectLength = $endWeek - $startWeek + 1;
+        $weeksUsed = $currentWeek - $startWeek + 1;
+        if ($currentWeek <= $endWeek) {
+            // Check overall status metric of the latest weekly report
+            $latestOverallStatus = 1;
+            if (sizeof($metrics) >= 11) {
+                if ($metrics[10]['value'] == 3) {
+                    $latestOverallStatus = 5;
+                } else if ($metrics[10]['value'] == 2) {
+                    $latestOverallStatus = 3;
+                }    
+            }
+
+            // Check total hours
+            $hourStatus = 1;
+            $targetHours = $this->getTargetHours($project_id);
+            $totalHours = $this->getTotalHours($project_id);
+            $estimatedHoursPerWeek = $targetHours / $projectLength;
+            // Ignore first two weeks of project and check total hours against estimated average
+            if ($currentWeek > $startWeek + 2) {
+                $targetHoursForThisWeek = ($weeksUsed - 2) * $estimatedHoursPerWeek;
+                if ($totalHours < $targetHoursForThisWeek) {
+                    $hourStatus = 2;
+                }
+                if ($totalHours < ($weeksUsed - 3) * $estimatedHoursPerWeek) {
+                    $hourStatus = 3;
+                }
+                if ($totalHours < ($weeksUsed - 4) * $estimatedHoursPerWeek) {
+                    $hourStatus = 5;
+                }
+            }
+
+            // Check degree of readiness metric of the latest weekly report
+            $readinessStatus = 1;
+            if (sizeof($metrics) >= 11 && ($currentWeek > $startWeek + 2)) {
+                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100) {
+                    $readinessStatus = 2;
+                }
+                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100 - 20) {
+                    $readinessStatus = 4;
+                }
+            }
+
+
+            // Check risks of the latest weekly report
+            $riskStatus = 1;
+            $highRisks = $this->getRisks($project_id)[0];
+            $totalRisks = $this->getRisks($project_id)[1];
+            if ($totalRisks > 0) {
+                if ($highRisks / $totalRisks >= 0.25) {
+                    $riskStatus = 2;
+                }
+                if ($highRisks / $totalRisks >= 0.5) {
+                    $riskStatus = 3;
+                }
+                if ($highRisks / $totalRisks >= 0.75) {
+                    $riskStatus = 5;
+                }
+            }
+
+            $subStatusSum = $latestOverallStatus + $hourStatus + $readinessStatus + $riskStatus;
+            if ($subStatusSum > 5) {
                 $status = 2;
-            }    
-        }
-        
+            }
+            if ($subStatusSum > 8) {
+                $status = 3;
+            }
+        }        
+
         return $status;
-    } 
+    }
 }
