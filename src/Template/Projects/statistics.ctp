@@ -1,4 +1,4 @@
-
+<?php use Cake\I18n\Time; ?>
 <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
     <div class="statistics">
         <h3><?= __('Edit limits') ?></h3> 
@@ -198,7 +198,7 @@
                     <td><?= h($project['totalHours']) ?></td>
                 <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
                     <td><?= h($project['minimumHours']) ?></td>
-                    <td><?= h($project['earliestLastSeenDate']) ?></td>
+                    <td><?php echo date("d.m.Y", strtotime($project['earliestLastSeenDate'])) ?></td>
                 <?php }?>
                 </tr>
             <?php endforeach; ?>

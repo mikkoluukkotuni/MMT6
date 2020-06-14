@@ -149,7 +149,7 @@ class ProjectsTable extends Table
     
     public function getEarliestLastSeenDate($project_id)
     {
-        $userMembers = $this->getUserMembers($project_id);
+        $memberIds = $this->getUserMembers($project_id);
         $lastSeenDate = NULL;
         $workinghours = TableRegistry::get('Workinghours');
         $individualLastSeenDates = array();
@@ -161,16 +161,16 @@ class ProjectsTable extends Table
                     ->where(['member_id' => $memberId])
                     ->order(['date' => 'DESC'])
                     ->toArray();
-                    var_dump($individualLastSeenDates);
+            
                 if(!empty($queryW)) {
                     array_push($individualLastSeenDates, $queryW[0]->date);
                 }           
             } 
         }
         if(!empty($individualLastSeenDates)) {
-            $lastSeenDate = min($individualLastSeenDates);
+            $lastSeenDate = date(min($individualLastSeenDates));
         }
-        
+        // var_dump(gettype($lastSeenDate));
         return $lastSeenDate;
     }
     
@@ -224,12 +224,7 @@ class ProjectsTable extends Table
         $minimumHours = 0;
 
         if(!empty($individualTotalHours)) {
-            $minimumHours = $individualTotalHours[0];
-            foreach($individualTotalHours as $membersHours) {
-                if($membersHours < $minimumHours) {
-                    $minimumHours = $membersHours;
-                }
-            }
+            $minimumHours = min($individualTotalHours);
         }
         return $minimumHours;
     }
@@ -425,18 +420,6 @@ class ProjectsTable extends Table
             }
         }
         return $completeList;
-    }
-
-
-    public function getMinHoursOfMember($project_id)
-    {
-        return 1;
-    }
-
-
-    public function getLatestDateOfMember($project_id)
-    {
-        return 1;
     }
 
 
