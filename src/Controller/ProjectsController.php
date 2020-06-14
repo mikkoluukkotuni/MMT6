@@ -182,6 +182,7 @@ class ProjectsController extends AppController
         $projects = array();
         // the weeklyreport weeks and the total weeklyhours duration is loaded for all projects
         // functions in "ProjectsTable.php"
+        $chartsTable = $this->loadModel('Charts');
         foreach ($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
@@ -196,6 +197,10 @@ class ProjectsController extends AppController
             $project['status'] = $this->Projects->getLatestStatus($project['id'], $project['metrics']);
             $project['minimumHours'] = $this->Projects->getMinimumHours($project['id']);
             $project['earliestLastSeenDate'] = $this->Projects->getEarliestLastSeenDate($project['id']);
+            $project['earnedValueData'] = NULL;
+            if($this->Projects->getWeeklyreportCount($project['id']) > 0 && $project['totalHours'] > 0 && $project['endDate'] > Time::now()) {
+                $project['earnedValueData'] = $chartsTable->earnedValueData($project['id'], $project['startDate'], $project['endDate']);
+            }
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

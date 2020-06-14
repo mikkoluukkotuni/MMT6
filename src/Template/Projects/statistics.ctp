@@ -152,7 +152,8 @@
                 <td>Test cases (passed / total)</td>
                 <td>Backlog (product / sprint)</td>
                 <td>Done</td>
-                <td>Risks (high / total)</td>                
+                <td>Risks (high / total)</td>
+                <td>CPI / SPI</td>              
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
@@ -171,6 +172,9 @@
                     <td><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
                     <td><?= h($project['metrics'][4]['value']) ?></td>
                     <td><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
+                    <td><?php if ($project['earnedValueData'] != NULL) {
+                        echo(round($project['earnedValueData'][6]['CPI'], 2) . ' / ' . round($project['earnedValueData'][6]['SPI'], 2));
+                    } ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody> 

@@ -512,4 +512,26 @@ class ProjectsTable extends Table
 
         return $status;
     }
+
+
+    public function getWeeklyreportCount($project_id)
+    {
+        $weeklyreports = TableRegistry::get('Weeklyreports'); 
+        $query = $weeklyreports
+            ->find()
+            ->select(['id'])
+            ->where(['project_id' => $project_id])
+            ->toArray();
+        return sizeof($query);
+    }
+
+
+    // public function getEarnedValueData($project_id)
+    // {
+    //     $projectStartDate = $this->getStartDate($project_id);
+    //     $projectEndDate = $this->getEndDate($project_id);
+    //     $chartsTable = $this->loadModel('Charts');
+    //     $data = $chartsTable->earnedValueData($project_id, $projectStartDate, $projectEndDate);
+    //     return 1;
+    // }
 }
