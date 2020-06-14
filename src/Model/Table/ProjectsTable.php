@@ -87,22 +87,31 @@ class ProjectsTable extends Table
         }
         return $publicProjects;
     }
-    
 
-    // used for getting the number of project's users for public statistics
-    public function getUserMember($project_id) 
+
+    // Get ids of all the developer and manager members
+    public function getUserMembers($project_id) 
     {
         $members = TableRegistry::get('Members');
         $queryM = $members
                 ->find()
-                ->select(['project_role'])
+                ->select(['id'])
                 ->where(['project_id' => $project_id, 'OR' => [['project_role' => 'developer'], ['project_role' => 'manager']], ])
                 ->toArray();
-                $ids = array();
-        foreach($queryM as $temp){
-            $ids[] = $temp->id;
+                
+        $ids = array();
+        foreach($queryM as $member){
+            $ids[] = $member->id;
         }
-        return count($ids);
+        return $ids;
+    }
+    
+
+    // used for getting the number of project's users for public statistics
+    public function getUserMembersCount($project_id) 
+    {
+        $userMembers = $this->getUserMembers($project_id);        
+        return count($userMembers);
     }
 
 
@@ -137,36 +146,92 @@ class ProjectsTable extends Table
         }        
     }
 
+    
+    public function getEarliestLastSeenDate($project_id)
+    {
+        $userMembers = $this->getUserMembers($project_id);
+        $lastSeenDate = NULL;
+        $workinghours = TableRegistry::get('Workinghours');
+        $individualLastSeenDates = array();
+        if(!empty($memberIds)) {
+            foreach($memberIds as $memberId) {
+                $queryW = $workinghours
+                    ->find()
+                    ->select(['date'])
+                    ->where(['member_id' => $memberId])
+                    ->order(['date' => 'DESC'])
+                    ->toArray();
+                    var_dump($individualLastSeenDates);
+                if(!empty($queryW)) {
+                    array_push($individualLastSeenDates, $queryW[0]->date);
+                }           
+            } 
+        }
+        if(!empty($individualLastSeenDates)) {
+            $lastSeenDate = min($individualLastSeenDates);
+        }
+        
+        return $lastSeenDate;
+    }
+    
+
+    // Get list of members working hours
+    public function getMembersIndividualHours($project_id)
+    {
+        $memberIds = $this->getUserMembers($project_id);
+        
+        $workinghours = TableRegistry::get('Workinghours');
+        $individualTotalHours = array();
+        if(!empty($memberIds)) {
+            foreach($memberIds as $memberId) {
+                $queryW = $workinghours
+                    ->find()
+                    ->select(['duration'])
+                    ->where(['member_id' => $memberId])
+                    ->toArray();
+
+                $sum = 0;
+                if(!empty($queryW)) {
+                    foreach($queryW as $result) {
+                        $sum += $result->duration;
+                    }
+                }
+                array_push($individualTotalHours, $sum);
+            }   
+        }
+        return $individualTotalHours;
+    }
+
 
     // get the total workinghours of a project
     public function getTotalHours($project_id) 
     {
-        $members = TableRegistry::get('Members');
-        $queryM = $members
-                ->find()
-                ->select(['id'])
-                ->where(['project_id' => $project_id])
-                ->toArray();
-                $ids = array();
-        foreach($queryM as $temp){
-            $ids[] = $temp->id;
-        }
-        
-        $workinghours = TableRegistry::get('Workinghours');
+        $individualTotalHours = $this->getMembersIndividualHours($project_id);
         $sum = 0;
-        if(!empty($ids)) {
-            $queryW = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['member_id IN' => $ids])
-                    ->toArray();       
-            if(!empty($queryW)) {
-                foreach($queryW as $result) {
-                    $sum += $result->duration;
+
+        if(!empty($individualTotalHours)) {
+            foreach($individualTotalHours as $membersHours) {
+                $sum += $membersHours;
+            }
+        }
+        return $sum;
+    }
+
+
+    public function getMinimumHours($project_id) 
+    {
+        $individualTotalHours = $this->getMembersIndividualHours($project_id);
+        $minimumHours = 0;
+
+        if(!empty($individualTotalHours)) {
+            $minimumHours = $individualTotalHours[0];
+            foreach($individualTotalHours as $membersHours) {
+                if($membersHours < $minimumHours) {
+                    $minimumHours = $membersHours;
                 }
             }
-        } 
-        return $sum;
+        }
+        return $minimumHours;
     }
     
     
@@ -362,7 +427,19 @@ class ProjectsTable extends Table
         return $completeList;
     }
 
-    
+
+    public function getMinHoursOfMember($project_id)
+    {
+        return 1;
+    }
+
+
+    public function getLatestDateOfMember($project_id)
+    {
+        return 1;
+    }
+
+
     // The logic that determines the status of project goes here
     // Check multiple info of the project to determine if project's predicted status is 1, 2 or 3 (green, yellow, red)
     public function getLatestStatus($project_id, $metrics)
@@ -382,7 +459,7 @@ class ProjectsTable extends Table
             $latestOverallStatus = 1;
             if (sizeof($metrics) >= 11) {
                 if ($metrics[10]['value'] == 3) {
-                    $latestOverallStatus = 5;
+                    $latestOverallStatus = 7;
                 } else if ($metrics[10]['value'] == 2) {
                     $latestOverallStatus = 3;
                 }    
@@ -405,16 +482,22 @@ class ProjectsTable extends Table
                 if ($totalHours < ($weeksUsed - 4) * $estimatedHoursPerWeek) {
                     $hourStatus = 5;
                 }
+                if ($totalHours < ($weeksUsed - 4) * $estimatedHoursPerWeek) {
+                    $hourStatus = 7;
+                }
             }
 
             // Check degree of readiness metric of the latest weekly report
             $readinessStatus = 1;
             if (sizeof($metrics) >= 11 && ($currentWeek > $startWeek + 2)) {
                 if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100) {
-                    $readinessStatus = 2;
+                    $readinessStatus = 3;
                 }
                 if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100 - 20) {
                     $readinessStatus = 4;
+                }
+                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100 - 40) {
+                    $readinessStatus = 7;
                 }
             }
 
@@ -431,7 +514,7 @@ class ProjectsTable extends Table
                     $riskStatus = 3;
                 }
                 if ($highRisks / $totalRisks >= 0.75) {
-                    $riskStatus = 5;
+                    $riskStatus = 7;
                 }
             }
 
@@ -439,7 +522,7 @@ class ProjectsTable extends Table
             if ($subStatusSum > 5) {
                 $status = 2;
             }
-            if ($subStatusSum > 8) {
+            if ($subStatusSum > 9) {
                 $status = 3;
             }
         }        

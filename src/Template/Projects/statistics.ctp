@@ -180,18 +180,26 @@
     <?php }?>
 
     <h4><?= h('Total numbers of working hours') ?></h4>
-    <table class="stylized-table" style="width:640px;">        
+    <table class="stylized-table">        
         <tbody>
             <tr class="header">
                 <td style="width:280px;">Project name</td>
                 <td style="width:160px;">Number of members</td>
                 <td>Total number of working hours</td>
+            <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
+                <td>Minimum working hours of an active member</td>
+                <td>Earliest last seen date of an active member</td>                
+            <?php }?>
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
-                    <td><?= h($project['user_members']) ?></td>
+                    <td><?= h($project['userMembersCount']) ?></td>
                     <td><?= h($project['totalHours']) ?></td>
+                <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
+                    <td><?= h($project['minimumHours']) ?></td>
+                    <td><?= h($project['earliestLastSeenDate']) ?></td>
+                <?php }?>
                 </tr>
             <?php endforeach; ?>
         </tbody> 

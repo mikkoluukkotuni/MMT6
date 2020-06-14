@@ -190,10 +190,12 @@ class ProjectsController extends AppController
             $project['endDate'] = $this->Projects->getEndDate($project['id']);
             $project['totalHours'] = $this->Projects->getTotalHours($project['id']);
             // $project['targetHours'] = $this->Projects->getTargetHours($project['id']);
-            $project['user_members'] = $this->Projects->getUserMember($project['id']);
+            $project['userMembersCount'] = $this->Projects->getUserMembersCount($project['id']);
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
             $project['risks'] = $this->Projects->getRisks($project['id']);
             $project['status'] = $this->Projects->getLatestStatus($project['id'], $project['metrics']);
+            $project['minimumHours'] = $this->Projects->getMinimumHours($project['id']);
+            $project['earliestLastSeenDate'] = $this->Projects->getEarliestLastSeenDate($project['id']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page
