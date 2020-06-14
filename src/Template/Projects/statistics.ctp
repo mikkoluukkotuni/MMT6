@@ -150,8 +150,7 @@
                 <td style="width:220px;">Project name</td>
                 <td>Commits</td>
                 <td>Test cases (passed / total)</td>
-                <td>Product backlog</td>
-                <td>Sprint backlog</td>
+                <td>Backlog (product / sprint)</td>
                 <td>Done</td>
                 <td>Risks (high / total)</td>                
             </tr>
@@ -169,8 +168,7 @@
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td><?= h($project['metrics'][6]['value']) ?></td>
                     <td><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
-                    <td><?= h($project['metrics'][2]['value']) ?></td>
-                    <td><?= h($project['metrics'][3]['value']) ?></td>
+                    <td><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
                     <td><?= h($project['metrics'][4]['value']) ?></td>
                     <td><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
                 </tr>
@@ -183,8 +181,8 @@
     <table class="stylized-table">        
         <tbody>
             <tr class="header">
-                <td style="width:280px;">Project name</td>
-                <td style="width:160px;">Number of members</td>
+                <td>Project name</td>
+                <td>Number of members</td>
                 <td>Total number of working hours</td>
             <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
                 <td>Minimum working hours of an active member</td>
@@ -198,7 +196,9 @@
                     <td><?= h($project['totalHours']) ?></td>
                 <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
                     <td><?= h($project['minimumHours']) ?></td>
-                    <td><?php echo date("d.m.Y", strtotime($project['earliestLastSeenDate'])) ?></td>
+                    <td><?php if ($project['earliestLastSeenDate'] != NULL) {
+                        echo date("d.m.Y", strtotime($project['earliestLastSeenDate']));
+                    } ?></td>
                 <?php }?>
                 </tr>
             <?php endforeach; ?>
