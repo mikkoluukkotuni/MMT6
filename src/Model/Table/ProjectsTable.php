@@ -327,6 +327,7 @@ class ProjectsTable extends Table
     } 
 
 
+    // [0] is high risks, [1] is total risks
     public function getRisks($project_id)
     {
         $risks = [];
@@ -514,6 +515,181 @@ class ProjectsTable extends Table
     }
 
 
+    // The logic that determines the substatuses of project goes here
+    // Returns array of background color stylings as strings to be used in the statistics tables
+    public function getStatusColors($project_id, $metrics)
+    {
+        $red = 'style="background-color:#ff5757"';
+        $yellow = 'style="background-color:#ffef85"';                               
+        $green = 'style="background-color:#ccffd7"';
+        $statusColors = array();
+
+        // Make each substatus's default color green
+        $statusColors['commits'] = $green;
+        $statusColors['testCases'] = $green;
+        $statusColors['productBacklog'] = $green;
+        $statusColors['done'] = $green;
+        $statusColors['risks'] = $green;
+        $statusColors['CPI/SPI'] = $green;        
+        $statusColors['minimumHours'] = $green;
+        $statusColors['lastSeen'] = $green;
+
+        $now = Time::now();
+        $startDate = $this->getStartDate($project_id);
+        $endDate = $this->getEndDate($project_id);
+
+        if ($now <= $endDate) {
+            // The project is divided into four phases
+            $interval = date_diff($now, $startDate);
+            $intervalWeeks = $interval->format('%a') / 7;
+
+            $metrics = $this->getMetrics($project_id);
+            $commits = $metrics[6]['value'];
+            $testCasesPassed = $metrics[7]['value'];
+            $testCasesTotal = $metrics[8]['value'];
+            $prodcutBacklog = $metrics[2]['value'];
+            $done = $metrics[4]['value'];            
+            
+            // risks[0] = high, risks[1] = total
+            $risks = $this->getRisks($project_id);
+            $highRisks = $risks[0];
+            $totalRisks = $risks[1];
+            
+            $earnedValueData = $this->getEarnedValueData($project_id);
+            $CPI = $earnedValueData[6]['CPI'];
+            $SPI = $earnedValueData[6]['SPI'];            
+
+            $minimumHours = $this->getMinimumHours($project_id);
+            $lastSeen = Time::parseDate($this->getEarliestLastSeenDate($project_id));
+
+            if ($intervalWeeks <= 5) {
+                if ($minimumHours == 0) {
+                    $statusColors['minimumHours'] = $yellow;
+                }
+            } else if ($intervalWeeks <= 10) {
+                if ($commits == 0) {
+                    $statusColors['commits'] = $red;
+                } else if ($commits < $intervalWeeks) {
+                    $statusColors['commits'] = $yellow;
+                }
+
+                if ($testCasesTotal == 0) {
+                    $statusColors['testCases'] = $yellow;
+                }
+
+                if ($prodcutBacklog == 0) {
+                    $statusColors['productBacklog'] = $red;
+                } else if ($prodcutBacklog < 5) {
+                    $statusColors['productBacklog'] = $yellow;
+                }
+                
+                if ($totalRisks == 0) {
+                    $statusColors['risks'] = $red;
+                } else if ($totalRisks < 5) {
+                    $statusColors['risks'] = $yellow;
+                }
+
+                if ($earnedValueData != NULL && ($CPI < 0.5 || $SPI < 0.5)) {
+                    $statusColors['CPI/SPI'] = $yellow;
+                }
+                
+                if ($minimumHours < $intervalWeeks) {
+                    $statusColors['minimumHours'] = $red;
+                } else if ($minimumHours < $intervalWeeks * 2.5) {
+                    $statusColors['minimumHours'] = $yellow;
+                }
+            } else if ($intervalWeeks <= 15) {
+                if ($commits == 0) {
+                    $statusColors['commits'] = $red;
+                } else if ($commits < $intervalWeeks) {
+                    $statusColors['commits'] = $yellow;
+                }
+
+                if ($testCasesTotal == 0) {
+                    $statusColors['testCases'] = $red;
+                } else if ($testCasesTotal < 5) {
+                    $statusColors['testCases'] = $yellow;
+                }
+
+                if ($prodcutBacklog < 5) {
+                    $statusColors['productBacklog'] = $red;
+                }
+
+                if ($done == 0) {
+                    $statusColors['done'] = $yellow;
+                }
+                
+                if ($totalRisks == 0 || $highRisks == $totalRisks) {
+                    $statusColors['risks'] = $red;
+                } else if ($totalRisks < 5 || $highRisks > 2) {
+                    $statusColors['risks'] = $yellow;
+                }
+
+                if ($earnedValueData != NULL && ($CPI < 0.5 || $SPI < 0.5)) {
+                    $statusColors['CPI/SPI'] = $red;
+                } else if ($earnedValueData != NULL && ($CPI < 0.9 || $SPI < 0.9)) {
+                    $statusColors['CPI/SPI'] = $yellow;
+                }
+                
+                if ($minimumHours < $intervalWeeks * 3) {
+                    $statusColors['minimumHours'] = $red;
+                } else if ($minimumHours < $intervalWeeks * 5) {
+                    $statusColors['minimumHours'] = $yellow;
+                }
+            } else {
+                if ($commits < 5) {
+                    $statusColors['commits'] = $red;
+                } else if ($commits < $intervalWeeks) {
+                    $statusColors['commits'] = $yellow;
+                }
+
+                if ($testCasesTotal < 5) {
+                    $statusColors['testCases'] = $red;
+                } else if ($testCasesPassed == 0) {
+                    $statusColors['testCases'] = $yellow;
+                }
+
+                if ($prodcutBacklog < 5) {
+                    $statusColors['productBacklog'] = $red;
+                }
+
+                if ($done == 0) {
+                    $statusColors['done'] = $red;
+                } else if ($done < 5) {
+                    $statusColors['done'] = $yellow;
+                }
+
+                if ($totalRisks == 0 || $highRisks == $totalRisks) {
+                    $statusColors['risks'] = $red;
+                } else if ($totalRisks < 5 || $highRisks > 2) {
+                    $statusColors['risks'] = $yellow;
+                }
+
+                if ($earnedValueData != NULL && ($CPI < 0.5 || $SPI < 0.5)) {
+                    $statusColors['CPI/SPI'] = $red;
+                } else if ($earnedValueData != NULL && ($CPI < 0.9 || $SPI < 0.9)) {
+                    $statusColors['CPI/SPI'] = $yellow;
+                }
+                
+                if ($minimumHours < $intervalWeeks * 3) {
+                    $statusColors['minimumHours'] = $red;
+                } else if ($minimumHours < $intervalWeeks * 5) {
+                    $statusColors['minimumHours'] = $yellow;
+                }
+            }
+
+            // These conditions are the same regardless of the project's phase
+            if ($lastSeen == NULL || date_diff($now, $lastSeen)->format('%a') / 7 > 3) {
+                $statusColors['lastSeen'] = $red;
+            } else if ($lastSeen == NULL || date_diff($now, $lastSeen)->format('%a') / 7 > 2) {
+                $statusColors['lastSeen'] = $yellow;
+            }
+        }
+
+        return $statusColors;
+    }
+
+
     public function getWeeklyreportCount($project_id)
     {
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
@@ -526,12 +702,17 @@ class ProjectsTable extends Table
     }
 
 
-    // public function getEarnedValueData($project_id)
-    // {
-    //     $projectStartDate = $this->getStartDate($project_id);
-    //     $projectEndDate = $this->getEndDate($project_id);
-    //     $chartsTable = $this->loadModel('Charts');
-    //     $data = $chartsTable->earnedValueData($project_id, $projectStartDate, $projectEndDate);
-    //     return 1;
-    // }
+    public function getEarnedValueData($project_id)
+    {
+        $projectStartDate = $this->getStartDate($project_id);
+        $projectEndDate = $this->getEndDate($project_id);
+        $data = NULL;
+        
+        if ($this->getWeeklyreportCount($project_id) > 0 && $this->getTotalHours($project_id) > 0 && $projectEndDate > Time::now()) {
+            $this->Charts = TableRegistry::get('Charts');
+            $data = $this->Charts->earnedValueData($project_id, $projectStartDate, $projectEndDate);
+        }
+
+        return $data;
+    }
 }

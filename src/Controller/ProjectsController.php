@@ -195,12 +195,10 @@ class ProjectsController extends AppController
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
             $project['risks'] = $this->Projects->getRisks($project['id']);
             $project['status'] = $this->Projects->getLatestStatus($project['id'], $project['metrics']);
+            $project['statusColors'] = $this->Projects->getStatusColors($project['id'], $project['metrics']);
             $project['minimumHours'] = $this->Projects->getMinimumHours($project['id']);
             $project['earliestLastSeenDate'] = $this->Projects->getEarliestLastSeenDate($project['id']);
-            $project['earnedValueData'] = NULL;
-            if($this->Projects->getWeeklyreportCount($project['id']) > 0 && $project['totalHours'] > 0 && $project['endDate'] > Time::now()) {
-                $project['earnedValueData'] = $chartsTable->earnedValueData($project['id'], $project['startDate'], $project['endDate']);
-            }
+            $project['earnedValueData'] = $this->Projects->getEarnedValueData($project['id']);
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page

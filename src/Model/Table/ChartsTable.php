@@ -370,13 +370,9 @@ class ChartsTable extends Table
                 array_push($BCWP2, NULL);
             }            
         }
-        // array_push($BCWP2, NULL);
 
-        // TÄSSÄ JOTAIN VIKAA - ONKO AINA SAMA KUIN $average?
         // For the weeks after current week, add predicted values to BCWP2
-        $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   
-        
-        
+        $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));       
         
         $tempSum = $BCWP[(sizeof($BCWP) - 1)];
         // First point of this line has to be same as the last point of BCWP
@@ -385,9 +381,6 @@ class ChartsTable extends Table
             $tempSum += $average;
             array_push($BCWP2, $tempSum);
         }
-
-        
-
 
         for ($i = 1; $i < sizeof($AC); $i++) {
             array_push($AC2, NULL);
@@ -771,7 +764,6 @@ class ChartsTable extends Table
                 array_push($BCWP2, NULL);
             }            
         }
-        // array_push($BCWP2, NULL);
 
         // For the weeks after current week, add predicted values to BCWP2
         $averagePredicted = ($BAC[(sizeof($BAC) - 1)] - $BCWP[(sizeof($BCWP) - 1)]) / ($weeksEstimated - sizeof($AC));   

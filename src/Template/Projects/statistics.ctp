@@ -59,14 +59,14 @@
                 <tr class="trow">
                     <td class="primary-cell"><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                         <?php                    
-                $admin = $this->request->session()->read('is_admin');
-                $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+                        $admin = $this->request->session()->read('is_admin');
+                        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
 
-                // query iterator, resets after finishing one row
-                $i = 0;
+                        // query iterator, resets after finishing one row
+                        $i = 0;
 
                         foreach ($project['reports'] as $report):                          
-                            ?>
+                        ?>
                         
                         <?php
                         // missing ones print normally
@@ -167,12 +167,12 @@
                     } ?> >
                     </td>
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
-                    <td><?= h($project['metrics'][6]['value']) ?></td>
-                    <td><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
-                    <td><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
-                    <td><?= h($project['metrics'][4]['value']) ?></td>
-                    <td><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
-                    <td><?php if ($project['earnedValueData'] != NULL) {
+                    <td <?= $project['statusColors']['commits'] ?> ><?= h($project['metrics'][6]['value']) ?></td>
+                    <td <?= $project['statusColors']['testCases'] ?> ><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
+                    <td <?= $project['statusColors']['productBacklog'] ?> ><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
+                    <td <?= $project['statusColors']['done'] ?> ><?= h($project['metrics'][4]['value']) ?></td>
+                    <td <?= $project['statusColors']['risks'] ?> ><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
+                    <td <?= $project['statusColors']['CPI/SPI'] ?> ><?php if ($project['earnedValueData'] != NULL) {
                         echo(round($project['earnedValueData'][6]['CPI'], 2) . ' / ' . round($project['earnedValueData'][6]['SPI'], 2));
                     } ?></td>
                 </tr>
@@ -199,8 +199,8 @@
                     <td><?= h($project['userMembersCount']) ?></td>
                     <td><?= h($project['totalHours']) ?></td>
                 <?php if ($this->request->session()->read('is_admin') || $this->request->session()->read('is_supervisor')) { ?>
-                    <td><?= h($project['minimumHours']) ?></td>
-                    <td><?php if ($project['earliestLastSeenDate'] != NULL) {
+                    <td <?= $project['statusColors']['minimumHours'] ?> ><?= h($project['minimumHours']) ?></td>
+                    <td <?= $project['statusColors']['lastSeen'] ?> ><?php if ($project['earliestLastSeenDate'] != NULL) {
                         echo date("d.m.Y", strtotime($project['earliestLastSeenDate']));
                     } ?></td>
                 <?php }?>
