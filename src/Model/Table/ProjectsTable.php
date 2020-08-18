@@ -424,97 +424,6 @@ class ProjectsTable extends Table
     }
 
 
-    // The logic that determines the status of project goes here
-    // Check multiple info of the project to determine if project's predicted status is 1, 2 or 3 (green, yellow, red)
-    public function getLatestStatus($project_id, $metrics)
-    {
-        // This status will be calculated based on substatus values of project (weekly report's overall status, 
-        // hour status, risk status...)
-        // To adjust importance of a substatus increase or decrease it's values
-        $status = 1;
-
-        $currentWeek = date('W');
-        $startWeek = date('W', strtotime($this->getStartDate($project_id)));
-        $endWeek = date('W', strtotime($this->getEndDate($project_id)));
-        $projectLength = $endWeek - $startWeek + 1;
-        $weeksUsed = $currentWeek - $startWeek + 1;
-        if ($currentWeek <= $endWeek) {
-            // Check overall status metric of the latest weekly report
-            $latestOverallStatus = 1;
-            if (sizeof($metrics) >= 11) {
-                if ($metrics[10]['value'] == 3) {
-                    $latestOverallStatus = 7;
-                } else if ($metrics[10]['value'] == 2) {
-                    $latestOverallStatus = 3;
-                }    
-            }
-
-            // Check total hours
-            $hourStatus = 1;
-            $targetHours = $this->getTargetHours($project_id);
-            $totalHours = $this->getTotalHours($project_id);
-            $estimatedHoursPerWeek = $targetHours / $projectLength;
-            // Ignore first two weeks of project and check total hours against estimated average
-            if ($currentWeek > $startWeek + 2) {
-                $targetHoursForThisWeek = ($weeksUsed - 2) * $estimatedHoursPerWeek;
-                if ($totalHours < $targetHoursForThisWeek) {
-                    $hourStatus = 2;
-                }
-                if ($totalHours < ($weeksUsed - 3) * $estimatedHoursPerWeek) {
-                    $hourStatus = 3;
-                }
-                if ($totalHours < ($weeksUsed - 4) * $estimatedHoursPerWeek) {
-                    $hourStatus = 5;
-                }
-                if ($totalHours < ($weeksUsed - 4) * $estimatedHoursPerWeek) {
-                    $hourStatus = 7;
-                }
-            }
-
-            // Check degree of readiness metric of the latest weekly report
-            $readinessStatus = 1;
-            if (sizeof($metrics) >= 11 && ($currentWeek > $startWeek + 2)) {
-                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100) {
-                    $readinessStatus = 3;
-                }
-                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100 - 20) {
-                    $readinessStatus = 4;
-                }
-                if ($metrics[9]['value'] < ($weeksUsed - 2) / $projectLength * 100 - 40) {
-                    $readinessStatus = 7;
-                }
-            }
-
-
-            // Check risks of the latest weekly report
-            $riskStatus = 1;
-            $highRisks = $this->getRisks($project_id)[0];
-            $totalRisks = $this->getRisks($project_id)[1];
-            if ($totalRisks > 0) {
-                if ($highRisks / $totalRisks >= 0.25) {
-                    $riskStatus = 2;
-                }
-                if ($highRisks / $totalRisks >= 0.5) {
-                    $riskStatus = 3;
-                }
-                if ($highRisks / $totalRisks >= 0.75) {
-                    $riskStatus = 7;
-                }
-            }
-
-            $subStatusSum = $latestOverallStatus + $hourStatus + $readinessStatus + $riskStatus;
-            if ($subStatusSum > 5) {
-                $status = 2;
-            }
-            if ($subStatusSum > 9) {
-                $status = 3;
-            }
-        }        
-
-        return $status;
-    }
-
-
     // The logic that determines the substatuses of project goes here
     // Returns array of background color stylings as strings to be used in the statistics tables
     public function getStatusColors($project_id, $metrics)
@@ -527,7 +436,7 @@ class ProjectsTable extends Table
         // Make each substatus's default color green
         $statusColors['commits'] = $green;
         $statusColors['testCases'] = $green;
-        $statusColors['productBacklog'] = $green;
+        $statusColors['backlog'] = $green;
         $statusColors['done'] = $green;
         $statusColors['risks'] = $green;
         $statusColors['CPI/SPI'] = $green;        
@@ -548,6 +457,7 @@ class ProjectsTable extends Table
             $testCasesPassed = $metrics[7]['value'];
             $testCasesTotal = $metrics[8]['value'];
             $prodcutBacklog = $metrics[2]['value'];
+            $sprintBacklog = $metrics[3]['value'];
             $done = $metrics[4]['value'];            
             
             // risks[0] = high, risks[1] = total
@@ -578,9 +488,9 @@ class ProjectsTable extends Table
                 }
 
                 if ($prodcutBacklog == 0) {
-                    $statusColors['productBacklog'] = $red;
-                } else if ($prodcutBacklog < 5) {
-                    $statusColors['productBacklog'] = $yellow;
+                    $statusColors['backlog'] = $red;
+                } else if ($prodcutBacklog < 5 || $sprintBacklog == 0) {
+                    $statusColors['backlog'] = $yellow;
                 }
                 
                 if ($totalRisks == 0) {
@@ -612,7 +522,9 @@ class ProjectsTable extends Table
                 }
 
                 if ($prodcutBacklog < 5) {
-                    $statusColors['productBacklog'] = $red;
+                    $statusColors['backlog'] = $red;
+                } else if ($sprintBacklog == 0) {
+                    $statusColors['backlog'] = $yellow;
                 }
 
                 if ($done == 0) {
@@ -650,7 +562,9 @@ class ProjectsTable extends Table
                 }
 
                 if ($prodcutBacklog < 5) {
-                    $statusColors['productBacklog'] = $red;
+                    $statusColors['backlog'] = $red;
+                } else if ($sprintBacklog == 0) {
+                    $statusColors['backlog'] = $yellow;
                 }
 
                 if ($done == 0) {

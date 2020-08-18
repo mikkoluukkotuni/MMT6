@@ -194,7 +194,6 @@ class ProjectsController extends AppController
             $project['userMembersCount'] = $this->Projects->getUserMembersCount($project['id']);
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
             $project['risks'] = $this->Projects->getRisks($project['id']);
-            $project['status'] = $this->Projects->getLatestStatus($project['id'], $project['metrics']);
             $project['statusColors'] = $this->Projects->getStatusColors($project['id'], $project['metrics']);
             $project['minimumHours'] = $this->Projects->getMinimumHours($project['id']);
             $project['earliestLastSeenDate'] = $this->Projects->getEarliestLastSeenDate($project['id']);

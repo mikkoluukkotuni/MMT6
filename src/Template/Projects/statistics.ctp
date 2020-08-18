@@ -146,7 +146,6 @@
         <table class="stylized-table">
         <tbody>
             <tr class="header">
-                <td style="width:10px;"></td>
                 <td style="width:220px;">Project name</td>
                 <td>Commits</td>
                 <td>Test cases (passed / total)</td>
@@ -157,19 +156,10 @@
             </tr>
             <?php foreach ($projects as $project): ?>
                 <tr class="trow">
-                    <td
-                    <?php if ($project['status'] == 3) {
-                            echo(' style="background-color:#ff1100"');
-                        } else if ($project['status'] == 2) {
-                            echo(' style="background-color:yellow"');                               
-                        } else {
-                            echo(' style="background-color:#51e064"');
-                    } ?> >
-                    </td>
                     <td><?= $this->Html->link(__($project['project_name']), ['action' => 'view', $project['id']]) ?></td>
                     <td <?= $project['statusColors']['commits'] ?> ><?= h($project['metrics'][6]['value']) ?></td>
                     <td <?= $project['statusColors']['testCases'] ?> ><?= h($project['metrics'][7]['value'] . ' / ' . $project['metrics'][8]['value']) ?></td>
-                    <td <?= $project['statusColors']['productBacklog'] ?> ><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
+                    <td <?= $project['statusColors']['backlog'] ?> ><?= h($project['metrics'][2]['value'] . ' / ' . $project['metrics'][3]['value']) ?></td>
                     <td <?= $project['statusColors']['done'] ?> ><?= h($project['metrics'][4]['value']) ?></td>
                     <td <?= $project['statusColors']['risks'] ?> ><?= h($project['risks'][0] . ' / ' . $project['risks'][1]) ?></td>
                     <td <?= $project['statusColors']['CPI/SPI'] ?> ><?php if ($project['earnedValueData'] != NULL) {
