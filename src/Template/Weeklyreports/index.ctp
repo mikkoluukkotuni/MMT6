@@ -16,7 +16,7 @@
                 <button id="managing_button"><?= $this->Html->link(__('Weekly hours'), ['controller' => 'Weeklyhours', 'action' => 'index']) ?></button>
             <?php }
 
-            if($admin || $supervisor || $manager) {
+            if($admin || $manager) {
         ?>
             <button id="navbutton"><?= $this->Html->link(__('+ New Report'), ['action' => 'add']) ?></button>
         <?php } ?>
