@@ -19,34 +19,53 @@
             $nowWeek = date('W');
             $reportWeek = $now->weekOfYear -1;
             
-            if(!is_null($current_weeklyreport)){
-                echo $this->Form->input('title', array('value' => $current_weeklyreport['title']));                
-                echo $this->Form->input('week', array('value' => $current_weeklyreport['week'], 'type' => 'number', 'min' => 1, 'max' => 52, 'style' => 'width: 40%;'));
-                echo $this->Form->input('year', array('value' => $current_weeklyreport['year'], 'min' => $now->year-1, 'max' => $now->year, 'style' => 'width: 50%;'));    
+            if(!is_null($current_weeklyreport)) {
+                echo $this->Form->input('title', array('value' => $current_weeklyreport['title']));        
+            ?>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php         
+                echo $this->Form->input('week', array('value' => $current_weeklyreport['week'], 'label' => 'For week', 'type' => 'number', 'min' => 1, 'max' => 52));
+                echo $this->Form->input('year', array('value' => $current_weeklyreport['year'], 'min' => $now->year-1, 'max' => $now->year));                
+                echo $this->Form->input('meetings', array('value' => $current_weeklyreport['meetings'], 'type' => 'number', 'min' => 0));
                 echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon']);
-                echo $this->Form->input('meetings', array('value' => $current_weeklyreport['meetings'], 'type' => 'number', 'min' => 0, 'style' => 'width: 40%;'));                
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon']);
+            ?>
+            </div>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php           
                 echo $this->Form->input('reglink', array('value' => $current_weeklyreport['reglink'], 'label' => 'Requirements link' ));
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon']);
+            ?>
+            </div>
+            <?php 
                 echo $this->Form->input('problems', array('value' => $current_weeklyreport['problems'], 'label' => 'Challenges, issues, etc.'));
                 echo $this->Form->input('additional', array('value' => $current_weeklyreport['additional'], 'label' => 'Additional information'));
-            }
-            else{                
+            } else {                
                 $currProj = $this->request->session()->read('selected_project')['project_name'];
 
                 echo $this->Form->input('title', array('value' => $currProj.', weekly report') );
+            ?>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php      
                 // the week and year for the last weeklyreport of the year are not automatically filled out
                 if ($nowWeek == 01) {
-                    echo $this->Form->input('week', array('type' => 'number', 'min' => 1, 'max' => 52, 'style' => 'width: 40%;'));
-                    echo $this->Form->input('year', array('min' => $now->year-1, 'max' => $now->year, 'style' => 'width: 50%;'));
+                    echo $this->Form->input('week', array('label' => 'For week', 'type' => 'number', 'min' => 1, 'max' => 52));
+                    echo $this->Form->input('year', array('min' => $now->year-1, 'max' => $now->year));
+                } else {
+                    echo $this->Form->input('week', array('label' => 'For week', 'value' => $reportWeek, 'type' => 'number', 'min' => 1, 'max' => 52));
+                    echo $this->Form->input('year', array('value' => $now->year, 'min' => $now->year-1, 'max' => $now->year));
                 }
-                else {
-                    echo $this->Form->input('week', array('value' => $reportWeek, 'type' => 'number', 'min' => 1, 'max' => 52, 'style' => 'width: 40%;'));
-                    echo $this->Form->input('year', array('value' => $now->year, 'min' => $now->year-1, 'max' => $now->year, 'style' => 'width: 50%;'));
-                }
+                
+                echo $this->Form->input('meetings', array('type' => 'number', 'min' => 0)); 
                 echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon']);
-                echo $this->Form->input('meetings', array('type' => 'number', 'min' => 0, 'style' => 'width: 40%;')); 
+            ?>
+            </div>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php           
+                echo $this->Form->input('reglink', array('value' => $current_weeklyreport['reglink'], 'label' => 'Requirements link' ));
                 echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon']);
-                echo $this->Form->input('reglink', array('label' => 'Requirements link'));
+            ?>
+            </div>
+            <?php 
                 echo $this->Form->input('problems', array('label' => 'Challenges, issues, etc.'));
                 echo $this->Form->input('additional', array('label' => 'Additional information'));
             }

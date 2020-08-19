@@ -279,6 +279,12 @@ class ProjectsController extends AppController
         }
         $this->set(compact('project'));
         $this->set('_serialize', ['project']);
+
+        // This is to force refresh modified project data in selected project variable
+        $project = $this->Projects->get($id, [
+            'contain' => ['Members', 'Metrics', 'Weeklyreports']
+        ]);
+        $this->request->session()->write('selected_project', $project);
     }
 
     public function delete($id = null)
