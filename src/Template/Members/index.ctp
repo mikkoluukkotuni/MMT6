@@ -119,47 +119,44 @@
             <?php echo $this->Highcharts->render($predictiveProjectChart, 'predictiveProjectChart'); ?>
         </div>
     </div> 
+    <?php } ?>
+
     <br>
     <table cellpadding="0" cellspacing="0">
-
-<tr>
-    <th><?= __('Worktype') ?></th>
-    <th><?= __('Hours') ?></th>
-    <th><?= __('Percentage') ?></th>
-</tr>
-    <?php } ?>
+        <tr>
+            <th><?= __('Worktype') ?></th>
+            <th><?= __('Hours') ?></th>
+            <th><?= __('Percentage') ?></th>
+        </tr>
     
         <?php
         $queryForTypes = Cake\ORM\TableRegistry::get('Worktypes')
-        ->find()
-        ->toArray();
-    ?>
-
-    <?php             
-    foreach($queryForTypes as $type): ?>
-    <tr>
-        <td><?= h($type->description) ?></td>                
-        <td><?= h($hoursByTypeData[$type->id]) ?></td>
-        <td>
-        <?php 
-            if ($hoursByTypeData[$type->id] == 0) {
-                echo(0);
-            } else {
-                $percent = round(($hoursByTypeData[$type->id]/$total * 100), 0, PHP_ROUND_HALF_UP);
-                echo($percent);
-            }
-        ?>
-        </td>
-
-    <?php endforeach; ?>   
-    </tr>
-    <tr style="border-top: 2px solid black;">
-                    <td><b><?= __('Total') ?></b></td> 
-                    <td><b><?= h($total) ?></b></td>
-                    <td><b><?= h(100) ?></b></td>
-                </tr>    
-            </table>
+            ->find()
+            ->toArray();
+           
+        foreach($queryForTypes as $type): ?>
+            <tr>
+                <td><?= h($type->description) ?></td>                
+                <td><?= h($hoursByTypeData[$type->id]) ?></td>
+                <td>
+                <?php 
+                if ($hoursByTypeData[$type->id] == 0) {
+                    echo(0);
+                } else {
+                    $percent = round(($hoursByTypeData[$type->id]/$total * 100), 0, PHP_ROUND_HALF_UP);
+                    echo($percent);
+                }
+                ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>   
         
+        <tr style="border-top: 2px solid black;">
+            <td><b><?= __('Total') ?></b></td> 
+            <td><b><?= h($total) ?></b></td>
+            <td><b><?= h(100) ?></b></td>
+        </tr>    
+    </table>        
     
     <?php if ($admin) { ?>
     <a href="<?= $this->Url->build(['controller' => 'Members', 'action' => 'anonymizeAll']) ?>" 
