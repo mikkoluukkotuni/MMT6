@@ -25,7 +25,7 @@
             <td><?= h($user->role) ?></td>
         </tr>
         <tr>
-            <th><?= __('Data usage in research') ?></th>
+            <th><?= __('My anonymized data may be used for academic research') ?></th>
             <td>
                 <?php if ($user->research_allowed == 1){
                         echo ("Allowed");

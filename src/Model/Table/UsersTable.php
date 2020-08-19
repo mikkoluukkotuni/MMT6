@@ -40,7 +40,7 @@ class UsersTable extends Table
             ->add('password', [
                     'length' => [
                         'rule' => ['minLength', 8],
-                        'message' => 'The password has to be 8 characters long'
+                        'message' => 'The password has to be at least 8 characters long'
                     ]
                 ]);
         $validator

@@ -4,7 +4,7 @@
     <?= $this->Form->create($user) ?>
         <?php 
             echo $this->Form->input('email');
-            echo $this->Form->input('password');
+            echo $this->Form->input('password', array('placeholder' => 'The password has to be at least 8 characters long'));
             echo $this->Form->input('first_name');
             echo $this->Form->input('last_name');
             echo $this->Form->input('phone');
