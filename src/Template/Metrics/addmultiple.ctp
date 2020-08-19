@@ -17,14 +17,19 @@
         <legend><?= __('Add Metrics, Page 2/4') ?></legend>
         <?php
             $current_metrics = $this->request->session()->read('current_metrics');
-        
-            echo $this->Form->input('phase', 
-                array('value' => $current_metrics[0]['value'], 'label' => $metricNames[1],'type' => 'number', 'min' => 0, 'required' => true));
             
-            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This can be for example number of sprints.', 'class' => 'infoicon']);
+        ?>            
+        <div style="display: flex; justify-content: flex-start;">
+        <?php
+            echo $this->Form->input('phase', 
+                array('value' => $current_metrics[0]['value'], 'label' => $metricNames[1],'type' => 'number', 'min' => 0, 'required' => true));            
+            
             echo $this->Form->input('totalPhases', 
                 array('value' => $current_metrics[1]['value'], 'label' => $metricNames[2],'type' => 'number', 'min' => 0, 'required' => true));
-            ?>
+
+            echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This can be for example number of sprints.', 'class' => 'infoicon']);
+        ?>
+        </div>
             <div class="boxed">
                 <p>
                     <?php echo "Current state of the requirements list"; ?>
@@ -38,11 +43,11 @@
                 
                 <?php 
                     endif;
-
-                    echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Product backlog is a list of the upcoming features.', 'class' => 'infoicon']);
+                ?>            
+                <div style="display: flex; justify-content: flex-start;">
+                <?php                    
                     echo $this->Form->input('reqNew', 
-                        array('value' => $current_metrics[2]['value'], 'label' => $metricNames[3],'type' => 'number', 'min' => 0, 'required' => true));
-                    echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Sprint backlog is a list of features in progress.', 'class' => 'infoicon']);
+                        array('value' => $current_metrics[2]['value'], 'label' => $metricNames[3],'type' => 'number', 'min' => 0, 'required' => true));                    
                     echo $this->Form->input('reqInProgress', 
                         array('value' => $current_metrics[3]['value'], 'label' => $metricNames[4],'type' => 'number', 'min' => 0, 'required' => true));
                     echo $this->Form->input('reqClosed', 
@@ -50,31 +55,43 @@
                     echo $this->Form->input('reqRejected', 
                         array('value' => $current_metrics[5]['value'], 'label' => $metricNames[6],'type' => 'number', 'min' => 0, 'required' => true));
 
-                    echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of commits in master branch on your GitHub etc', 'class' => 'infoicon']);
-
-                    if ($commitCount != null) {
-                        echo $this->Form->input('commits', 
-                            array('value' => $commitCount, 'label' => $metricNames[7],'type' => 'number', 'min' => 0, 'required' => true)); 
-                    } else {
-                        echo $this->Form->input('commits', 
-                            array('value' => $current_metrics[6]['value'], 'label' => $metricNames[7],'type' => 'number', 'min' => 0, 'required' => true)); 
-                    }
-
-                    echo $this->Form->input('passedTestCases', 
-                        array('value' => $current_metrics[7]['value'], 'label' => $metricNames[8],'type' => 'number', 'min' => 0, 'required' => true));
-
-                    echo $this->Form->input('totalTestCases', 
-                        array('value' => $current_metrics[8]['value'], 'label' => $metricNames[9],'type' => 'number', 'min' => 0, 'required' => true));
+                    echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Product backlog is a list of the upcoming features.', 'class' => 'infoicon']);
+                    echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Sprint backlog is a list of features in progress.', 'class' => 'infoicon']);
                 ?>
+                </div>
             </div>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php
+                if ($commitCount != null) {
+                    echo $this->Form->input('commits', 
+                        array('value' => $commitCount, 'label' => $metricNames[7],'type' => 'number', 'min' => 0, 'required' => true)); 
+                } else {
+                    echo $this->Form->input('commits', 
+                        array('value' => $current_metrics[6]['value'], 'label' => $metricNames[7],'type' => 'number', 'min' => 0, 'required' => true)); 
+                }
+                
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of commits in master branch on your GitHub etc', 'class' => 'infoicon']);
+            ?>
+            </div>
+            <div style="display: flex; justify-content: flex-start;">
+            <?php
+                echo $this->Form->input('passedTestCases', 
+                    array('value' => $current_metrics[7]['value'], 'label' => $metricNames[8],'type' => 'number', 'min' => 0, 'required' => true));
+
+                echo $this->Form->input('totalTestCases', 
+                    array('value' => $current_metrics[8]['value'], 'label' => $metricNames[9],'type' => 'number', 'min' => 0, 'required' => true));
+
+            ?>
+            </div>
+            <div style="display: flex; justify-content: flex-start;">
             <?php
                 echo $this->Form->input('degreeReadiness', 
-                    array('value' => $current_metrics[9]['value'], 'label' => $metricNames[10],'type' => 'number', 'min' => 0, 'max' => 100, 'required' => true));
+                    array('value' => $current_metrics[9]['value'], 'label' => $metricNames[10],'type' => 'number', 'min' => 0, 'max' => 100, 'required' => true));                
+                echo $this->Form->input('overallStatus', ['options' => array(1 => 'All OK', 2 => 'Minor issues', 3 => 'Serious problems'), 
+                    'empty' => ' ', 'label' => $metricNames[11], 'required' => true]);
                 echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Degree of readiness tells how complete the project is (from 0 to 100 percent).', 'class' => 'infoicon']);
-                echo $this->Form->input('overallStatus', 
-                    array('value' => $current_metrics[10]['value'], 'label' => $metricNames[11],'type' => 'number', 'min' => 1, 'max' => 3, 'required' => true));
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Overall status of the project (1 = OK, 2 = caution, 3 = critical).', 'class' => 'infoicon']);
             ?>
+            </div>
             <div class="report-nav">
                 <?= $this->Form->button('Next page', ['name' => 'submit', 'value' => 'next']);?>
                     <?= $this->Html->link('Previous page', ['name' => 'submit', 'value'=>'previous', 'controller' => 'Weeklyreports', 'action' => 'add'],['class' => 'link-button']); ?>
