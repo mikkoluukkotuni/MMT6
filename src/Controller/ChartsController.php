@@ -148,12 +148,12 @@ class ChartsController extends AppController
         // these objects come from functions in this controller
         $phaseChart = $this->phaseChart();
         $reqChart = $this->reqChart();
-        $commitChart = $this->commitChart();
-        $testcaseChart = $this->testcaseChart();
-        $hoursChart = $this->hoursChart();
-        $totalhourChart = $this->totalhourChart();
-        $hoursPerWeekChart = $this->hoursPerWeekChart();
         $reqPercentChart = $this->reqPercentChart();
+        $commitChart = $this->commitChart();
+        $testcaseChart = $this->testcaseChart();        
+        $totalhourChart = $this->totalhourChart();
+        $hoursPerWeekChart = $this->hoursPerWeekChart();  
+        $hoursChart = $this->hoursChart();      
         $risksProbChart = $this->risksProbChart();
         $risksImpactChart = $this->risksImpactChart();
         $risksCombinedChart = $this->risksCombinedChart();
@@ -192,6 +192,25 @@ class ChartsController extends AppController
             'name' => 'Rejected',
             'data' => $reqData['rejected']
         );
+                
+        // reqPercentChart
+        $reqPercentChart->xAxis->categories = $weeklyreports['weeks'];
+        $reqPercentChart->series[] = array(
+            'name' => 'Product Backlog',
+            'data' => $reqData['new']
+        );
+        $reqPercentChart->series[] = array(
+            'name' => 'Sprint Backlog',
+            'data' => $reqData['inprogress']
+        );
+        $reqPercentChart->series[] = array(
+            'name' => 'Done',
+            'data' => $reqData['closed']
+        );
+        $reqPercentChart->series[] = array(
+            'name' => 'Rejected',
+            'data' => $reqData['rejected']
+        );
         
         // commitChart
         $commitChart->xAxis->categories = $weeklyreports['weeks'];    
@@ -210,32 +229,20 @@ class ChartsController extends AppController
             'name' => 'Passed test cases',
             'data' => $testcaseData['testsPassed']
         );
-
-
-        // // earnedValueChart
-        // $earnedValueChart->xAxis->categories = $earnedValueData[0]['weekList'];
-        // foreach ($earnedValueData as $data) {
-        //     $earnedValueChart->series[] = array(
-        //         'name' => $data['name'],
-        //         'data' => $data['values'],
-        //         'marker' => $data['marker']
-        //     );
-        // }
-        // $earnedValueChart->series[] = array(
-        //     'name' => 'Degree of readiness',
-        //     'data' => $earnedValueData[0]['values']        
-        // );
-
         
         // hoursChart
         $hoursChart->series[] = array(
-            'name' => 'Management',
+            'name' => 'Hour types',
             'data' => array(
-                $hoursData['management'],
-                $hoursData['code'],
-                $hoursData['document'],
-                $hoursData['study'],
-                $hoursData['other']
+                $hoursData[1],
+                $hoursData[2],
+                $hoursData[3],
+                $hoursData[4],
+                $hoursData[5],
+                $hoursData[6],
+                $hoursData[7],
+                $hoursData[8],
+                $hoursData[9]
             )
         );
         
@@ -251,25 +258,6 @@ class ChartsController extends AppController
         $hoursPerWeekChart->series[] = array(
             'name' => 'Working hours per week',
             'data' => $hoursperweekData
-        );
-        
-        // reqPercentChart
-        $reqPercentChart->xAxis->categories = $weeklyreports['weeks'];
-        $reqPercentChart->series[] = array(
-            'name' => 'Product Backlog',
-            'data' => $reqData['new']
-        );
-        $reqPercentChart->series[] = array(
-            'name' => 'Sprint Backlog',
-            'data' => $reqData['inprogress']
-        );
-        $reqPercentChart->series[] = array(
-            'name' => 'Done',
-            'data' => $reqData['closed']
-        );
-        $reqPercentChart->series[] = array(
-            'name' => 'Rejected',
-            'data' => $reqData['rejected']
         );
         
         // risksProbChart
@@ -685,11 +673,15 @@ class ChartsController extends AppController
     	$myChart->legend->enabled = false;
     	// labels of axes; unique x-axis
     	$myChart->xAxis->categories = array(
-    			'Planning and management',
-    			'Coding and testing',
-    			'Studying',
     			'Documentation',
-    			'Other'
+    			'Requirements',
+    			'Design',
+    			'Implementation',
+                'Testing',
+                'Meetings',
+                'Studying',
+                'Other',
+                'Lectures'
     	);
     	$myChart->yAxis->title->text = 'Working hours';
 		// tooltips etc

@@ -36,6 +36,13 @@
 			?></tr>
         </tr>
         <tr>
+            <th><?= __('Customer') ?></th>
+            <td><?php
+			if ($project->customer != NULL)
+				echo h($project->customer); 
+			?></tr>
+        </tr>
+        <tr>
             <th><?= __('Is Public') ?></th>
             <td><?= $project->is_public ? __('Yes') : __('No'); ?></td>
          </tr>

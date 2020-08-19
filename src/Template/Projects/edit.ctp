@@ -33,6 +33,7 @@ echo $this->Html->script('jquery-ui.min');
             echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'This is used to make some of the charts. Manager should set this. It can be changed later.']);
 
             echo $this->Form->input('description');
+            echo $this->Form->input('customer');
             echo $this->Form->input('is_public', array("checked" => "checked", 'label' => "This project is public"));
             
             // Fetching from the db the date when the project was created          

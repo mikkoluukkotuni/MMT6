@@ -103,7 +103,7 @@
                 }
                 // Fill array with zeros to avoid a bug if there are no workinghours of some work type
                 $sums = array();
-                $sums = array_fill(1, 5, 0);
+                $sums = array_fill(1, 9, 0);
                 $id = 0;
                 foreach($query as $temp) {
                     $hour = 0;
@@ -151,7 +151,43 @@
                         else {
                             $sums[5] += $hour;
                         }
-                    }                  
+                    }  
+                    if ($temp->worktype_id === 6) {
+                        $hour = $temp->duration;
+                        if (!(isset($sums[6]))) {
+                            $sums[6] = $hour;
+                        }
+                        else {
+                            $sums[6] += $hour;
+                        }
+                    } 
+                    if ($temp->worktype_id === 7) {
+                        $hour = $temp->duration;
+                        if (!(isset($sums[7]))) {
+                            $sums[7] = $hour;
+                        }
+                        else {
+                            $sums[7] += $hour;
+                        }
+                    } 
+                    if ($temp->worktype_id === 8) {
+                        $hour = $temp->duration;
+                        if (!(isset($sums[8]))) {
+                            $sums[8] = $hour;
+                        }
+                        else {
+                            $sums[8] += $hour;
+                        }
+                    } 
+                    if ($temp->worktype_id === 9) {
+                        $hour = $temp->duration;
+                        if (!(isset($sums[9]))) {
+                            $sums[9] = $hour;
+                        }
+                        else {
+                            $sums[9] += $hour;
+                        }
+                    }                 
                 }          
                 // Get the names for worktypes
               	$queryForTypes = Cake\ORM\TableRegistry::get('Worktypes')

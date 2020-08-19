@@ -1125,69 +1125,25 @@ class ChartsTable extends Table
         // get all the different work types one by one
         $data = array();
         if (!empty($memberlist)) {
-            $query = $workinghours
+            for ($i = 1; $i <= 9; $i++) {
+                $query = $workinghours
                     ->find()
                     ->select(['duration'])
-                    ->where(['worktype_id =' => 1, 'member_id IN' => $memberlist])
+                    ->where(['worktype_id =' => $i, 'member_id IN' => $memberlist])
                     ->toArray();
-            $num = 0;
-            // count the total ammount of the duration of the worktype
-            foreach ($query as $temp) {
-                $num += $temp->duration;
-            }
-            $data['management'] = $num;
 
-            $query = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['worktype_id =' => 2, 'member_id IN' => $memberlist])
-                    ->toArray();
-            $num = 0;
-            foreach ($query as $temp) {
-                $num += $temp->duration;
+                $num = 0;
+                // count the total ammount of the duration of the worktype
+                foreach ($query as $temp) {
+                    $num += $temp->duration;
+                }
+                $data[$i] = $num;
             }
-            $data['code'] = $num;
-
-            $query = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['worktype_id =' => 3, 'member_id IN' => $memberlist])
-                    ->toArray();
-            $num = 0;
-            foreach ($query as $temp) {
-                $num += $temp->duration;
-            }
-            $data['document'] = $num;
-
-            $query = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['worktype_id =' => 4, 'member_id IN' => $memberlist])
-                    ->toArray();
-            $num = 0;
-            foreach ($query as $temp) {
-                $num += $temp->duration;
-            }
-            $data['study'] = $num;
-
-            $query = $workinghours
-                    ->find()
-                    ->select(['duration'])
-                    ->where(['worktype_id =' => 5, 'member_id IN' => $memberlist])
-                    ->toArray();
-            $num = 0;
-            foreach ($query as $temp) {
-                $num += $temp->duration;
-            }
-            $data['other'] = $num;
-        } 
-        else {
+        } else {
             $num = "";
-            $data['management'] = $num;
-            $data['code'] = $num;
-            $data['document'] = $num;
-            $data['study'] = $num;
-            $data['other'] = $num;
+            for ($i = 1; $i <= 9; $i++) {
+                $data[$i] = $num;
+            }
         }
         return $data;
     }

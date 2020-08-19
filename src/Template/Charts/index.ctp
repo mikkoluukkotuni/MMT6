@@ -85,16 +85,17 @@
     </div>
     </br>
     <div class="chart">
-        <div id="hourswrapper">
-		    <?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>
-	    </div>
-    </div>
-    </br>
-    <div class="chart">
         <div id="totalhourwrapper">
 		    <?php echo $this->Highcharts->render($totalhourChart, 'totalhourchart'); ?>
 	    </div>
     </div>
+    </br>
+    <div class="chart">
+        <div id="hourswrapper">
+		    <?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>
+	    </div>
+    </div>
+
     
     <div class="chart">
         <h4>Risks</h4>
