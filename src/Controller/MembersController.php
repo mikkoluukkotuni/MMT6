@@ -38,6 +38,8 @@ class MembersController extends AppController
         $predictiveProjectChart = $this->predictiveProjectChart();
         $predictiveProjectData = $this->Members->predictiveProjectData($project_id, $projectStartDate, $endingDate);
 
+        $this->set('hoursByTypeData', $this->Members->hoursByTypeData($project_id));
+
         // Set chart only if project has working hours
         if (count($predictiveProjectData) > 0) {
             // Define axis data for chart

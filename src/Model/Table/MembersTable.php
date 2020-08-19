@@ -362,6 +362,14 @@ class MembersTable extends Table
     }
 
 
+    public function hoursByTypeData($project_id)
+    {
+        $this->Charts = TableRegistry::get('Charts');
+        $data = $this->Charts->hoursData($project_id);
+        return $data;
+    }
+
+
     public function anonymizeAllMembers($project_id)
     {
         // Because ids of anon users might differ from db to db, we need to find the id of anon 1 first
