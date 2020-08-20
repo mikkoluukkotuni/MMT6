@@ -153,7 +153,8 @@ class ChartsController extends AppController
         $testcaseChart = $this->testcaseChart();        
         $totalhourChart = $this->totalhourChart();
         $hoursPerWeekChart = $this->hoursPerWeekChart();  
-        $hoursChart = $this->hoursChart();      
+        $hoursChart = $this->hoursChart();     
+        $hoursChart2 = $this->hoursChart2();     
         $risksProbChart = $this->risksProbChart();
         $risksImpactChart = $this->risksImpactChart();
         $risksCombinedChart = $this->risksCombinedChart();
@@ -245,6 +246,22 @@ class ChartsController extends AppController
                 $hoursData[9]
             )
         );
+
+        // hoursChart2
+        $hoursChart2->series[] = array(
+            'name' => 'Hour types',
+            'data' => array(
+                round($hoursData[1]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[2]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[3]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[4]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[5]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[6]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[7]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[8]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                round($hoursData[9]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP)
+            )
+        );
         
         // totalhourChart
         $totalhourChart->xAxis->categories = $allTheWeeks;    
@@ -312,7 +329,7 @@ class ChartsController extends AppController
         }
 
         // This sets the charts visible in the actual charts page "Charts/index.php"
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'totalhourChart', 
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'hoursChart2', 'totalhourChart', 
             'hoursPerWeekChart', 'reqPercentChart', 'risksProbChart', 'risksImpactChart', 'risksCombinedChart', 
             'derivedChart', 'hoursComparisonChart', 'earnedValueChart', 'earnedValueChart2')
         );
@@ -686,13 +703,58 @@ class ChartsController extends AppController
     	$myChart->yAxis->title->text = 'Working hours';
 		// tooltips etc
     	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
-            "function() {return 'Total hours: ' +' <b>' +Highcharts.numberFormat(this.y, 0) 
+            "function() {return 'Hour type total hours: ' +' <b>' +Highcharts.numberFormat(this.y, 0) 
             +'</b><br/>Work type: '+ this.x;}"
         );
     	$myChart->plotOptions->column->dataLabels->enabled = true;
     	$myChart->plotOptions->column->dataLabels->style->textShadow = false;
     	$myChart->plotOptions->column->dataLabels->style->color = '#444';
     	$myChart->plotOptions->column->dataLabels->style->fontSize = '1.2em';
+    
+    	return $myChart;
+    }
+
+    // Working hours categorized by type
+    public function hoursChart2()
+    {
+    	$myChart = $this->Highcharts->createChart();
+    	$myChart->chart->renderTo = 'hourswrapper2';
+    	$myChart->chart->type = 'pie';
+    
+    	$myChart->title = array(
+        	'text' => 'Working hours categorized by type',
+        	'y' => 20,
+        	'align' => 'center',
+        	'styleFont' => '18px Metrophobic, Arial, sans-serif',
+        	'styleColor' => '#0099ff',
+        );
+    	$myChart->subtitle->text = "percentage of total";
+
+    	$myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+    	$myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 255)'), array(1, 'rgb(255, 255, 255)'));
+    	$myChart->legend->enabled = true;
+    	// labels of axes; unique x-axis
+    	$myChart->xAxis->categories = array(
+    			'Documentation',
+    			'Requirements',
+    			'Design',
+    			'Implementation',
+                'Testing',
+                'Meetings',
+                'Studying',
+                'Other',
+                'Lectures'
+        );                
+
+        $myChart->plotOptions->pie->dataLabels->formatter = $this->Highcharts->createJsExpr(
+            "function() {return this.series.chart.axes[0].categories[this.point.index] + ': ' + Highcharts.numberFormat(this.y, 0) + '%';}"
+        );
+
+        // tooltips etc
+    	$myChart->tooltip->formatter = $this->Highcharts->createJsExpr(
+            "function() {return 'Hour type percentage: ' +' <b>' +Highcharts.numberFormat(this.y, 0) 
+            +'</b><br/>Work type: '+ this.series.chart.axes[0].categories[this.point.index];}"
+        );
     
     	return $myChart;
     }

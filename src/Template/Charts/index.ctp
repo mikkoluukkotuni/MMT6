@@ -95,7 +95,12 @@
 		    <?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>
 	    </div>
     </div>
-
+    </br>
+    <div class="chart">
+        <div id="hourswrapper2">
+		    <?php echo $this->Highcharts->render($hoursChart2, 'hourschart2'); ?>
+	    </div>
+    </div>
     
     <div class="chart">
         <h4>Risks</h4>
