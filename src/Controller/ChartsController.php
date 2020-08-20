@@ -11,6 +11,7 @@ class ChartsController extends AppController
     public $name = 'Charts';
     public $helpers = ['Highcharts.Highcharts'];
     public $uses = array();
+
     
     public function initialize() 
     {
@@ -20,6 +21,9 @@ class ChartsController extends AppController
     
     public function index() 
     {
+        $admin = $this->request->session()->read('is_admin');
+        $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+        
         // When the chart limits are updated this is where they are saved
         if ($this->request->is('post')) {
             $data = $this->request->data;
@@ -81,7 +85,7 @@ class ChartsController extends AppController
         $dateOfChartUpdates = new Time('2020-08-01');
         
         // For some charts data is only created (and chart displayed) if project has reports and hours
-        if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0 && $projectStartDate > $dateOfChartUpdates) {
+        if (($admin || $supervisor) && sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0 && $projectStartDate > $dateOfChartUpdates) {
             $this->request->session()->write('displayCharts', true);
 
             $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $projectEndDate);
