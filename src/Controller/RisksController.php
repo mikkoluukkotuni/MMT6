@@ -139,16 +139,17 @@ class RisksController extends AppController
         }
         
         //If there are values previously selected, it will get them form session
-        if($this->request->session()->check('current_risks') && !empty($this->request->session()->read('current_risks'))){
+        // if($this->request->session()->check('current_risks') && !empty($this->request->session()->read('current_risks'))){
             
-            $current_risks = $this->request->session()->read('current_risks');
+        //     $current_risks = $this->request->session()->read('current_risks');
+        //     var_dump($current_risks);
             
-        }else{
+        // }else{
             
             //If no prevously selected values exist, it look for the latest week
             $current_risks = $this->getLatestRisks($project_id);
             
-        }
+        // }
         
         
         $this->set(compact('risks', 'types', 'current_risks'));
