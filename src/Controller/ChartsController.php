@@ -77,9 +77,11 @@ class ChartsController extends AppController
 
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $projectEndDate = $this->request->session()->read('selected_project')['finished_date'];
+
+        $dateOfChartUpdates = new Time('2020-08-01');
         
         // For some charts data is only created (and chart displayed) if project has reports and hours
-        if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0) {
+        if (sizeof($weeklyreports['id']) > 0 &&  $this->Charts->getTotalHours($project_id) > 0 && $projectStartDate > $dateOfChartUpdates) {
             $this->request->session()->write('displayCharts', true);
 
             $earnedValueData = $this->Charts->earnedValueData($project_id, $projectStartDate, $projectEndDate);
@@ -153,7 +155,7 @@ class ChartsController extends AppController
         $testcaseChart = $this->testcaseChart();        
         $totalhourChart = $this->totalhourChart();
         $hoursPerWeekChart = $this->hoursPerWeekChart();  
-        $hoursChart = $this->hoursChart();     
+        $hoursChart = $this->hoursChart();
         $hoursChart2 = $this->hoursChart2();     
         $risksProbChart = $this->risksProbChart();
         $risksImpactChart = $this->risksImpactChart();
@@ -247,21 +249,30 @@ class ChartsController extends AppController
             )
         );
 
-        // hoursChart2
-        $hoursChart2->series[] = array(
-            'name' => 'Hour types',
-            'data' => array(
-                round($hoursData[1]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[2]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[3]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[4]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[5]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[6]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[7]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[8]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
-                round($hoursData[9]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP)
-            )
-        );
+        // hoursChart2  
+        if (array_sum($hoursData) > 0) {
+            $hoursChart2->series[] = array(
+                'name' => 'Hour types',
+                'data' => array(
+                    round($hoursData[1]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[2]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[3]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[4]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[5]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[6]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[7]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[8]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP),
+                    round($hoursData[9]/array_sum($hoursData)*100, 0, PHP_ROUND_HALF_UP)
+                )
+            );
+        } else {
+            $hoursChart2->series[] = array(
+                'name' => 'Hour types',
+                'data' => array_fill(1, 9, 0)
+            );
+        }
+              
+
         
         // totalhourChart
         $totalhourChart->xAxis->categories = $allTheWeeks;    
