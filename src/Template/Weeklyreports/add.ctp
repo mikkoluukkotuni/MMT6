@@ -27,13 +27,13 @@
                 echo $this->Form->input('week', array('value' => $current_weeklyreport['week'], 'label' => 'For week', 'type' => 'number', 'min' => 1, 'max' => 52));
                 echo $this->Form->input('year', array('value' => $current_weeklyreport['year'], 'min' => $now->year-1, 'max' => $now->year));                
                 echo $this->Form->input('meetings', array('value' => $current_weeklyreport['meetings'], 'type' => 'number', 'min' => 0));
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon', 'style' => 'align-self: center;']);
             ?>
             </div>
             <div style="display: flex; justify-content: flex-start;">
             <?php           
                 echo $this->Form->input('reglink', array('value' => $current_weeklyreport['reglink'], 'label' => 'Requirements link' ));
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon', 'style' => 'align-self: center;']);
             ?>
             </div>
             <?php 
@@ -56,13 +56,13 @@
                 }
                 
                 echo $this->Form->input('meetings', array('type' => 'number', 'min' => 0)); 
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Number of meetings on this week.', 'class' => 'infoicon', 'style' => 'align-self: center;']);
             ?>
             </div>
             <div style="display: flex; justify-content: flex-start;">
             <?php           
                 echo $this->Form->input('reglink', array('value' => $current_weeklyreport['reglink'], 'label' => 'Requirements link' ));
-                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon']);
+                echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Link to your requirements, Trello etc.', 'class' => 'infoicon', 'style' => 'align-self: center;']);
             ?>
             </div>
             <?php 

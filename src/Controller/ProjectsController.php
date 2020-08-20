@@ -182,7 +182,6 @@ class ProjectsController extends AppController
         $projects = array();
         // the weeklyreport weeks and the total weeklyhours duration is loaded for all projects
         // functions in "ProjectsTable.php"
-        $chartsTable = $this->loadModel('Charts');
         foreach ($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
             $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
@@ -194,10 +193,17 @@ class ProjectsController extends AppController
             $project['userMembersCount'] = $this->Projects->getUserMembersCount($project['id']);
             $project['metrics'] = $this->Projects->getMetrics($project['id']);
             $project['risks'] = $this->Projects->getRisks($project['id']);
-            $project['statusColors'] = $this->Projects->getStatusColors($project['id'], $project['metrics']);
+            
             $project['minimumHours'] = $this->Projects->getMinimumHours($project['id']);
             $project['earliestLastSeenDate'] = $this->Projects->getEarliestLastSeenDate($project['id']);
-            $project['earnedValueData'] = $this->Projects->getEarnedValueData($project['id']);
+
+            $admin = $this->request->session()->read('is_admin');
+            $supervisor = ( $this->request->session()->read('selected_project_role') == 'supervisor' ) ? 1 : 0;
+            if ($admin || $supervisor) {
+                $project['statusColors'] = $this->Projects->getStatusColors($project['id'], $project['metrics']);
+                $project['earnedValueData'] = $this->Projects->getEarnedValueData($project['id']);
+            }
+            
             $projects[] = $project;
         }
         // the projects and their data are made visible in the "statistics.php" page
