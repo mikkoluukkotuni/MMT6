@@ -189,6 +189,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `updated_on` date DEFAULT NULL,
   `finished_date` date DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `customer` varchar(200) DEFAULT NULL,
   `is_public` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_name` (`project_name`)
@@ -395,18 +396,22 @@ CREATE TABLE IF NOT EXISTS `worktypes` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `description` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `worktypes`
 --
 
 INSERT INTO `worktypes` (`id`, `description`) VALUES
-(1, 'Planning, design and management'),
-(2, 'Coding and testing'),
-(3, 'Studying'),
-(4, 'Documenting'),
-(5, 'Other');
+(1, 'Documentation'),
+(2, 'Requirements'),
+(3, 'Design'),
+(4, 'Implementation'),
+(5, 'Testing'),
+(6, 'Meetings'),
+(7, 'Studying'),
+(8, 'Other'),
+(9, 'Lectures');
 
 --
 -- Constraints for dumped tables

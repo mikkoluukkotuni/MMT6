@@ -439,15 +439,20 @@ class ChartsTable extends Table
         $hoursFull = array();
         $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageHoursBudgeted) + $weeksUsed;
 
+        $i = $weekList[(sizeof($weekList) - 1)] + 1;
         while ($weeksToFullHours > sizeof($weekList)) {
-            array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+            if ($i > 52) {
+                $i = 1;
+            }
+            array_push($weekList, $i);
+            $i++;
         }
 
         for ($i = 1; $i <= $weeksToFullHours; $i++) {
             if ($i < $weeksToFullHours) {
                 array_push($hoursFull, NULL);
             } else {
-                array_push($hoursFull, $BCWP2[($i - 1)]);
+                array_push($hoursFull, $targetHoursTotal);
             }
         }
 
@@ -832,17 +837,22 @@ class ChartsTable extends Table
         $hoursFull = array();
         $weeksToFullHours = ceil(($BAC[(sizeof($BAC) - 1)] - $AC[(sizeof($AC) - 1)]) / $averageHoursPredicted) + $weeksUsed;
 
+        $i = $weekList[(sizeof($weekList) - 1)] + 1;
         while ($weeksToFullHours > sizeof($weekList)) {
-            array_push($weekList, ($weekList[(sizeof($weekList) - 1)] + 1));
+            if ($i > 52) {
+                $i = 1;
+            }
+            array_push($weekList, $i);
+            $i++;
         }
 
         for ($i = 1; $i <= ($weeksToFullHours); $i++) {
             if ($i < $weeksToFullHours) {
                 array_push($hoursFull, NULL);
             } else {
-                array_push($hoursFull, $BCWP2[($i - 1)]);
+                array_push($hoursFull, $targetHoursTotal);
             }
-        }        
+        }    
 
         $estimatedWeekFullHours = $weekList[(sizeof($hoursFull) - 1)];
 
