@@ -124,7 +124,7 @@
                                             ->where(['user_id =' => $userid, 'weeklyreport_id =' => $reportId])
                                             ->toArray();
                                     if ( sizeof($newreps) > 0 ) {
-                                            echo "<div class='unread'>unread</div>";
+                                            echo "<div style='font-style: italic;'>unread</div>";
                                     }
                                     
                             } else {

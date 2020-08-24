@@ -4,9 +4,9 @@
     <h3><?= __('FAQ') ?></h3>
     <ol start="0">
       <li style="list-style-type:none;"><a accesskey="alt+0 "href="#Q0">Video tutorials</a></li>
-      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in spring 2020</a></li>
-	<li><a accesskey="alt+2 "href="#Q2">What is the research permission for?</a></li>
-      <li><a accesskey="alt+3" href="#Q3">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
+      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in autumn 2020</a></li>      
+      <li><a accesskey="alt+2" href="#Q2">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
+      <li><a accesskey="alt+3 "href="#Q3">What is the research permission for?</a></li>
       <li><a accesskey="alt+4" href="#Q4">How do I get started?</a></li>
       <li><a accesskey="alt+5" href="#Q5">I forgot my password. How do I get a new one?</a></li>
       <li><a accesskey="alt+6" href="#Q6">How can I change my password?</a></li>
@@ -24,8 +24,10 @@
     <h4 id="Q0">Video tutorials</h4>
     <p>
        <ul>
-            <li>Developer tutorial shows how to log time and view the progress of the project.</li>
-            <li>Manager tutorial shows how to add members and fill in the weekly report form.</li>
+            <li>Navigation tutorial shows the general navigation in MMT and in your project.</li>
+            <li>Developer tutorial shows how to log time and view the progress of your project.</li>
+            <li>Manager tutorial shows how to edit project's info, add members and fill in the weekly report form.</li>
+            <li>Supervisor tutorial shows how to edit member roles and use the supervisor-only functionalities to monitor multiple projects.</li>
        </ul>
         <p>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/RE5sO55sDyk" frameborder="0" allowfullscreen></iframe>
@@ -33,18 +35,18 @@
          </p>
         <p><a href="#">[back to the top]</a></p>
     </p>
-    <h4 id="Q1">1. For students of PW and SPM courses in spring 2020</h4>
+    <h4 id="Q1">1. For students of PW and SPM courses in autumn 2020</h4>
     <p>
     For developers and managers:
           <ul>
             <li>Unless you created your user account yourself, change the password during your first log in.</li>
-            <li>The first weekly report is written for week 4.</li>
+            <li>The first weekly report is written for week 37.</li>
             <li>The working hours that are in the table on Members' page include all working hours, even the ones that are not covered by a weekly report.</li>   
           </ul>
     For managers:
       	<ul>    
-            <li>The first week you'll need to write a weekly report for is week 5.</li>
-            <li>Submit the first weekly report latest on Monday 27th of January.</li>
+            <li>The first week you'll need to write a weekly report for is week 37.</li>
+            <li>Submit the first weekly report latest on Monday 14th of September.</li>
             <li>For all teams, the phase will be 0 in the first weekly report.</li>
         </ul>
     In the current version of MMT:
@@ -70,9 +72,9 @@
         </ul>
     As a project manager you can:
       	<ul >
-           <li>add members to your project team</li>
-	   <li>log your daily working time</li>
-	   <li>do the weekly reporting of your project</li> 
+            <li>add members to your project team</li>
+            <li>log your daily working time</li>
+            <li>do the weekly reporting of your project</li> 
         </ul>
         As a developer you can:
           <ul >
@@ -91,7 +93,7 @@
 
     <h4 id="Q3">3. What is the research permission for?</h4>
     <p>
-	Will be updated.
+	    This is a permission that anonymized data can be used for academic research.
 	<br />
 	<br />
 

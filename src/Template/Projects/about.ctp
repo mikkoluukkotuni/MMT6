@@ -55,6 +55,17 @@
     </p>
     <h4>Release notes</h4>
     <p>
+        <h5>Version 6.2 (24.8.2020)</h5>
+        <ul>
+            <li>New work types and metric types added (including project's degree of readiness and overall status metrics)</li>
+            <li>Earned value method method implemented (data and charts visible only to supervisors)</li>
+            <li>Pie chart added displaying projects working hours categorized by type</li>
+            <li>New metrics table and some new data added to statistics page (only visible to supervisors)</li>
+            <li>Usability updates and bug fixes: new tutorial videos, better instructions for forms, small layout updates</li>
+        </ul>
+        <br>
+    </p>
+    <p>
         <h5>Version 6.1 (4.4.2020)</h5>
         <ul>
             <li>GitHub connection that can fetch number of commits for weekly report</li>
