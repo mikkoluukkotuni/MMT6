@@ -569,7 +569,7 @@ class ProjectsTable extends Table
 
                 if ($done == 0) {
                     $statusColors['done'] = $red;
-                } else if ($done < 5) {
+                } else if ($done * 0.5 < $prodcutBacklog) {
                     $statusColors['done'] = $yellow;
                 }
 
