@@ -82,6 +82,8 @@ class ChartsController extends AppController
         $projectStartDate = clone $this->request->session()->read('selected_project')['created_on'];
         $projectEndDate = $this->request->session()->read('selected_project')['finished_date'];
 
+        // This is used so that new charts from MMT6 (EVC1, EVC2 and hour pie chart) are not displayed for older projects
+        // as they would just cause errors (the data necessary for new charts is not present in older projects)
         $dateOfChartUpdates = new Time('2020-08-01');
         
         // For some charts data is only created (and chart displayed) if project has reports and hours

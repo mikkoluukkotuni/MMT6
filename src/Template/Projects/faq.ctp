@@ -3,20 +3,20 @@
 <div id="faq" class="projects index large-9 medium-18 columns content float: left">
     <h3><?= __('FAQ') ?></h3>
     <ol start="0">
-      <li style="list-style-type:none;"><a accesskey="alt+0 "href="#Q0">Video tutorials</a></li>
-      <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in autumn 2020</a></li>      
-      <li><a accesskey="alt+2" href="#Q2">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
-      <li><a accesskey="alt+3 "href="#Q3">What is the research permission for?</a></li>
-      <li><a accesskey="alt+4" href="#Q4">How do I get started?</a></li>
-      <li><a accesskey="alt+5" href="#Q5">I forgot my password. How do I get a new one?</a></li>
-      <li><a accesskey="alt+6" href="#Q6">How can I change my password?</a></li>
-      <li><a accesskey="alt+7" href="#Q7">As a project manager, how do I do the weekly reporting of my project?</a></li>
-	<li><a accesskey="alt+8 "href="#Q8">Can I edit weekly reports?</a></li>
-      <li><a accesskey="alt+9" href="#Q9">How do I log my daily working time?</a></li>
-      <li><a accesskey="alt+10" href="#Q10">Where can I find team's/member's logged working time and the total number of working hours?</a></li>
-      <li><a accesskey="alt+11" href="#Q11">How can I view the progress of my project?</a></li>
-      <li><a href="#Q12">How can I view the progress of other projects?</a></li>
-	  <li><a href="#Q13">How can I try this application and/or see a DEMO?</a></li>
+        <li style="list-style-type:none;"><a accesskey="alt+0 "href="#Q0">Video tutorials</a></li>
+        <li><a accesskey="alt+1 "href="#Q1">For students of PW and SPM courses in autumn 2020</a></li>      
+        <li><a accesskey="alt+2" href="#Q2">What can I use the Metrics Monitoring Tool (MMT) for?</a></li>
+        <li><a accesskey="alt+3 "href="#Q3">What is the research permission for?</a></li>
+        <li><a accesskey="alt+4" href="#Q4">How do I get started?</a></li>
+        <li><a accesskey="alt+5" href="#Q5">I forgot my password. How do I get a new one?</a></li>
+        <li><a accesskey="alt+6" href="#Q6">How can I change my password?</a></li>
+        <li><a accesskey="alt+7" href="#Q7">As a project manager, how do I do the weekly reporting of my project?</a></li>
+        <li><a accesskey="alt+8 "href="#Q8">Can I edit weekly reports?</a></li>
+        <li><a accesskey="alt+9" href="#Q9">How do I log my daily working time?</a></li>
+        <li><a accesskey="alt+10" href="#Q10">Where can I find team's/member's logged working time and the total number of working hours?</a></li>
+        <li><a accesskey="alt+11" href="#Q11">How can I view the progress of my project?</a></li>
+        <li><a href="#Q12">How can I view the progress of other projects?</a></li>
+        <li><a href="#Q13">How can I try this application and/or see a DEMO?</a></li>
     </ol>
     
 		See also <a href="/projects/publications" target="_blank">publications</a> related to MMT
@@ -30,8 +30,10 @@
             <li>Supervisor tutorial shows how to edit member roles and use the supervisor-only functionalities to monitor multiple projects.</li>
        </ul>
         <p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/RE5sO55sDyk" frameborder="0" allowfullscreen></iframe>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/9Qx3TuLZZc8" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/AckNF3vEtEU" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/T0_wId2h8JA" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/UQYouJSNmVA" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/47S049LbCfE" frameborder="0" allowfullscreen></iframe>
          </p>
         <p><a href="#">[back to the top]</a></p>
     </p>
