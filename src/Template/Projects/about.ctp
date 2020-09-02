@@ -87,14 +87,18 @@
 
     </p>
     <h4>Previous versions</h4>
-	<p>
-	    Version 5.0 were implemented during the fall term of 2019 as a coursework for TIEA4 Project Work course and TIETS19 Software Project Management course. 
-            The team consisted of two project managers (Hanna-Riikka Rantamaa and Henna Lehto) 
-            and four developers (Kimi af Forselles, Mikko Luukko, Tommi Piili and Ville Niemi). 
-            Updates included: new interface with TUNI-Theme (logo and brand of the new Tampere University), 
-            new diagrams like comparing the total hours of the project to the all parallel public projects, 
-            HTTPS protocol, bug fixing and other smaller features.
-	</p>
+        <p>
+            Versions 6.0-6.2 were implemented by Mikko Luukko as a TIETS16 programming project 
+            during the spring term of 2020. 
+        </p>
+        <p>
+            Version 5.0 were implemented during the fall term of 2019 as a coursework for TIEA4 Project Work course and TIETS19 Software Project Management course. 
+                The team consisted of two project managers (Hanna-Riikka Rantamaa and Henna Lehto) 
+                and four developers (Kimi af Forselles, Mikko Luukko, Tommi Piili and Ville Niemi). 
+                Updates included: new interface with TUNI-Theme (logo and brand of the new Tampere University), 
+                new diagrams like comparing the total hours of the project to the all parallel public projects, 
+                HTTPS protocol, bug fixing and other smaller features.
+        </p>
         <p>
             Version 4.0 was implemented by Murat Pojon as a TIETS16 programming project 
             during the spring term of 2017. 
