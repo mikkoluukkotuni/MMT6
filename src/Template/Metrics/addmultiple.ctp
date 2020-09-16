@@ -86,7 +86,7 @@
             <div style="display: flex; justify-content: flex-start;">
             <?php
                 echo $this->Form->input('degreeReadiness', 
-                    array('value' => $current_metrics[9]['value'], 'label' => $metricNames[10],'type' => 'number', 'min' => 0, 'max' => 100, 'required' => true));                
+                    array('value' => $current_metrics[9]['value'], 'label' => $metricNames[10],'type' => 'number', 'min' => 1, 'max' => 100, 'required' => true));                
                 echo $this->Form->input('overallStatus', ['options' => array(1 => 'All OK', 2 => 'Minor issues', 3 => 'Serious problems'), 
                     'empty' => ' ', 'label' => $metricNames[11], 'required' => true]);
                 echo $this->Html->image('../webroot/img/infoicon.png', ['alt' => 'infoicon', 'title' => 'Degree of readiness tells how complete the project is (from 0 to 100 percent).', 'class' => 'infoicon', 'style' => 'align-self: center;']);
